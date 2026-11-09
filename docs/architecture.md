@@ -46,7 +46,16 @@ dark-chinese-chess/
 │   ├── product-spec.md
 │   ├── game-rules.md
 │   ├── architecture.md
-│   └── phase-1-plan.md
+│   ├── phase-1-plan.md
+│   ├── task-2-report.md
+│   └── tasks/
+│       ├── README.md
+│       ├── task-1-workspace-first-flip.md
+│       ├── task-2-movement-capture.md
+│       ├── task-3-outcomes-chase.md
+│       ├── task-4-history-undo-restart.md
+│       ├── task-5-progressive-review.md
+│       └── task-6-usability-verification.md
 ├── apps/
 │   └── web/
 │       ├── src/
@@ -68,7 +77,7 @@ Future modules should be created only when needed:
 - `packages/ai-agents` in Phase 2
 - `apps/server` in Phase 3
 
-The tree is the intended implementation layout, not a claim that application files already exist. Use the single Phase 1 planning document now; do not create empty task/decision hierarchies, package-publishing infrastructure, or additional workspace orchestration.
+The tree includes the intended implementation layout and the owner's requested task documents. Use `phase-1-plan.md` as the overview and `tasks/README.md` as the task index; each task file owns its detailed acceptance criteria. Do not create further empty hierarchies, package-publishing infrastructure, or workspace orchestration.
 
 ## 4. Component Responsibilities
 
