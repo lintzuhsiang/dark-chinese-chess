@@ -1,10 +1,10 @@
 # Dark Chess — Architecture
 
-**Version:** 0.8 — Task 4 session operations\
-**Status:** Tasks 1–4 implemented; Task 4 review pending; Tasks 5–6 not authorized\
+**Version:** 0.11 — Selectable Review history\
+**Status:** Tasks 1–6 implemented; joint review and physical-device/hosted-CI acceptance pending\
 **Scope:** Phase 1 implementation with future AI and multiplayer compatibility
 
-Task 4 adds deterministic session reconstruction, exact undo, derived public history/captures, and validated restart with confirmation. Game Core, GameAction, ActionResult, public events, observations, and the canonical session shape are unchanged. Task 3's chase prohibition/no-alternative limitation remains unchanged. Tasks 5–6 remain unimplemented and unauthorized.
+Task 5 adds read-only Progressive Review; Task 6 adds relative text sizing, contrast/keyboard fixes, production-browser verification, CI configuration, and test-only long-game/tap measurement tooling. Game Core, GameAction, ActionResult, public events, observations, and the canonical session shape are unchanged. Task 3's chase prohibition/no-alternative limitation remains unchanged. Physical-device/hosted-CI acceptance and joint owner review are pending.
 
 ## 1. Architecture Goals
 
@@ -69,6 +69,11 @@ dark-chinese-chess/
 │       ├── tests/
 │       └── package.json
 ├── package.json
+├── e2e/
+├── verification/
+├── playwright.config.ts
+├── playwright.performance.config.ts
+├── .github/workflows/verify.yml
 └── pnpm-workspace.yaml
 ```
 
@@ -286,7 +291,7 @@ interface PlayerObservation {
 
 The observation projection must exclude hidden identities, not merely hide them visually.
 
-Internal piece IDs are unnecessary in the player-facing model, even for revealed pieces. Hidden squares contain only `kind: "HIDDEN"`. Do not pass initial decks, shuffle seeds, full state, internal trackers, future history, or concealed identities through component props, DOM attributes, accessibility labels, or public events. Use square positions for board rendering keys. This is an application data boundary, not protection against a person inspecting full local browser memory.
+Internal piece IDs are unnecessary in the player-facing model, even for revealed pieces. Hidden squares contain only `kind: "HIDDEN"`. Do not pass initial decks, shuffle seeds, full state, internal trackers, or concealed identities through component props, DOM attributes, accessibility labels, or public events. During active play, expose only accepted public events so far; completed Review intentionally exposes its complete public timeline alongside a separately projected historical board. Use square positions for board rendering keys. This is an application data boundary, not protection against a person inspecting full local browser memory.
 
 In Phase 1, both players use the same device and the browser holds the full local state.
 
@@ -396,7 +401,7 @@ During play, apply only the next accepted action to `currentState`. Reconstruct 
 
 Derive a history prefix in a single pass, without reconstructing every earlier prefix separately. Avoid repeating this work on unrelated renders by using the session/timeline and cursor as dependencies. Do not implement snapshot caching, inverse undo operations, advanced event sourcing, workers, or speculative optimization. Revisit performance only after the lightweight measurements in `product-spec.md` identify a problem.
 
-**Task 4 implementation:** `apps/web/src/game/reconstruct.ts` exports `reconstructGame(initialDeck, actions)`, returning `{ state, events }` from one fold. Invalid trusted replay input throws with the failing action number and Core error code rather than skipping it. `useLocalGame` memoizes the public event projection by original deck/action-array identity and derives captured public pieces from those events; selection/errors do not trigger another fold. Normal accepted play still advances `currentState` incrementally. Undo reconstructs the retained prefix; its subsequent public-history projection is separately memoized, without retaining a second event log or snapshot cache.
+**Task 4 implementation:** `apps/web/src/game/reconstruct.ts` exports `reconstructGame(initialDeck, actions)`, returning `{ state, events }` from one fold. Invalid trusted replay input throws with the failing action number and Core error code rather than skipping it. Normal accepted play advances `currentState` incrementally. Undo reconstructs the retained prefix; public history is derived rather than retained as a second event log or snapshot cache. Task 5's combined projection below memoizes by the canonical session reference and Review cursor; selection/errors preserve that reference and do not trigger another fold.
 
 ### Normal Gameplay
 
@@ -428,7 +433,7 @@ Undo is enforced at the session boundary as well as in the button state. Multipl
 
 Request confirmation before replacing an active session. Canceling retains it unchanged; confirming creates a newly shuffled valid initial deck and clears all action/domain/UI state for that game. Completed-game restart may replace the session directly. An invalid initialization must preserve the old session. Refresh may reset the game; persistence is out of scope.
 
-Task 4 adds internal `UNDO` and `RESTART { deck, confirmed }` session/interaction commands. The session rejects undo at zero actions or after completion and refuses an unconfirmed active restart. The hook generates the replacement deck once outside the reducer. Native HTML dialogs provide restart confirmation and read-only history, including Escape dismissal/focus restoration; Cancel performs no session command. Successful session replacement/undo clears selection and errors. No Review state or controls are implemented yet.
+Task 4 adds internal `UNDO` and `RESTART { deck, confirmed }` session/interaction commands. The session rejects undo at zero actions or after completion and refuses an unconfirmed active restart. The hook generates the replacement deck once outside the reducer. Native HTML dialogs provide restart confirmation and read-only history, including Escape dismissal/focus restoration; Cancel performs no session command. Successful session replacement/undo clears selection and errors. Task 5 requires exiting Review before restart; its cursor is then null.
 
 ### History
 
@@ -459,9 +464,13 @@ Each subsequent cursor position represents one additional applied action.
 
 Replay is read-only and must not mutate the completed game session.
 
-At cursor `k`, reconstruct from exactly the first `k` accepted actor/action entries, regenerate exactly those public events, and project that reconstructed state. Render only that history prefix. Cursor zero has empty history and the hidden initial board; no later event, assignment, result, or hidden identity is passed to the rendered replay view. Boundary controls are disabled at 0 and N. The completed live session remains unchanged; exiting returns to its final projection.
+At cursor `k`, reconstruct from exactly the first `k` accepted actor/action entries and project that state and its captured-piece summary. Per the owner's 2026-11-10 amendment, a separate read-only list displays the complete completed-game public events and selects any cursor. Cursor zero has the hidden initial board and no captures; later public events in the list do not affect its board, assignments, or result. Unrevealed piece identities never enter either projection. Boundary controls are disabled at 0 and N. The completed live session remains unchanged; exiting returns to its final projection.
 
 Review is available only for a completed session. Review navigation never submits game actions. Clear selected-square UI state on accepted actions, undo, restart, and view changes.
+
+**Task 5 implementation:** `BoardUiState.reviewCursor` is null for live play or an integer 0–N for Review. `OPEN_REVIEW` requires completion and starts at zero. `REVIEW_TO { cursor }` ignores invalid requests; `CLOSE_REVIEW` restores live view with selection/errors cleared. While the cursor is non-null, the interaction controller ignores all gameplay/undo/start/restart commands, independently of a historical observation's ACTIVE status. The canonical completed session reference never changes during navigation.
+
+`game/review.ts` exports `projectSession(session, reviewCursor)`. It reconstructs only the selected action prefix and returns its public observation, public events, and captures together. In live mode, the observation uses incremental `currentState`; the event projection still uses the canonical timeline. `useLocalGame` memoizes the live public projection by session reference and the historical projection by session/cursor. Its `reviewHistory` is the completed live projection's public events, stable during seeking, rather than a second authoritative log. `ReviewHistory` displays those events in a bounded scrollable sidebar (below the board on narrow screens), highlights the cursor, and routes clicks through existing `REVIEW_TO`; the board/capture summary still use only the selected prefix. All exposed values remain public. `ReviewControls` and disabled Board cells enforce read-only UI behavior; the completed screen alone offers the Review entry. Invalid internal projection inputs remain observable programming errors; user navigation is validated before reaching projection.
 
 ## 9. State Ownership
 
@@ -561,7 +570,7 @@ Verify:
 - History matches accepted actions.
 - Undo and review display the correct positions.
 - Invalid initialization/restart preserves the current session.
-- Review exposes only the selected history prefix and cannot modify the final session.
+- Review shows the complete public completed timeline; board/result/captures match the selected prefix, and navigation cannot modify the final session.
 - Session-level guards prevent undo after completion and Review before completion.
 
 ### E2E Tests
@@ -579,6 +588,8 @@ Use Playwright for a small number of important flows:
 Use deterministic test-only decks and legal timelines for reliable coverage. Test plumbing must not expose a deck/seed or bypass validation in the production build. Run core tests in a non-browser environment, typecheck, build, and execute the small E2E suite in CI. Timing checks are recorded manually on the reference device, not enforced as flaky CI wall-clock tests.
 
 Use the exact viewport, target-size, keyboard, contrast, and performance criteria in `product-spec.md`; do not maintain competing thresholds here. Manually check iPhone Safari and Android Chrome before Phase 1 acceptance, recording device/browser details. Failure to access a reference device is a reported verification gap, not a passing result.
+
+**Task 6 execution:** `pnpm test:e2e` builds production output and runs 22 Chromium/WebKit checks against a self-managed preview server. `.github/workflows/verify.yml` configures install/typecheck/unit/build/E2E with read-only permission; hosted execution awaits an owner-authorized push. `verification/fixtures.ts` supplies legal 547/607-action inputs used only by tests. `pnpm verify:performance` records five samples per operation outside CI, using a production preview and browser click-to-two-frame timing. `verification/phone-check.js` is a standalone, test-only console procedure: normal UI clicks prepare the fixtures, then trusted user taps collect physical-device samples. None of this tooling is imported into production. See `docs/verification/` for host baselines, the acceptance audit, and pending physical-phone checks. No timing calls enter Game Core, and no snapshot cache or runtime dependency was added.
 
 ## 12. Future AI Integration
 
@@ -625,7 +636,7 @@ When making implementation decisions:
 - Changing the documented no-alternative chase policy or tracker contract beyond authorized additive Task 3 changes
 - Deploying, pushing, or deleting files, as required by `AGENTS.md`
 
-Small internal implementation decisions may be made within the authorized task. The owner authorized Task 4's session/UI operations after Task 3, including its additive tracker/error types and later-pattern chase fix. Tasks 5–6 are not authorized.
+Small internal implementation decisions may be made within the authorized task. The owner authorized Task 6 for joint Tasks 5–6 testing. Core contracts and approved chase rules remain unchanged. Remaining physical-device/hosted-CI acceptance does not authorize publishing, committing/pushing, or later-phase implementation.
 
 ## 15. Phase 1 Architecture Acceptance
 
@@ -643,5 +654,5 @@ The architecture is acceptable when:
 - [ ] Task 3 prohibition-only enforcement and tracker pass verification, including the documented ACTIVE/no-alternative limitation.
 - [ ] Terminal next-player semantics and result priorities agree with `game-rules.md`.
 - [ ] Core observations exclude history; the session derives history/captures from its one active timeline.
-- [ ] Progressive Review projects only the selected prefix, including its result and assignments.
+- [ ] Progressive Review projects the selected board/result/assignments/captures while its full public history supports direct step selection.
 - [ ] No snapshot infrastructure or speculative network/agent abstractions are introduced.

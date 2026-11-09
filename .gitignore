@@ -1,6 +1,9 @@
 node_modules/
 dist/
 coverage/
+test-results/
+playwright-report/
+performance-results/
 .DS_Store
 *.local
 *.log

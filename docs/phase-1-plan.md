@@ -1,7 +1,7 @@
 # Dark Chess — Phase 1 Implementation Plan
 
-**Version:** 0.7 — Task 4 implementation\
-**Status:** Tasks 1–4 implemented; Task 4 review pending; Tasks 5–6 not authorized\
+**Version:** 0.9 — Tasks 5–6 joint verification\
+**Status:** Tasks 1–6 implemented; joint review and physical-device/hosted-CI acceptance pending\
 **Updated:** 2026-11-09
 
 ## Task documents
@@ -13,9 +13,9 @@ This file is the navigation overview. Detailed scope, acceptance criteria, verif
 | 1 | [Workspace and first flip](tasks/task-1-workspace-first-flip.md) | Complete |
 | 2 | [Movement, capture, and board interaction](tasks/task-2-movement-capture.md) | Complete; owner confirmed |
 | 3 | [Outcomes, no-progress rule, and chase prohibition](tasks/task-3-outcomes-chase.md) | Complete; committed as `c1a9916` |
-| 4 | [History, exact undo, and restart](tasks/task-4-history-undo-restart.md) | Implemented; owner review pending |
-| 5 | [Progressive post-game Review](tasks/task-5-progressive-review.md) | Planned; not authorized |
-| 6 | [Usability, visual finish, and final verification](tasks/task-6-usability-verification.md) | Planned; not authorized |
+| 4 | [History, exact undo, and restart](tasks/task-4-history-undo-restart.md) | Complete; committed as `d73538d` |
+| 5 | [Progressive post-game Review](tasks/task-5-progressive-review.md) | Implemented; owner review pending |
+| 6 | [Usability, visual finish, and final verification](tasks/task-6-usability-verification.md) | Implemented; device/hosted-CI acceptance pending |
 
 ## Authoritative context
 
@@ -34,12 +34,12 @@ Read [AGENTS.md](../AGENTS.md), [product specification](product-spec.md), [game 
 
 Task 1 recorded 62 passing tests at its completion. Task 2 used actual Core/Frontend/QA subagents and, after the owner's UX amendment, recorded typecheck, 340 tests across five files, and production build passing. The [Task 2 report](task-2-report.md) distinguishes original browser/QA evidence from its later UX amendment. These are historical verification results; the current task-file organization adds no application code and does not rerun those checks.
 
-Task 3 implements counters, outcomes, and the narrow chase prohibition, including the owner's later-pattern chase regression, and is committed as `c1a9916`. Task 4 adds exact undo, derived history/captures, and confirmed restart. Typecheck, 420 tests in 10 files, and build pass; Chrome smoke checks cover undo/history and restart cancellation/confirmation. See the Task 4 record for verification limits. Tasks 5–6 remain plans and are not authorized.
+Task 3 implements outcomes/chase (`c1a9916`); Task 4 implements exact undo, history/captures, and restart (`d73538d`). Task 5 adds Progressive Review; Task 6 adds accessibility fixes, production-browser verification, CI configuration, and legal long-game measurement tooling. Typecheck, 451 tests in 13 files, production build, and 22 Chromium/WebKit checks pass. Five-sample host baselines cover short and 607-action completed games. See the Task 6 evidence report for exact results and remaining acceptance gaps.
 
 The latest Task 3 authorization allows minimal additive tracking types and narrow interpretation of ambiguous chase cases. If all ordinary actions are chase-prohibited, preserve ACTIVE without inventing adjudication; this documented stalemate limitation remains for future owner policy review.
 
-The repository currently has typecheck/test/build scripts, no ESLint/Prettier setup, and no test:e2e script. Each task must distinguish existing commands from planned tooling and report unavailable checks honestly.
+The repository has typecheck/test/build scripts, production `test:e2e`, and opt-in `verify:performance`. ESLint/Prettier remain unconfigured. Actual iPhone Safari/Android Chrome, native device zoom/timing, hosted CI execution, and owner acceptance remain pending; Phase 1 completion is not declared.
 
 ## Authorization and handoff
 
-The owner authorized Task 4 and requires a review handoff before Task 5. Rule/public contract changes, significant dependencies/layers, commits, pushes, deployment, and destructive operations remain approval boundaries.
+The owner authorized Task 6 so Tasks 5–6 can be tested together. Stop for joint review and the physical-device checklist. Rule/public contract changes, significant dependencies/layers beyond approved verification tooling, commits, pushes, deployment, destructive operations, and Phase 2 work remain approval boundaries.

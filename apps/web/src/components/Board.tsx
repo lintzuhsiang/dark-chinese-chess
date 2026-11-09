@@ -20,6 +20,7 @@ export function Board({ squares, selectedSquare = null, onSquareClick, disabled 
             <button
               className={`square ${piece ? `revealed ${piece.color.toLowerCase()}` : square.kind.toLowerCase()}${selectedSquare === position ? ' selected' : ''}`}
               type="button"
+              tabIndex={0}
               aria-label={`${coordinate}，${label}`}
               aria-pressed={selectedSquare === position}
               onClick={() => onSquareClick(position)}

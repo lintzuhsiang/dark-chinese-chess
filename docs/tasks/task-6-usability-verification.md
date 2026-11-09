@@ -1,7 +1,8 @@
 # Task 6 — Usability, Visual Finish, and Final Verification
 
-**Status:** Planned; not started or authorized  
-**Dependencies:** Tasks 1–5 implemented and reviewed; all Task 3 decisions resolved
+**Status:** Implemented; automated checks passed; physical-device/hosted-CI acceptance pending\
+**Authorization:** Owner authorized Task 6 and joint Tasks 5–6 testing on 2026-11-09\
+**Dependencies:** Tasks 1–5 implemented; owner elected joint review of Tasks 5–6. Approved Task 3 house-rule limitation remains unchanged.
 
 ## Objective
 
@@ -11,22 +12,34 @@ Read [AGENTS.md](../../AGENTS.md), the [product specification's visual/non-funct
 
 ## Visual and interaction acceptance criteria
 
-- [ ] Preserve warm neutral surfaces, clear boundaries, red/dark pieces, deliberate typography/spacing, and simple controls. No decorative gradients, animation, sound, celebration effects, strategy overlays, or legal-move hints.
-- [ ] At default zoom in 320×640 and 390×844 portrait and 1280×800 desktop CSS viewports, the normal play screen shows all 32 cells and essential turn/action controls without page scrolling, overlap, or horizontal overflow. History may use its own bounded area/panel.
-- [ ] Every board cell and primary control provides at least a 44×44 CSS-pixel target. Empty destinations remain interactive. Larger screens do not excessively stretch the board.
-- [ ] At 200% zoom/increased text size, vertical scrolling is acceptable; all squares, text, and controls remain readable and reachable without clipping important content.
-- [ ] Tab/Shift+Tab and Enter/Space operate board/control buttons with visible focus and no trap. A custom arrow-key grid is not required.
-- [ ] Traditional Chinese labels contain coordinates and public piece information only; hidden labels disclose no piece identity. Turn, result, and rejection messages are announced through the existing status area. Important state is not conveyed by color alone.
-- [ ] Normal text contrast is at least 4.5:1; essential control boundaries/focus indicators are at least 3:1 against adjacent colors.
-- [ ] First-flip assignment, selection/switching, direct hidden-piece FLIP from a selection, destination attempts, undo, history, restart, and Progressive Review remain consistent after layout/accessibility changes.
+- [x] Preserve warm neutral surfaces, clear boundaries, red/dark pieces, deliberate typography/spacing, and simple controls. No decorative gradients, animation, sound, celebration effects, strategy overlays, or legal-move hints.
+- [x] At default zoom in 320×640 and 390×844 portrait and 1280×800 desktop CSS viewports, the normal play screen shows all 32 cells and essential turn/action controls without page scrolling, overlap, or horizontal overflow. Review is also checked at these sizes; after the 2026-11-10 amendment its full selectable history is a bounded sidebar on wider screens and below the board on phones. Narrow Review pages may scroll vertically; normal play remains unchanged.
+- [x] Every board cell and primary control provides at least a 44×44 CSS-pixel target. Empty destinations remain interactive. Larger screens do not excessively stretch the board.
+- [x] Automated 200% text-size and zoom-equivalent reflow checks preserve reachability. Actual phone/browser-native zoom remains part of the unchecked physical-device acceptance below.
+- [x] Tab/Shift+Tab and Enter/Space operate board/control buttons with visible focus and no trap. Explicit zero tab indices address WebKit's native button skipping; no custom arrow-key grid is added.
+- [x] Traditional Chinese labels contain coordinates and public piece information only; hidden labels disclose no piece identity. Turn, result, and rejection messages use the existing live status area. Important state is not conveyed by color alone.
+- [x] Measured normal text contrast is at least 4.5:1 and essential control boundaries/focus at least 3:1 in the tested rendered states. See the evidence report for actual minima and method.
+- [x] First-flip assignment, selection/switching, direct hidden-piece FLIP from a selection, destination attempts, undo, history, restart, and Progressive Review remain consistent after layout/accessibility changes.
 
 ## Correctness and browser acceptance criteria
 
-- [ ] Existing Core/session/UI tests pass without weakening rules or bypassing validation. Completed games enforce results and the approved chase rule, not a generic repetition draw or chase-induced loss.
-- [ ] A small Playwright suite covers start, first/subsequent flip, legal move/capture, invalid action, chase rejection, undo, restart cancel/confirm, terminal result, and Progressive Review/exit. Reuse the approved test tooling; add `pnpm test:e2e` if Task 5 has not established it.
-- [ ] Deterministic decks/timelines remain test-only. Production bundles/DOM have no test endpoints, exposed seed/deck, hidden identities, or validation bypass hooks.
+- [x] Existing Core/session/UI tests pass without weakening rules or bypassing validation. Completed games enforce results and the approved chase rule, not a generic repetition draw or chase-induced loss.
+- [x] The Playwright suite covers start, first/subsequent flip, legal move/capture, invalid action, repeated/later-pattern chase rejection, undo, restart cancel/confirm, terminal draw, and Progressive Review/exit in Chromium and WebKit.
+- [x] Deterministic decks/timelines remain test-only. Production bundle/DOM inspection finds no test endpoints, exposed seed/deck, hidden identities, or verification hooks.
 - [ ] Manually check actual iPhone Safari and Android Chrome, recording devices/browser versions and observations. Desktop/emulated viewport success is not a substitute for claiming physical-device verification.
 - [ ] CI runs the established typecheck, tests, build, and small E2E checks without deployment or publication. Creating a local workflow file does not authorize committing/pushing it.
+
+The CI workflow is authored in `.github/workflows/verify.yml` with read-only repository permission, and its corresponding commands pass locally. The checkbox remains open until an owner-authorized hosted run is recorded. Physical devices were not connected; use [the manual checklist](../verification/manual-checks.md), including the tested trusted-tap console procedure, to close that acceptance item.
+
+## Implementation and executed evidence
+
+Relative fonts/board minima support text enlargement; darker hidden text and square boundaries meet measured contrast; explicit zero tab indices and view focus improve WebKit keyboard access. The browser runner now builds and serves production output. No Game Core rule/contract or runtime dependency changed.
+
+`pnpm typecheck`, `pnpm test` (**451 tests in 13 files**), `pnpm build`, and `pnpm test:e2e` (**22 Chromium/WebKit checks**) pass. A separate three-case WebKit screenshot recheck confirms stable painted titles/layout. `pnpm verify:performance` passes its functional checks and records five samples per operation for 7/66-action and 547/607-action games in two Chromium host configurations; it has no timing threshold assertion and is excluded from CI.
+
+Apple M1/macOS 27.2/Chromium 158 host medians are approximately **31–32 ms** for action, undo, and Review jump in both games. The touch-viewport baseline is browser emulation, not a physical-phone result. All 607 fixture actions pass production validation with progress resets, conservation, and selected-prefix reconstruction checks.
+
+See [the evidence/acceptance audit](../verification/task-6-results.md), [raw five-sample baselines](../verification/performance-baseline.json), and [physical-device steps](../verification/manual-checks.md). Native phone zoom/taps/performance and hosted CI remain pending. ESLint/Prettier remain unconfigured. Phase 1 completion is not declared, and the owner authorized a local commit after the 2026-11-10 Review refinement; no push, deployment, or Phase 1.5/2 work is performed.
 
 ## Lightweight performance verification
 

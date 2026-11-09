@@ -1,0 +1,168 @@
+{
+  "sessionDate": "2026-11-10",
+  "change": "Complete selectable public Review history; default text size",
+  "hostOS": "macOS 27.2",
+  "physicalPhoneResults": "Pending; both configurations are host measurements, not physical devices",
+  "reports": [
+    {
+      "project": "desktop-chromium",
+      "browser": "158.0.8127.18",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+      "node": "v26.10.0",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M1",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "physicalDevice": false,
+      "productionBuild": true,
+      "method": "click capture listener → two requestAnimationFrame callbacks; five samples; no pass/fail timing assertion",
+      "runs": [
+        {
+          "name": "short",
+          "activeActions": 7,
+          "completedActions": 66,
+          "actionMs": [
+            31.5,
+            31.400000005960464,
+            31.5,
+            32.100000001490116,
+            31.599999994039536
+          ],
+          "undoMs": [
+            31.600000001490116,
+            31.5,
+            31.600000001490116,
+            31.599999994039536,
+            31.100000001490116
+          ],
+          "reviewMs": [
+            31.299999997019768,
+            31.399999998509884,
+            30.799999997019768,
+            31.5,
+            31.5
+          ],
+          "medians": {
+            "action": 31.5,
+            "undo": 31.599999994039536,
+            "review": 31.399999998509884
+          }
+        },
+        {
+          "name": "long",
+          "activeActions": 547,
+          "completedActions": 607,
+          "actionMs": [
+            30.399999998509884,
+            31.299999997019768,
+            32,
+            31.799999997019768,
+            31.69999999552965
+          ],
+          "undoMs": [
+            30.299999997019768,
+            32.099999994039536,
+            31.799999997019768,
+            32.79999999701977,
+            32.100000001490116
+          ],
+          "reviewMs": [
+            31.69999999552965,
+            31.69999999552965,
+            31.700000002980232,
+            31.5,
+            31.69999999552965
+          ],
+          "medians": {
+            "action": 31.69999999552965,
+            "undo": 32.099999994039536,
+            "review": 31.69999999552965
+          }
+        }
+      ]
+    },
+    {
+      "project": "touch-viewport-chromium",
+      "browser": "158.0.8127.18",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/158.0.8127.18 Safari/537.36",
+      "node": "v26.10.0",
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpu": "Apple M1",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "physicalDevice": false,
+      "productionBuild": true,
+      "method": "click capture listener → two requestAnimationFrame callbacks; five samples; no pass/fail timing assertion",
+      "runs": [
+        {
+          "name": "short",
+          "activeActions": 7,
+          "completedActions": 66,
+          "actionMs": [
+            31.900000005960464,
+            31.600000001490116,
+            30.19999999552965,
+            30.200000002980232,
+            31.399999998509884
+          ],
+          "undoMs": [
+            31,
+            31.19999999552965,
+            32.399999998509884,
+            31.69999999552965,
+            30.799999997019768
+          ],
+          "reviewMs": [
+            31.5,
+            31.799999997019768,
+            32.400000005960464,
+            31.600000001490116,
+            30.80000000447035
+          ],
+          "medians": {
+            "action": 31.399999998509884,
+            "undo": 31.19999999552965,
+            "review": 31.600000001490116
+          }
+        },
+        {
+          "name": "long",
+          "activeActions": 547,
+          "completedActions": 607,
+          "actionMs": [
+            31.100000001490116,
+            32,
+            31.80000000447035,
+            32,
+            31.600000001490116
+          ],
+          "undoMs": [
+            31.599999994039536,
+            31.400000005960464,
+            31.700000002980232,
+            31.69999999552965,
+            30.69999999552965
+          ],
+          "reviewMs": [
+            31.299999997019768,
+            32.69999999552965,
+            31.600000001490116,
+            31.700000002980232,
+            31.799999997019768
+          ],
+          "medians": {
+            "action": 31.80000000447035,
+            "undo": 31.599999994039536,
+            "review": 31.700000002980232
+          }
+        }
+      ]
+    }
+  ]
+}

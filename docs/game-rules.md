@@ -4,7 +4,7 @@
 **Ruleset:** Taiwanese Banqi — Project Ruleset  
 **Status:** Task 3 implemented; owner review pending
 
-Task 3 implements outcomes, counters, and the simplified chase house rule under the owner's 2026-11-09 authorization to choose a narrow deterministic interpretation. General repetition never causes a draw. Chase prohibits a third qualifying return without inducing a loss; the no-alternative limitation is stated below. Task 4 adds session-level undo, history, and restart without changing these rules; Review remains later work. This is a project-specific ruleset, not a universal tournament standard.
+Task 3 implements outcomes, counters, and the simplified chase house rule under the owner's 2026-11-09 authorization to choose a narrow deterministic interpretation. General repetition never causes a draw. Chase prohibits a third qualifying return without inducing a loss; the no-alternative limitation is stated below. Tasks 4–5 add session-level undo, history, restart, and read-only Progressive Review without changing these rules. This is a project-specific ruleset, not a universal tournament standard.
 
 ## 1. Board and Pieces
 

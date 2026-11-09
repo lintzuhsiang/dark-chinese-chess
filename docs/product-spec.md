@@ -1,10 +1,10 @@
 # Dark Chess — Product Specification
 
-**Version:** 0.6 — Task 4 implementation\
-**Status:** Tasks 1–4 implemented; Task 4 review pending; Tasks 5–6 not authorized\
+**Version:** 0.9 — Selectable completed-game Review history\
+**Status:** Tasks 1–6 implemented; physical-device/hosted-CI acceptance and owner review pending\
 **Target:** Phase 1 — Functional MVP
 
-Task 4 implements history, exact undo, and confirmed restart under the owner's authorization. Task 3's outcomes/counters and chase interpretation remain unchanged, including the documented no-alternative limitation. Tasks 5–6 remain later work; this increment is not the completed MVP. Product requirements below are unchanged.
+Task 5 implements Progressive Review; Task 6 implements usability/accessibility fixes, production-browser checks, CI configuration, and verification tooling under the owner's joint-testing authorization. Physical devices, hosted CI, and owner acceptance remain pending, including review of the documented no-alternative chase limitation. Phase 1 completion is not declared. The owner amended Review on 2026-11-10 to show the complete public completed-game history beside the board and allow direct step selection; FR-06 and its acceptance criterion reflect that amendment.
 
 ## 1. Product Vision
 
@@ -150,12 +150,12 @@ After a completed game, players can:
 - Move forward one action.
 - Move backward one action.
 - Jump to the first or final position.
-- View the corresponding action number and history prefix.
+- View the complete accepted history and select any action to render its resulting board position.
 - Exit Review and return to the completed game screen.
 
-Use **Progressive Review**. At cursor `k`, render the board after the first `k` accepted actions and display only those `k` history entries. Cursor 0 has the initial hidden board and empty history. Cursor `N` has the completed position and all `N` active entries. Exclude undone actions at every cursor.
+Use **Progressive Review**. At cursor `k`, render the board after the first `k` accepted actions. Keep the complete public history of the completed game visible, highlight the selected step, and allow direct selection of any step, including opening. Place this scrollable history beside the board on wider screens and below it on narrow screens. Cursor 0 has the initial hidden board; cursor `N` has the completed position. Exclude undone actions from the list.
 
-The replayed board must match the actual board at every historical step, including which pieces were hidden at that time. Future flips, captures, assignments, and the final result must not leak into an earlier replay projection. Hidden piece identities must be absent from rendered data, accessibility labels, and attributes, not merely concealed visually.
+The replayed board must match the actual board at every historical step, including which pieces were hidden at that time. The board, assignments, capture summary, and result follow the selected prefix. Later public action details are intentionally visible in the completed-game history list; they must not alter the earlier board projection. Historical hidden-square labels remain generic. Identities never revealed in the completed public timeline and private piece IDs must be absent from rendered data, accessibility labels, and attributes, not merely concealed visually.
 
 Review is unavailable during active play. Review controls cannot submit game actions or mutate the completed session. Exiting Review returns to the unchanged completed position.
 
@@ -278,7 +278,7 @@ Phase 1 is complete when:
 - Automated rule tests and basic E2E tests pass.
 - Terminal turn/result behavior and removal of general repetition draws are verified.
 - The remaining no-alternative chase decision is resolved and all chase acceptance tests pass; an approved specification alone is not implemented behavior.
-- Progressive Review exposes only the selected history prefix and corresponding public state.
+- Progressive Review keeps the full completed public history selectable while board/turn/result/capture summary match the selected prefix.
 - The viewport, touch, keyboard, hidden-data, and lightweight performance checks above are recorded.
 
 ## 9. Future Roadmap

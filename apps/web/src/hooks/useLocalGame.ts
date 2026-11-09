@@ -1,20 +1,21 @@
 import { useMemo, useReducer } from 'react';
-import { getObservation } from '@dark-chess/game-core';
 import { createShuffledDeck } from '../game/deck';
 import { boardUiReducer, initialBoardUi } from '../game/interaction';
-import { reconstructGame } from '../game/reconstruct';
+import { projectSession } from '../game/review';
 
 export function useLocalGame() {
   const [ui, dispatch] = useReducer(boardUiReducer, initialBoardUi);
-  const currentState = ui.local.session?.currentState;
-  const initialDeck = ui.local.session?.initialDeck;
-  const actions = ui.local.session?.actions;
-  const observation = useMemo(() => currentState ? getObservation(currentState) : null, [currentState]);
-  const history = useMemo(() => initialDeck && actions
-    ? reconstructGame(initialDeck, actions).events : [], [initialDeck, actions]);
-  const captured = useMemo(() => history.flatMap(event => event.type === 'MOVE' && event.captured
-    ? [event.captured] : []), [history]);
-  const canUndo = currentState?.status === 'ACTIVE' && (actions?.length ?? 0) > 0;
+  const session = ui.local.session;
+  const currentState = session?.currentState;
+  // Public completed-game history is stable while seeking. The board and capture
+  // summary still come from the selected prefix, never from this full timeline.
+  const liveView = useMemo(() => session ? projectSession(session, null) : null, [session]);
+  const view = useMemo(() => session && ui.reviewCursor !== null
+    ? projectSession(session, ui.reviewCursor) : liveView, [session, ui.reviewCursor, liveView]);
+  const isReview = ui.reviewCursor !== null;
+  const totalActions = session?.actions.length ?? 0;
+  const canUndo = !isReview && currentState?.status === 'ACTIVE' && totalActions > 0;
+  const canReview = !isReview && currentState?.status === 'FINISHED';
 
   function startGame() {
     dispatch({ type: 'START', deck: createShuffledDeck() });
@@ -29,11 +30,17 @@ export function useLocalGame() {
   }
 
   function restartGame(confirmed: boolean) {
-    if (!currentState || (currentState.status === 'ACTIVE' && !confirmed)) return;
+    if (isReview || !currentState || (currentState.status === 'ACTIVE' && !confirmed)) return;
     dispatch({ type: 'RESTART', deck: createShuffledDeck(), confirmed });
   }
 
   // Rendering receives no session, deck, IDs, full state, or raw timeline.
-  return { observation, history, captured, canUndo, error: ui.local.error, selectedSquare: ui.selectedSquare,
-    startGame, clickSquare, undo, restartGame };
+  return { observation: view?.observation ?? null, history: view?.history ?? [], captured: view?.captured ?? [],
+    reviewHistory: isReview ? liveView?.history ?? [] : [],
+    canUndo, canReview, reviewCursor: ui.reviewCursor, totalActions, error: ui.local.error, selectedSquare: ui.selectedSquare,
+    startGame, clickSquare, undo, restartGame,
+    openReview: () => dispatch({ type: 'OPEN_REVIEW' }),
+    closeReview: () => dispatch({ type: 'CLOSE_REVIEW' }),
+    seekReview: (cursor: number) => dispatch({ type: 'REVIEW_TO', cursor }),
+  };
 }

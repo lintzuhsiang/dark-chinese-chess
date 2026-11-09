@@ -1,6 +1,6 @@
 # Task 4 — History, Exact Undo, and Restart
 
-**Status:** Implemented; owner review pending\
+**Status:** Complete; committed as `d73538d`; owner authorized Task 5\
 **Authorization:** Owner authorized Task 4 on 2026-11-09\
 **Dependencies:** [Task 3](task-3-outcomes-chase.md) complete, committed as `c1a9916`, including the later-pattern chase fix
 
