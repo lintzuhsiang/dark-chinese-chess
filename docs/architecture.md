@@ -1,10 +1,10 @@
 # Dark Chess — Architecture
 
-**Version:** 0.4 — Task 1 authorization  
-**Status:** Task 1 approved; later implementation tasks not authorized  
+**Version:** 0.5 — Task 2 authorization  
+**Status:** Tasks 1–2 complete; Tasks 3–6 not authorized  
 **Scope:** Phase 1 implementation with future AI and multiplayer compatibility
 
-The owner has authorized Task 1 in `phase-1-plan.md`. Implement only initialization/flips and their local session/UI. The contracts below describe the intended full Phase 1 interface; MOVE handling, legal-action enumeration, outcomes, and chase tracking arrive in later tasks. Chase coverage/threshold and prohibition-only enforcement are approved in `game-rules.md`, section 10, but its no-alternative edge case and private tracker schema remain for Task 3. No chase-induced loss or repetition draw is authorized.
+The owner has authorized Task 2 in `phase-1-plan.md`: MOVE validation/transitions, legal-action enumeration, and selection/destination UI. Preserve the existing public contracts below. Outcomes, no-progress counter policy, and chase tracking remain Task 3 work. Chase coverage/threshold and prohibition-only enforcement are approved in `game-rules.md`, section 10, but its no-alternative edge case and private tracker schema remain open. No chase-induced loss or repetition draw is authorized.
 
 ## 1. Architecture Goals
 
@@ -125,7 +125,7 @@ It must not independently determine move legality.
 
 ## 5. Domain Types
 
-These are the approved baseline contracts, implemented incrementally by the task plan. The intentionally incomplete rule-state contract is the future chase tracker; do not add it to the flip-only Task 1 model. In Task 1, MOVE remains a declared action type but is rejected without mutation; `getLegalActions` is not implemented until Task 2.
+These are the approved baseline contracts, implemented incrementally by the task plan. Task 2 implements MOVE and `getLegalActions` without changing their shapes. The future chase tracker and outcome policy remain Task 3 work. Accepted MOVE advances `plyCount` and the turn; this increment leaves stored `noProgressCount` unchanged for MOVE rather than implementing Task 3 counter policy early. Existing FLIP reset behavior is preserved.
 
 ```ts
 type PlayerId = "P1" | "P2";
@@ -601,7 +601,7 @@ When making implementation decisions:
 - Resolving the no-alternative chase edge case and finalizing its future tracker contract
 - Deploying, pushing, or deleting files, as required by `AGENTS.md`
 
-Small internal implementation decisions may be made by Codex within the authorized task: function/module organization, reducer details, plain CSS versus CSS Modules, input checks, deterministic test fixtures, and memoization on the correct dependencies. Task 1 is authorized; Tasks 2–6 are not.
+Small internal implementation decisions may be made by Codex within the authorized task: function/module organization, reducer details, plain CSS versus CSS Modules, input checks, deterministic test fixtures, and memoization on the correct dependencies. Task 2 is authorized; Tasks 3–6 are not.
 
 ## 15. Phase 1 Architecture Acceptance
 

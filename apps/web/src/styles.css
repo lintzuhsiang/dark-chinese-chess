@@ -40,6 +40,7 @@ h1 { font-family: 'Songti TC', 'Noto Serif TC', serif; font-size: 32px; font-wei
 .board { display: grid; grid-template-columns: repeat(4, var(--cell)); gap: 6px; list-style: none; margin: 0; padding: 12px; border: 1px solid #a99a86; border-radius: 5px; background: #e6ddcf; }
 .board li { display: flex; }
 .square { width: var(--cell); height: var(--cell); display: grid; place-items: center; border: 1px solid #b4a691; border-radius: 3px; padding: 3px; background: #f7f2e9; }
+.square.selected { border: 3px solid #6b5945; padding: 1px; }
 .piece { display: grid; place-items: center; width: 100%; height: 100%; border: 1px solid #796a56; border-radius: 50%; font-family: 'Songti TC', 'Noto Serif TC', serif; font-size: calc(var(--cell) * .5); font-weight: 600; line-height: 1; }
 .hidden .piece { background: #e4dbc9; color: #766650; font-size: calc(var(--cell) * .3); font-weight: 400; }
 .revealed.red .piece { color: #a33c30; border-color: #a33c30; }

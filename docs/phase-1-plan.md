@@ -1,12 +1,12 @@
 # Dark Chess — Phase 1 Implementation Plan
 
-**Version:** 0.4 — Task 1 authorization  
-**Status:** Task 1 authorized; Tasks 2–6 require later authorization  
+**Version:** 0.5 — Task 2 authorization  
+**Status:** Tasks 1–2 complete; Tasks 3–6 require later authorization  
 **Scope:** Tasks 0–6, local two-player Functional MVP
 
 ## Approval and scope gates
 
-- The owner reviewed Task 0 and authorized Task 1. Implement only that vertical slice, then stop for independent review; do not begin Task 2.
+- Tasks 1–2 are complete and accepted. Task 2 used a Main Agent, Game Core Engineer, Frontend Engineer, and read-only Independent QA Reviewer. Task 3 requires separate authorization.
 - Terminal next-player handling, observation/history ownership, Progressive Review, simple reconstruction, and removal of general threefold-repetition draws are approved decisions incorporated into the specifications.
 - Chase coverage, cycle threshold, resets, and exclusions in `game-rules.md`, section 10 are approved. The owner selected prohibition only, with no chase-induced loss. The no-alternative edge case and final tracker contract remain for Task 3; do not implement them during Task 1.
 - Intermediate increments are development checkpoints, not completed implementations of the full ruleset. Do not silently ship Phase 1 without the required chase enforcement.
@@ -26,7 +26,7 @@ Acceptance and verification:
 
 ## Task 1 — Minimal workspace and first-flip vertical slice
 
-**Implementation status:** Completed locally on 2026-11-09; independent owner review pending. Typecheck, 62 tests, production build, and the start/flip/turn/keyboard/rejection browser smoke checks passed. See `../README.md` for commands, results, review entry points, and limitations. Tasks 2–6 have not started.
+**Implementation status:** Completed locally on 2026-11-09 and reviewed before Task 2 authorization. Typecheck, 62 tests, production build, and the start/flip/turn/keyboard/rejection browser smoke checks passed. See `../README.md` for commands, results, review entry points, and limitations.
 
 Use the agreed TypeScript, React/Vite, pnpm workspace, plain CSS/CSS Modules, and Vitest stack. Establish only `apps/web` and `packages/game-core`. Add a simple Traditional Chinese local-game entry, board, and turn display; prioritize a clean neutral baseline without elaborate visual work.
 
@@ -46,6 +46,10 @@ Verification:
 
 ## Task 2 — Movement, captures, and board interaction
 
+**Implementation status:** Completed and accepted on 2026-11-09. Following the owner's hidden-piece flip UX amendment, typecheck, 340 tests across five files, and production build passed. Original Task 2 native Safari selection/capture/empty-move smoke checks passed. See `task-2-report.md` for actual delegation, independent QA, timing, unavailable lint/format checks, and remaining limitations. Task 3 has not started.
+
+**Execution:** Main owns root/docs/integration; Core Engineer writes only `packages/game-core/`; Frontend Engineer writes only `apps/web/`; QA Reviewer is read-only. This is a shared checkout, not isolated worktrees. Preserve public contracts, add no dependencies, and leave outcome/no-progress/chase policy to Task 3.
+
 Add core validation and enumeration for ordinary movement and rank/Cannon captures, and connect selection/destination interactions to the same action-submission boundary. Do not duplicate legality in the UI.
 
 Acceptance criteria:
@@ -55,6 +59,7 @@ Acceptance criteria:
 - Hidden sources/targets, friendly captures, wrong-player moves, diagonals, and illegal jumps are rejected with no change to board, turn, counters, or timeline.
 - Legal-action enumeration and submission share validation. MOVE events identify the actor, source/destination, public mover, and captured public piece or null.
 - Tap/click supports selection/deselection and submits at most one game action per activation. Accepted actions clear selection; invalid attempts show a brief status message without hints.
+- Owner UX amendment: a hidden-piece tap submits FLIP regardless of an existing selection. Success clears selection, appends one FLIP, and advances the turn; empty/revealed destinations retain MOVE/capture routing.
 
 Verification:
 
@@ -154,4 +159,4 @@ Verification:
 
 ## Next recommended task
 
-Task 1 is the current authorized implementation: minimal workspace and start → first-flip → next-player slice. On completion, stop for the owner's independent review. Task 2 is not authorized. Task 3's open no-alternative decision does not block this flip-only slice.
+Task 2 is complete and accepted, including the hidden-piece flip UX amendment. Task 3 is not authorized and its chase no-alternative decision remains open.

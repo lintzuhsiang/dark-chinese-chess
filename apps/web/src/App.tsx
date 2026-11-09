@@ -6,9 +6,9 @@ const playerNames: Readonly<Record<PlayerId, string>> = { P1: '玩家一', P2: '
 const errorMessages = {
   INVALID_DECK: '無法建立棋盤，請再試一次。',
   NOT_YOUR_TURN: '尚未輪到這位玩家。',
-  INVALID_SOURCE: '無法操作這個位置。',
+  INVALID_SOURCE: '請先選擇自己的明棋。',
   INVALID_DESTINATION: '這個位置不在棋盤內。',
-  ILLEGAL_MOVE: '目前無法移動這枚棋子。',
+  ILLEGAL_MOVE: '這一步無法移動或吃子。',
   INVALID_FLIP: '這枚棋子已翻開。',
   INVALID_ACTION: '目前無法進行這個操作。',
   GAME_FINISHED: '對局已結束。',
@@ -30,10 +30,9 @@ function Players({ colors, current }: { readonly colors: PlayerColors; readonly 
 }
 
 export function App() {
-  const { observation, error, startGame, flip } = useLocalGame();
-  const allRevealed = observation?.board.every(square => square.kind !== 'HIDDEN');
+  const { observation, error, selectedSquare, startGame, clickSquare } = useLocalGame();
   const turnText = observation === null ? '同一台裝置，輪流對弈。'
-    : allRevealed ? '棋子已全部翻開。' : `輪到${playerNames[observation.currentPlayer]}翻棋`;
+    : `輪到${playerNames[observation.currentPlayer]}`;
 
   return (
     <div className={`app ${observation ? 'playing' : 'welcome'}`}>
@@ -56,8 +55,9 @@ export function App() {
             <div className="game-status" role="status" aria-live="polite" aria-atomic="true">
               <p>{turnText}{error && <span className="error-message"> · {errorMessages[error.code]}</span>}</p>
             </div>
-            <Board squares={observation.board} onFlip={flip} />
-            <p className="board-note">{observation.playerColors.P1 === null ? '第一枚棋子，決定你的顏色。' : '輪流翻棋，每次一枚。'}</p>
+            <Board squares={observation.board} selectedSquare={selectedSquare} onSquareClick={clickSquare} />
+            <p className="board-note">{observation.playerColors.P1 === null ? '第一枚棋子，決定你的顏色。'
+              : selectedSquare !== null ? '點選目的地，或直接翻開暗棋。' : '翻暗棋，或選擇自己的明棋。'}</p>
           </section>
         )}
         {observation === null && <p className="entry-status" role="status">{error ? errorMessages[error.code] : turnText}</p>}

@@ -2,6 +2,7 @@ import type {
   ActionResult, GameAction, GameResult, GameState, InitialStateResult,
   Piece, PieceColor, PieceRank, PlayerId, PlayerObservation, PublicPiece,
 } from './types';
+import { getActionError } from './validation';
 
 export type * from './types';
 
@@ -60,19 +61,32 @@ function publicPiece({ color, rank }: Piece): PublicPiece {
 }
 
 export function applyAction(state: GameState, playerId: PlayerId, action: GameAction): ActionResult {
-  if (state.status === 'FINISHED') return { ok: false, error: { code: 'GAME_FINISHED' } };
-  if (playerId !== state.currentPlayer) return { ok: false, error: { code: 'NOT_YOUR_TURN' } };
-  if (!isRecord(action)) return { ok: false, error: { code: 'INVALID_ACTION' } };
-  // MOVE is part of the approved contract, but its behavior belongs to Task 2.
-  if (action.type === 'MOVE') return { ok: false, error: { code: 'ILLEGAL_MOVE' } };
-  if (action.type !== 'FLIP') return { ok: false, error: { code: 'INVALID_ACTION' } };
-  const position = action.position;
-  if (!Number.isInteger(position) || position < 0 || position >= 32) {
-    return { ok: false, error: { code: 'INVALID_DESTINATION' } };
+  const error = getActionError(state, playerId, action);
+  if (error !== null) return { ok: false, error };
+  if (action.type === 'MOVE') {
+    const source = state.board[action.from]!;
+    const target = state.board[action.to];
+    const board = [...state.board];
+    board[action.from] = null;
+    board[action.to] = source;
+    const nextState: GameState = {
+      ...state,
+      board,
+      currentPlayer: playerId === 'P1' ? 'P2' : 'P1',
+      plyCount: state.plyCount + 1,
+      // No-progress policy and outcome evaluation belong to Task 3.
+    };
+    return {
+      ok: true,
+      state: nextState,
+      event: {
+        ply: nextState.plyCount, playerId, type: 'MOVE', from: action.from, to: action.to,
+        piece: publicPiece(source.piece), captured: target ? publicPiece(target.piece) : null,
+      },
+    };
   }
-  const square = state.board[position];
-  if (!square || square.revealed) return { ok: false, error: { code: 'INVALID_FLIP' } };
-
+  const position = action.position;
+  const square = state.board[position]!;
   const board = [...state.board];
   board[position] = { piece: square.piece, revealed: true };
   const colors = state.playerColors.P1 === null
@@ -91,6 +105,20 @@ export function applyAction(state: GameState, playerId: PlayerId, action: GameAc
     state: nextState,
     event: { ply: nextState.plyCount, playerId, type: 'FLIP', position, piece: publicPiece(square.piece) },
   };
+}
+
+export function getLegalActions(state: GameState, playerId: PlayerId): GameAction[] {
+  if (state.status === 'FINISHED' || playerId !== state.currentPlayer) return [];
+  const actions: GameAction[] = [];
+  for (let position = 0; position < 32; position += 1) {
+    const flip: GameAction = { type: 'FLIP', position };
+    if (getActionError(state, playerId, flip) === null) actions.push(flip);
+    for (let to = 0; to < 32; to += 1) {
+      const move: GameAction = { type: 'MOVE', from: position, to };
+      if (getActionError(state, playerId, move) === null) actions.push(move);
+    }
+  }
+  return actions;
 }
 
 export function getGameResult(state: GameState): GameResult | null {

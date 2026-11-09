@@ -5,9 +5,10 @@ const glyphs: Readonly<Record<PieceColor, Record<PieceRank, string>>> = {
   BLACK: { GENERAL: '將', ADVISOR: '士', ELEPHANT: '象', CHARIOT: '車', HORSE: '馬', CANNON: '包', SOLDIER: '卒' },
 };
 
-export function Board({ squares, onFlip }: {
+export function Board({ squares, selectedSquare = null, onSquareClick }: {
   readonly squares: readonly PublicSquare[];
-  readonly onFlip: (position: number) => void;
+  readonly selectedSquare?: number | null;
+  readonly onSquareClick: (position: number) => void;
 }) {
   return (
     <ol className="board" aria-label="暗棋棋盤，八列四欄">
@@ -20,11 +21,11 @@ export function Board({ squares, onFlip }: {
         return (
           <li key={position}>
             <button
-              className={`square ${piece ? `revealed ${piece.color.toLowerCase()}` : square.kind.toLowerCase()}`}
+              className={`square ${piece ? `revealed ${piece.color.toLowerCase()}` : square.kind.toLowerCase()}${selectedSquare === position ? ' selected' : ''}`}
               type="button"
               aria-label={`${coordinate}，${label}`}
-              onClick={() => onFlip(position)}
-              disabled={square.kind === 'EMPTY'}
+              aria-pressed={selectedSquare === position}
+              onClick={() => onSquareClick(position)}
             >
               <span className="piece" aria-hidden="true">{square.kind === 'EMPTY' ? '' : glyph}</span>
             </button>

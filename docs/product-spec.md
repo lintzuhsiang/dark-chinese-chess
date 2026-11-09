@@ -1,10 +1,10 @@
 # Dark Chess — Product Specification
 
-**Version:** 0.4 — Task 1 authorization  
-**Status:** Task 1 approved; later implementation tasks not authorized  
+**Version:** 0.5 — Task 2 authorization  
+**Status:** Tasks 1–2 complete; Tasks 3–6 not authorized  
 **Target:** Phase 1 — Functional MVP
 
-The owner has approved Task 1 in `phase-1-plan.md`: the minimal workspace, initialization, and flip-only slice. Chase coverage and the three-completed-cycle threshold in `game-rules.md`, section 10 are approved, with move prohibition and no chase-induced loss. The no-alternative edge case remains open for Task 3. Do not implement later tasks during Task 1 or silently omit chase enforcement from the completed MVP.
+The owner has approved Task 2 in `phase-1-plan.md`: movement, capture, and board selection on top of the completed first-flip slice. Chase coverage and the three-completed-cycle threshold in `game-rules.md`, section 10 are approved, with move prohibition and no chase-induced loss. The no-alternative edge case remains open for Task 3. Outcomes, no-progress counter policy, and chase enforcement remain later work; do not silently count this increment as the completed MVP.
 
 ## 1. Product Vision
 
@@ -97,6 +97,7 @@ When the game ends:
 - Tapping an eligible revealed piece selects it.
 - Tapping a destination attempts a move or capture.
 - Tapping the selected piece again deselects it.
+- Tapping another revealed friendly piece switches selection. Tapping a hidden piece always attempts FLIP, even when another piece is selected; a successful flip clears selection and advances the turn. With a piece selected, empty squares and revealed enemies are MOVE/capture attempts. Selection itself consumes no turn and exposes no legal-move hints.
 - Invalid actions must not change the game state.
 - Board positions use row-major indices 0–31: `index = row * 4 + column`, with rows 0–7 and columns 0–3. Reject non-integer or out-of-range positions; adjacent indices across a row boundary are not adjacent squares.
 - Use tap/click or keyboard activation; dragging and gesture controls are not required. One activation submits at most one game action.

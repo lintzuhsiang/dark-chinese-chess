@@ -1,10 +1,10 @@
 # Dark Chess — Game Rules
 
-**Version:** 0.4 — Task 1 authorization  
+**Version:** 0.5 — Task 2 authorization  
 **Ruleset:** Taiwanese Banqi — Project Ruleset  
-**Status:** Task 1 approved; chase definition/threshold approved; no-alternative case open
+**Status:** Tasks 1–2 complete; chase definition/threshold approved; no-alternative case open
 
-The owner's 2026-11-09 decisions remove general threefold-repetition draws and approve terminal turn handling. The subsequent Task 1 authorization approves section 10's chase coverage and three-completed-cycle threshold, with prohibition only and no chase-induced loss. The no-alternative edge case remains open for Task 3. This is a project-specific ruleset, not a claim about a universal tournament standard. Task 1 implements initialization and flips only; chase enforcement belongs to Task 3.
+The owner's 2026-11-09 decisions remove general threefold-repetition draws and approve terminal turn handling. The subsequent Task 1 authorization approves section 10's chase coverage and three-completed-cycle threshold, with prohibition only and no chase-induced loss. Task 2 now authorizes movement/capture, selection, and legal-action enumeration. Outcomes, no-progress counter policy, and chase enforcement remain Task 3 work; this incremental implementation is not the full ruleset below. The no-alternative case remains open for Task 3. This is a project-specific ruleset, not a claim about a universal tournament standard.
 
 ## 1. Board and Pieces
 

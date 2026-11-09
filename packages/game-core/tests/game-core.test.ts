@@ -123,13 +123,13 @@ describe('flip transitions', () => {
       .toEqual({ ok: false, error: { code: 'INVALID_FLIP' } });
   });
 
-  it('rejects actions after completion and keeps MOVE unavailable in Task 1', () => {
+  it('rejects actions after completion and moving a hidden source', () => {
     const state = deepFreeze(initialState());
     const finished: GameState = { ...state, status: 'FINISHED', result: { type: 'DRAW', reason: 'NO_PROGRESS' } };
     expect(applyAction(deepFreeze(finished), 'P1', { type: 'FLIP', position: 0 }))
       .toEqual({ ok: false, error: { code: 'GAME_FINISHED' } });
     expect(applyAction(state, 'P1', { type: 'MOVE', from: 0, to: 1 }))
-      .toEqual({ ok: false, error: { code: 'ILLEGAL_MOVE' } });
+      .toEqual({ ok: false, error: { code: 'INVALID_SOURCE' } });
   });
 
   it('reproduces all 32 flips without using time or randomness', () => {
