@@ -1,10 +1,10 @@
 # Dark Chess — Product Specification
 
 **Version:** 0.5 — Task 2 authorization  
-**Status:** Tasks 1–2 complete; Tasks 3–6 not authorized  
+**Status:** Tasks 1–2 accepted; Task 3 implemented pending review; Tasks 4–6 not authorized\
 **Target:** Phase 1 — Functional MVP
 
-The owner has approved Task 2 in `phase-1-plan.md`: movement, capture, and board selection on top of the completed first-flip slice. Chase coverage and the three-completed-cycle threshold in `game-rules.md`, section 10 are approved, with move prohibition and no chase-induced loss. The no-alternative edge case remains open for Task 3. Outcomes, no-progress counter policy, and chase enforcement remain later work; do not silently count this increment as the completed MVP.
+Task 3 now implements outcomes/counters and the narrow chase interpretation recorded in `game-rules.md`, section 10, under the owner's latest authorization. The no-alternative position is a documented house-rule limitation, not a new loss condition. Tasks 4–6 remain later work; this increment is not the completed MVP. Product requirements below are unchanged.
 
 ## 1. Product Vision
 

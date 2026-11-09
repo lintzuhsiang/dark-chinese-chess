@@ -1,4 +1,4 @@
-import type { PlayerColors, PlayerId } from '@dark-chess/game-core';
+import type { PlayerColors, PlayerId, PlayerObservation } from '@dark-chess/game-core';
 import { Board } from './components/Board';
 import { useLocalGame } from './hooks/useLocalGame';
 
@@ -12,9 +12,20 @@ const errorMessages = {
   INVALID_FLIP: '這枚棋子已翻開。',
   INVALID_ACTION: '目前無法進行這個操作。',
   GAME_FINISHED: '對局已結束。',
+  PERPETUAL_CHASE: '長捉，請改走其他步。',
 } as const;
 
-function Players({ colors, current }: { readonly colors: PlayerColors; readonly current: PlayerId }) {
+export function gameStatusText(observation: PlayerObservation): string {
+  const result = observation.result;
+  if (result?.type === 'WIN') {
+    const reason = result.reason === 'NO_PIECES' ? '對手已無棋子。' : '對手無法行動。';
+    return `${playerNames[result.winner]}獲勝：${reason}`;
+  }
+  if (result?.type === 'DRAW') return '和棋：連續 60 手沒有翻棋或吃子。';
+  return `輪到${playerNames[observation.currentPlayer]}`;
+}
+
+function Players({ colors, current }: { readonly colors: PlayerColors; readonly current: PlayerId | null }) {
   return (
     <div className="players" aria-label="玩家與顏色">
       {(['P1', 'P2'] as const).map(player => (
@@ -31,8 +42,9 @@ function Players({ colors, current }: { readonly colors: PlayerColors; readonly 
 
 export function App() {
   const { observation, error, selectedSquare, startGame, clickSquare } = useLocalGame();
+  const finished = observation?.status === 'FINISHED';
   const turnText = observation === null ? '同一台裝置，輪流對弈。'
-    : `輪到${playerNames[observation.currentPlayer]}`;
+    : gameStatusText(observation);
 
   return (
     <div className={`app ${observation ? 'playing' : 'welcome'}`}>
@@ -51,12 +63,12 @@ export function App() {
           </section>
         ) : (
           <section className="game" aria-label="本機雙人對局">
-            <Players colors={observation.playerColors} current={observation.currentPlayer} />
+            <Players colors={observation.playerColors} current={finished ? null : observation.currentPlayer} />
             <div className="game-status" role="status" aria-live="polite" aria-atomic="true">
               <p>{turnText}{error && <span className="error-message"> · {errorMessages[error.code]}</span>}</p>
             </div>
-            <Board squares={observation.board} selectedSquare={selectedSquare} onSquareClick={clickSquare} />
-            <p className="board-note">{observation.playerColors.P1 === null ? '第一枚棋子，決定你的顏色。'
+            <Board squares={observation.board} selectedSquare={selectedSquare} onSquareClick={clickSquare} disabled={finished} />
+            <p className="board-note">{finished ? '對局已結束。' : observation.playerColors.P1 === null ? '第一枚棋子，決定你的顏色。'
               : selectedSquare !== null ? '點選目的地，或直接翻開暗棋。' : '翻暗棋，或選擇自己的明棋。'}</p>
           </section>
         )}

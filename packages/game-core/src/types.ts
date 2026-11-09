@@ -27,6 +27,16 @@ export type GameResult =
   | { readonly type: 'WIN'; readonly winner: PlayerId; readonly reason: 'NO_PIECES' | 'NO_LEGAL_ACTION' }
   | { readonly type: 'DRAW'; readonly reason: 'NO_PROGRESS' };
 
+// Authoritative rule state only; never included in PlayerObservation or events.
+export interface ChaseState {
+  readonly attackerPlayer: PlayerId;
+  readonly attackerId: string;
+  readonly targetId: string;
+  readonly phase: 'ESCAPE' | 'RENEW';
+  // Qualified threat-position appearances within this continuous chase only.
+  readonly positionCounts: Readonly<Record<string, number>>;
+}
+
 export interface GameState {
   readonly board: Board;
   readonly currentPlayer: PlayerId;
@@ -35,6 +45,7 @@ export interface GameState {
   readonly result: GameResult | null;
   readonly plyCount: number;
   readonly noProgressCount: number;
+  readonly chase: ChaseState | null;
 }
 
 export type PublicPiece = Readonly<Pick<Piece, 'color' | 'rank'>>;
@@ -71,7 +82,7 @@ export type ActionEvent =
 
 export interface ActionError {
   readonly code: 'NOT_YOUR_TURN' | 'INVALID_SOURCE' | 'INVALID_DESTINATION'
-    | 'ILLEGAL_MOVE' | 'INVALID_FLIP' | 'INVALID_ACTION' | 'GAME_FINISHED';
+    | 'ILLEGAL_MOVE' | 'INVALID_FLIP' | 'INVALID_ACTION' | 'GAME_FINISHED' | 'PERPETUAL_CHASE';
 }
 
 export type ActionResult =

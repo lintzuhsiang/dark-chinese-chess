@@ -1,10 +1,10 @@
 # Dark Chess — Architecture
 
-**Version:** 0.5 — Task 2 authorization  
-**Status:** Tasks 1–2 complete; Tasks 3–6 not authorized  
+**Version:** 0.7 — Task 3 contracts\
+**Status:** Task 3 implemented; Tasks 4–6 not authorized\
 **Scope:** Phase 1 implementation with future AI and multiplayer compatibility
 
-The owner has authorized Task 2 in `phase-1-plan.md`: MOVE validation/transitions, legal-action enumeration, and selection/destination UI. Preserve the existing public contracts below. Outcomes, no-progress counter policy, and chase tracking remain Task 3 work. Chase coverage/threshold and prohibition-only enforcement are approved in `game-rules.md`, section 10, but its no-alternative edge case and private tracker schema remain open. No chase-induced loss or repetition draw is authorized.
+Task 3 adds counters, terminal outcomes, and a minimal Core-owned chase tracker under the owner's authorization for additive state/type changes. GameAction, ActionResult, public events, observations, and the session timeline retain their shapes. Chase-induced loss and generic repetition draws remain prohibited. The no-alternative case preserves ACTIVE as a documented house-rule limitation; Tasks 4–6 remain unimplemented and unauthorized.
 
 ## 1. Architecture Goals
 
@@ -134,7 +134,7 @@ It must not independently determine move legality.
 
 ## 5. Domain Types
 
-These are the approved baseline contracts, implemented incrementally by the task plan. Task 2 implements MOVE and `getLegalActions` without changing their shapes. The future chase tracker and outcome policy remain Task 3 work. Accepted MOVE advances `plyCount` and the turn; this increment leaves stored `noProgressCount` unchanged for MOVE rather than implementing Task 3 counter policy early. Existing FLIP reset behavior is preserved.
+Task 3 preserves existing action/result shapes and adds the tracker below to authoritative state, plus the typed `PERPETUAL_CHASE` rejection code. Quiet MOVE now increments `noProgressCount`; FLIP/capture reset it. Public observations and action events deliberately omit the tracker.
 
 ```ts
 type PlayerId = "P1" | "P2";
@@ -202,6 +202,15 @@ interface GameState {
 
   plyCount: number;
   noProgressCount: number;
+  chase: ChaseState | null;
+}
+
+interface ChaseState {
+  attackerPlayer: PlayerId;
+  attackerId: string;
+  targetId: string;
+  phase: "ESCAPE" | "RENEW";
+  positionCounts: Readonly<Record<string, number>>;
 }
 ```
 
@@ -226,7 +235,9 @@ State invariants:
 - Ordinary movement increments `noProgressCount`; a flip or capture resets it. Elimination, next-player lack of ordinary legal actions, and no-progress are evaluated in that order after advancing the turn. An empty chase-filtered action list cannot itself cause a loss.
 - No general position-repetition state, hash, counter, or draw reason exists.
 
-**Future chase state (Task 3):** Game Core will own a deterministic private tracker containing attacker player/ID, target ID, anchor squares, escape/renewal phase, and completed-cycle count, or null when no chain exists. It must be reconstructible and included in undo/replay comparisons. The final field/type contract follows the no-alternative decision in section 10 of the rules; do not implement it in Task 1. The session must not add a second tracker or supply hidden chase history implicitly to a state-only core operation.
+**Chase state:** Initialize `chase` to null. A pure `getChaseUpdate(before, tentativeAfter, action)` returns `{ prohibited, chase }`. Logical position keys use EMPTY/HIDDEN/revealed color-rank squares, next player, and assignments; physical IDs are used only for pair continuity. `positionCounts` counts the first threat and qualifying renewals within the current continuous chase. A fourth appearance of any key is prohibited, including later loops elsewhere after an initial rejection. This replaces the original single-anchor tracker following the owner's UI bug report. The map resets on a broken chain/flip/capture, is bounded by 60 quiet plies, and never counts general repetition. Include this private state in deterministic reconstruction/equality for future undo/Review, never public projections or an independent session/UI tracker.
+
+Ordinary validation and the pure capture-threat helper are shared by chase and outcomes without calling the chase-aware engine recursively. One private permitted-transition path validates, tentatively moves/updates counters/turn, and rejects or records the chase update for both submission and enumeration. Only accepted `applyAction` then evaluates elimination, ordinary immobilization, and no-progress in priority order and stores the result atomically. A rejected tentative transition creates no event/timeline entry and mutates no state.
 
 No UI-specific state belongs inside GameState.
 
@@ -313,7 +324,7 @@ getGameResult(
 
 `InitialStateResult` is `{ ok: true, state: GameState }` or `{ ok: false, error: { code: "INVALID_DECK" } }`. Initialization validates exact per-color composition, recognized colors/ranks, 32 entries, and unique nonempty IDs before producing a state. An invalid deck must not replace an existing session.
 
-`getLegalActions` returns only actions accepted for the current player, using the same validation as `applyAction`; it returns an empty list for a non-current player or finished game. In Task 3, apply chase filtering consistently in both operations, but use ordinary legality before that filtering for the `NO_LEGAL_ACTION` loss check. Chase bans do not themselves cause losses. The all-actions-prohibited edge case still needs its rule decision. Evaluate the candidate next-player state before marking it finished; do not use an already-finished state's empty list to infer the original outcome.
+`getLegalActions` uses the same permitted-transition path as submission and returns an empty list for a non-current player or finished game. Outcome evaluation uses ordinary legality before chase filtering for `NO_LEGAL_ACTION`; all-chase-prohibited states can therefore remain ACTIVE with no permitted actions, as the documented limitation requires. Evaluate the accepted next-player candidate before marking it finished; do not use an already-finished state's empty list to infer the original outcome.
 
 ### Minimum public action event
 
@@ -454,7 +465,7 @@ Review is available only for a completed session. Review navigation never submit
 
 Owned by Game Core and local session.
 
-Contains board positions, piece identities, turn, result, and rule counters/trackers. The future Task 3 chase tracker belongs here and must be sufficient for state-only validation and legal-action enumeration once its field contract is finalized.
+Contains board positions, piece identities, turn, result, counters, and chase tracking sufficient for state-only submission/enumeration. The session retains this state and its one accepted timeline; it does not independently track chase history.
 
 ### UI State
 
@@ -493,7 +504,7 @@ Examples of domain errors:
 - `INVALID_ACTION`
 - `GAME_FINISHED`
 
-`ActionError` has a typed `code` from the action-error list above. `INVALID_DECK` belongs to initialization, not action submission. `PERPETUAL_CHASE` is the approved future Task 3 rejection code; do not add that behavior or a chase loss reason to Task 1.
+`ActionError` has a typed code from the list above plus `PERPETUAL_CHASE`. `INVALID_DECK` belongs to initialization. Ordinary validation errors take precedence over chase feedback; prohibited candidates are rejected before any outcome or counter commit. No chase loss reason exists.
 
 Validate game status and actor, action shape and finite integer coordinates, movement/capture rules, then the approved chase restriction before committing changes. An error leaves the board, turn, counters, trackers, and timeline unchanged. Map errors to brief Traditional Chinese status text without hints or complex feedback UI.
 
@@ -607,10 +618,10 @@ When making implementation decisions:
 - Introducing large dependencies
 - Replacing the chosen frontend framework
 - Changing core persistence or replay semantics
-- Resolving the no-alternative chase edge case and finalizing its future tracker contract
+- Changing the documented no-alternative chase policy or tracker contract beyond authorized additive Task 3 changes
 - Deploying, pushing, or deleting files, as required by `AGENTS.md`
 
-Small internal implementation decisions may be made by Codex within the authorized task: function/module organization, reducer details, plain CSS versus CSS Modules, input checks, deterministic test fixtures, and memoization on the correct dependencies. Task 2 is authorized; Tasks 3–6 are not.
+Small internal implementation decisions may be made within the authorized task. The owner authorized Task 3 and its minimal additive tracker/error types; Tasks 4–6 are not authorized.
 
 ## 15. Phase 1 Architecture Acceptance
 
@@ -625,7 +636,7 @@ The architecture is acceptable when:
 - [ ] Unit and E2E tests cover critical flows.
 - [ ] No backend is required for the local MVP.
 - [ ] No general repetition-draw state or behavior exists.
-- [ ] The no-alternative chase case and tracker contract are finalized; Task 3 prohibition-only enforcement is implemented and verified.
+- [ ] Task 3 prohibition-only enforcement and tracker pass verification, including the documented ACTIVE/no-alternative limitation.
 - [ ] Terminal next-player semantics and result priorities agree with `game-rules.md`.
 - [ ] Core observations exclude history; the session derives history/captures from its one active timeline.
 - [ ] Progressive Review projects only the selected prefix, including its result and assignments.

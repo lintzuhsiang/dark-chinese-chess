@@ -1,8 +1,8 @@
 # Task 3 — Outcomes, No-Progress Rule, and Chase Prohibition
 
-**Status:** Planned; not started or authorized  
+**Status:** Implemented; owner review pending\
 **Dependencies:** [Task 2](task-2-movement-capture.md) complete  
-**Approval gate:** Resolve the all-actions-chase-prohibited case and final tracker contract before implementing the complete task.
+**Authorization:** Owner authorized Task 3, narrow chase interpretation, and minimal additive state/type changes on 2026-11-09.
 
 ## Objective
 
@@ -17,15 +17,15 @@ Read [AGENTS.md](../../AGENTS.md), [product specification](../product-spec.md), 
 - Ordinary movement increments `noProgressCount`; flips/captures reset it. Sixty consecutive quiet individual actions cause a draw unless a win takes precedence.
 - No general board-repetition draw, counter, hash, or replacement heuristic is allowed.
 - Chase coverage is the same revealed attacker/target, renewed non-reciprocal threats, immediate target evasions, and the approved single-target exclusions/reset rules. See the rules for the exact predicate and example sequence.
-- The first anchored threat starts at zero completed cycles. Accept two qualifying returns; prohibit the renewal completing the third return, which would be the fourth anchored-threat appearance.
+- Each qualifying threat position starts at zero completed returns. Accept two returns to it; prohibit its third return/fourth appearance within the continuous chase, including a later pattern on other squares after an earlier warning.
 - A prohibited renewal is rejected without changing state, turn, counters, or timeline. The player must choose another action. Chase filtering itself must not cause a loss.
 
-## Decisions still requiring owner approval
+## Task 3 interpretation and contract
 
-1. **No alternative:** Ordinary legal actions may exist while every one is chase-prohibited. The owner has rejected chase-induced losses. Do not invent a pass, draw, loss, exemption, or permission to play the forbidden move. Obtain the intended behavior and add its acceptance test.
-2. **Tracker contract:** Finalize the reconstructible Core-owned tracker and any public GameState/type changes before implementation. The existing proposal needs attacker player/ID, target ID, anchor squares, escape/renewal phase, and cycle count, or an inactive/null state. No tracker belongs in the UI or as a second session authority.
+1. **No alternative:** Under the owner's instruction to choose a narrow interpretation and record limits, preserve ACTIVE with no result if ordinary actions exist but all are chase-prohibited. Do not invent loss/pass/draw/exemption. A permanent Cannon-cycle regression verifies this potentially stalled position; broader adjudication still needs a future owner decision.
+2. **Tracker contract:** Authorized additive `GameState.chase` is null or a Core-owned `ChaseState` with attacker player/ID, target ID, ESCAPE/RENEW phase, and chase-local logical `positionCounts`. After the owner's report of missing later warnings, these counts replace the single anchor/return count so a later loop on different squares is also checked. Logical equality excludes arbitrary IDs/hidden values/counters; physical IDs preserve pair continuity. `PERPETUAL_CHASE` leaves action/result/event shapes unchanged.
 
-Writing this task file does not resolve either decision or authorize code. If the owner authorizes baseline outcomes separately while the chase gate remains open, report partial progress and do not declare Task 3 complete.
+These choices are implemented under the latest Task 3 authorization and documented in the rules/architecture. They do not authorize Task 4 or a comprehensive chase adjudication system.
 
 ## Implementation sequence
 
@@ -37,22 +37,28 @@ Writing this task file does not resolve either decision or authorize code. If th
 
 ## Acceptance criteria
 
-- [ ] Counter values and outcomes are deterministic for a supplied initial deck and accepted timeline. Task 2's temporary unchanged-MOVE-counter behavior is replaced with the full rule.
-- [ ] Results use `WIN` with `NO_PIECES` or `NO_LEGAL_ACTION`, or `DRAW` with `NO_PROGRESS`. Elimination takes precedence over immobilization, and wins precede the 60-ply draw.
-- [ ] ACTIVE has null result; FINISHED has a result. Terminal `currentPlayer` is the next player; finished submission rejects and enumeration returns no actions. `getGameResult` reads the stored result without independently re-evaluating it.
-- [ ] Hidden pieces count toward survival and flipping, and capturing General alone is not an automatic win.
-- [ ] Chase classification, anchor counting, alternate qualifying routes, resets/fresh chains, and invalid-attempt preservation match rules section 10 exactly. Hidden screen identities do not affect threats or public output.
-- [ ] Submission/enumeration consistently exclude the prohibited renewal, with approved `PERPETUAL_CHASE` feedback and no loss from either rejection or chase filtering.
-- [ ] The no-alternative case follows the owner's explicit decision; the task cannot be complete while that case is unresolved.
-- [ ] Every required tracker is in immutable, reconstructible Core state. Public observations/events reveal no hidden information or private tracker data.
-- [ ] First-flip assignment, movement/capture, and hidden-piece FLIP priority from Tasks 1–2 remain correct.
+- [x] Counter values and outcomes are deterministic for a supplied initial deck and accepted timeline. Task 2's temporary unchanged-MOVE-counter behavior is replaced with the full rule.
+- [x] Results use `WIN` with `NO_PIECES` or `NO_LEGAL_ACTION`, or `DRAW` with `NO_PROGRESS`. Elimination takes precedence over immobilization, and wins precede the 60-ply draw.
+- [x] ACTIVE has null result; FINISHED has a result. Terminal `currentPlayer` is the next player; finished submission rejects and enumeration returns no actions. `getGameResult` reads the stored result without independently re-evaluating it.
+- [x] Hidden pieces count toward survival and flipping, and capturing General alone is not an automatic win.
+- [x] Chase classification, logical position counting, alternate qualifying routes/later patterns, resets/fresh chains, and invalid-attempt preservation match the clarified rules. Hidden screen identities do not affect threats or public output.
+- [x] Submission/enumeration consistently exclude the prohibited renewal with `PERPETUAL_CHASE` feedback, without chase-induced loss.
+- [x] The no-alternative position preserves ACTIVE and is explicitly documented/tested as a minimal-rule limitation.
+- [x] Every required tracker is in immutable, reconstructible Core state. Public observations/events reveal no hidden information or private tracker data.
+- [x] First-flip assignment, movement/capture, and hidden-piece FLIP priority from Tasks 1–2 remain correct.
+
+## Executed verification
+
+`pnpm typecheck`, `pnpm test` (396 tests across eight files), and `pnpm build` passed. Read-only QA separately matched 145,728 candidate submissions against enumeration, played 20 seeded valid-deck games totaling 4,902 accepted actions, and reconstructed every accepted prefix exactly. Result text and disabled finished cells have Node/SSR coverage. Browser/E2E checks were not run for this domain-focused task; ESLint/Prettier remain unconfigured. No commits, pushes, deployments, or Task 4 implementation were performed.
+
+Owner follow-up: reproduced a missing later prohibition after the same pair moved to other squares and repeated a new chase pattern. The new regression failed with the single-anchor tracker and passes with chase-local position counts. `pnpm typecheck`, `pnpm test` (399 tests across eight files), and `pnpm build` passed after the fix. New UI/session regressions verify the second rejection, enumeration agreement, unchanged rejected state/timeline, fresh chains after flips, and deterministic reconstruction. Earlier independent QA figures above are historical and were not rerun for this follow-up; no new browser verification is claimed.
 
 ## Verification
 
 - Unit fixtures: elimination including hidden pieces, immobilization with/without flips, terminal actor/next-player fields, and all result-priority collisions.
 - Counter boundaries: 59 versus 60 quiet plies, FLIP/capture reset, rejected attempts unchanged, and deterministic replay of counters/results.
-- Chase fixtures: direct versus reciprocal/ambiguous threats, all rank exceptions, Cannon/hidden screens, physical-piece IDs, anchor zero, allowed returns one/two, prohibited return three, resets, non-closing pursuit, and no general repetition draw.
-- Compare every candidate's submission result with enumeration, including the separately approved no-alternative behavior. Check hidden-identity permutation invariance.
+- Chase fixtures: direct versus reciprocal/ambiguous threats, all rank exceptions, Cannon/hidden screens, physical-piece IDs, first appearance/zero returns, allowed returns one/two, prohibited return three, later loops on different squares after a warning, resets, non-closing pursuit, and no general repetition draw.
+- Compare every candidate's submission result with enumeration, including the documented no-alternative limitation. Check hidden-identity permutation invariance.
 - Update old fixtures that intentionally omitted opposing pieces or expected Task 2 counter deferral; replace those assumptions with explicit outcome/counter assertions rather than disabling tests or forcing ACTIVE.
 - Run `pnpm typecheck`, `pnpm test`, and `pnpm build`. Smoke-test result display, disabled finished play, and rejection feedback. Record actual results and unavailable checks.
 

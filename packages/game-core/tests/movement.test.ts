@@ -203,8 +203,8 @@ describe('action validation and immutable rejection', () => {
     }
   });
 
-  it('rejects the wrong actor and finished-game moves, and preserves Task 3 state', () => {
-    const state = positionState([piece(9, 'CHARIOT')]);
+  it('rejects the wrong actor and finished-game moves, and enforces the quiet-ply draw', () => {
+    const state = positionState([piece(9, 'CHARIOT'), piece(31, 'HORSE', 'BLACK')]);
     expect(applyAction(state, 'P2', { type: 'MOVE', from: 9, to: 10 }))
       .toEqual({ ok: false, error: { code: 'NOT_YOUR_TURN' } });
     const finished: GameState = deepFreeze({ ...state, status: 'FINISHED', result: { type: 'DRAW', reason: 'NO_PROGRESS' } });
@@ -213,9 +213,10 @@ describe('action validation and immutable rejection', () => {
     const pending: GameState = deepFreeze({ ...state, noProgressCount: 59 });
     const result = applyAction(pending, 'P1', { type: 'MOVE', from: 9, to: 10 });
     if (!result.ok) throw new Error('Expected legal quiet move.');
-    expect(result.state.noProgressCount).toBe(59);
-    expect(result.state.status).toBe('ACTIVE');
-    expect(result.state.result).toBeNull();
+    expect(result.state.noProgressCount).toBe(60);
+    expect(result.state.status).toBe('FINISHED');
+    expect(result.state.result).toEqual({ type: 'DRAW', reason: 'NO_PROGRESS' });
+    expect(pending.noProgressCount).toBe(59);
   });
 
   it('copies public MOVE event data independently of full state', () => {

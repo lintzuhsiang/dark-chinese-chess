@@ -1,10 +1,10 @@
 # Dark Chess — Game Rules
 
-**Version:** 0.5 — Task 2 authorization  
+**Version:** 0.7 — Task 3 house-rule clarification\
 **Ruleset:** Taiwanese Banqi — Project Ruleset  
-**Status:** Tasks 1–2 complete; chase definition/threshold approved; no-alternative case open
+**Status:** Task 3 implemented; owner review pending
 
-The owner's 2026-11-09 decisions remove general threefold-repetition draws and approve terminal turn handling. The subsequent Task 1 authorization approves section 10's chase coverage and three-completed-cycle threshold, with prohibition only and no chase-induced loss. Task 2 now authorizes movement/capture, selection, and legal-action enumeration. Outcomes, no-progress counter policy, and chase enforcement remain Task 3 work; this incremental implementation is not the full ruleset below. The no-alternative case remains open for Task 3. This is a project-specific ruleset, not a claim about a universal tournament standard.
+Task 3 implements outcomes, counters, and the simplified chase house rule under the owner's 2026-11-09 authorization to choose a narrow deterministic interpretation. General repetition never causes a draw. Chase prohibits a third qualifying return without inducing a loss; the no-alternative limitation is stated below. Undo, history UI, and Review remain later work. This is a project-specific ruleset, not a universal tournament standard.
 
 ## 1. Board and Pieces
 
@@ -190,7 +190,7 @@ Undo is a local session feature and can restore a previous position.
 
 After an accepted action, the next player loses if they have no remaining pieces, counting both revealed and hidden pieces. The acting player wins with reason `NO_PIECES`.
 
-Otherwise, the next player loses if they have no ordinary legal action, with reason `NO_LEGAL_ACTION`; the acting player wins. For this loss check, evaluate ordinary move/capture/flip legality before chase filtering: chase prohibitions must not themselves trigger a loss. See section 10 for the unresolved case where ordinary actions exist but every one is chase-prohibited.
+Otherwise, the next player loses if they have no ordinary legal action, with reason `NO_LEGAL_ACTION`; the acting player wins. For this loss check, evaluate ordinary move/capture/flip legality before chase filtering: chase prohibitions must not themselves trigger a loss. Section 10 describes the limited case where ordinary actions exist but every one is chase-prohibited.
 
 While any face-down pieces remain, flipping one is a legal action, so lack of movable revealed pieces alone is not a loss.
 
@@ -210,7 +210,7 @@ The only approved automatic draw condition is `NO_PROGRESS`. Three or more occur
 
 For each submitted action, validate first and evaluate outcomes only after acceptance:
 
-1. Validate the attempted action, including the chase restriction only after that restriction is approved. A rejected attempt stops here without changing any state.
+1. Validate ordinary legality, construct an immutable tentative transition, and check chase prohibition before committing it. A rejected attempt stops here without changing any authoritative state or timeline.
 2. Apply the move or flip, including first-flip assignments and capture removal. Increment accepted-action count; increment no-progress count for a non-capturing MOVE, or reset it for a FLIP/capture. Update approved chase tracking atomically with the accepted action.
 3. Advance `currentPlayer` to the next player, regardless of whether a result follows.
 4. If the next player has no pieces, finish with the acting player as winner and reason `NO_PIECES`.
@@ -220,11 +220,11 @@ For each submitted action, validate first and evaluate outcomes only after accep
 
 A win takes precedence over a no-progress draw triggered by the same accepted action. `NO_PIECES` takes precedence over `NO_LEGAL_ACTION`. A finished state retains the next player in `currentPlayer`, rejects further play, and has no legal actions.
 
-## 10. Perpetual Chasing (長捉) — Approved Definition; Task 3 Implementation
+## 10. Perpetual Chasing (長捉) — Simplified House Rule
 
 ### Approval record and limited scope
 
-The owner approved the coverage and cycle definition below, including resets and exclusions, and selected move prohibition without a chase-induced loss. Implementation remains outside Task 1. Do not add a tracker, chase enforcement, or a substitute repetition draw during the flip-only slice.
+The owner authorized this minimal single-pair interpretation in Task 3, including logical board-value comparison, physical-pair identity, and prohibition without a chase-induced loss. This is deliberately narrower than comprehensive pursuit or tournament adjudication.
 
 Use a minimal **single-attacker, single-target closed chase cycle**. It follows actual renewed capture threats and evasions by the same two revealed pieces. It does not classify ordinary shuffling, general position repetition, or strategic intent as chasing. Longer-term pursuit that never closes a cycle remains subject to the 60-ply no-progress rule.
 
@@ -240,7 +240,7 @@ A qualifying chase starts when:
 
 Only newly threatened, non-reciprocal targets count toward the exactly-one test. Captures, flips, discovered threats by another piece, and ambiguous multiple eligible targets do not start this tracker. Cannon threats use the approved screen rules, including hidden screens; no hidden target identities are inspected to classify a chase.
 
-Record the attacker's player and internal piece ID, the target's internal piece ID, both squares immediately after this first threat (the anchor), a completed-cycle count of zero, and that the defender must escape next. IDs identify the same physical pieces, even when other pieces share their rank/color; IDs are not public history fields.
+Record the attacker's player and internal piece ID, the target's internal piece ID, and that the defender must escape next. Start a chase-local appearance count of one for the logical public-position key immediately after this first threat. IDs identify the same physical pair; they are excluded from position keys and public events.
 
 ### Evasion, renewal, and cycle counting
 
@@ -249,36 +249,38 @@ Continue the same chain only through this alternating sequence:
 - **Escape:** The defender immediately makes a non-capturing MOVE with that exact target, and the tracked attacker can no longer directly capture it afterward.
 - **Renewal:** The attacker immediately makes a non-capturing MOVE with that exact attacking piece, creating a new, non-reciprocal capture threat against that exact target. It must again be the only eligible newly threatened target.
 
-After each renewal, compare only the two tracked piece squares with their anchor squares. Returning both pieces to their anchor squares completes one closed chase cycle. The intervening route may differ; it must consist entirely of the qualifying escape/renewal pairs above. No cycle is counted merely because a whole-board position repeats.
+After each qualifying renewal, count the appearance of its logical public-position key within this continuous chase. Encode every square as EMPTY, HIDDEN, or revealed color/rank, followed by the next player and both assignments in fixed order. Exclude all IDs, hidden rank/color, counters, tracker data, status, and result. A repeated key completes a return to that position; the qualifying route may differ. Physical IDs still determine whether the same attacker/target continued the chain. Count only the first threat and qualifying renewals, never ordinary repetition or the defender's escapes.
 
-**Approved threshold:** The anchor begins at zero completed cycles. Accept the first and second completed returns. Reject the attacker's candidate renewal that would complete the third return. Thus the initial anchored threat plus two returns are allowed; the fourth appearance of that anchored threat would be prohibited because it completes the third chase cycle. Do not count the initial threat as a completed cycle.
+**Approved threshold:** Each distinct threat position begins at zero completed returns on its first appearance. Accept its first and second completed returns. Reject the attacker's candidate renewal that would complete its third return, the fourth qualifying appearance. Do not count the first appearance as a completed cycle. The owner clarified after UI testing that a chase moving to other squares and repeating a different pattern must also trigger a later prohibition; counting only the original threat position misses that case.
 
 Example using a Red Chariot and a Black Horse, with other pieces stationary and no additional eligible targets: anchor Chariot at index 1 and Horse at index 5, with the Horse's player next. The four actions `Horse 5→4; Chariot 1→0; Horse 4→5; Chariot 0→1` complete one cycle. Two such cycles are accepted. In the third cycle, the final `Chariot 0→1` is the prohibited candidate. The defender's escapes are never penalized as the chase violation.
+
+If the attacker instead renews with `Chariot 0→4` after that rejection, the continuous chase can move to a new loop: `Horse 5→9; Chariot 4→8; Horse 9→5; Chariot 8→4`. The first two returns to this new threat position are allowed; the third loop's final `Chariot 8→4` is prohibited even though the original anchor never returns. A rejected attempt does not erase earlier qualifying appearances in the same continuous chase.
 
 ### Resets and invalid attempts
 
 - A FLIP, capture, different mover/target, failure to escape, failure to renew, reciprocal threat, or ambiguous eligible targets breaks the tracked chain. The accepted action clears the old tracker; if that same action independently qualifies as a new first chase, it may seed a fresh tracker with zero cycles.
-- Qualifying returns do not reset the cycle count. Qualifying renewals that have not returned to the anchor preserve the count and continue the chain.
+- Qualifying returns do not reset appearance counts. A renewal at a new position starts that position's count at one while preserving other counts in the same chain. These counts are bounded by the 60-quiet-ply rule and are discarded when the chain breaks; no general game-wide repetition table exists.
 - Rejected attempts do not advance or reset tracking, consume a turn, increment counters, or create history. Undo reconstructs tracking from the remaining accepted timeline. Restart clears it.
 - Chase tracking and the no-progress counter are different mechanisms. Quiet escapes/renewals still increment no-progress count; a tracker reset alone does not reset that counter.
 
-### Approved enforcement and remaining edge case
+### Enforcement and no-alternative limitation
 
 Prohibit the candidate renewal with a typed `PERPETUAL_CHASE` rejection, preserve the prior state/timeline, and require the player to choose a different permitted action. A short message such as 「長捉，請改走其他步。」 is sufficient; do not suggest moves. An attempted chase violation does not produce a loss or a new result reason.
 
 `getLegalActions` must exclude the prohibited candidate, but this filtering must not itself trigger `NO_LEGAL_ACTION`. The owner's prohibition-only decision supersedes the previous recommendation to lose when all otherwise legal actions are chase-prohibited.
 
-**Open for Task 3:** What happens if ordinary legal actions exist but every one is chase-prohibited? The player would have no alternative to choose. No automatic loss, pass, draw, or exception to the prohibition is authorized for this case. Resolve it before completing Task 3; it does not block Task 1 initialization/flips. The private tracker type will be finalized with Task 3, not added speculatively now.
+Under the owner's instruction to retain a narrow rule rather than invent adjudication, ordinary actions existing but all being chase-prohibited leaves the game ACTIVE with an empty permitted-action list. Attempts remain rejected; no loss, pass, draw, or exemption is invented. A separately triggered no-progress draw still applies after an accepted action. This rare position can therefore stall local play; it is a known house-rule limitation requiring a future owner decision, not an implicit forfeiture. Task 3 includes a Cannon-cycle regression for this case.
 
 ### Required Task 3 tests
 
 - Direct threat versus unrelated repeated positions; no automatic general repetition draw.
 - General/Soldier exceptions and Cannon screens in threat classification; hidden targets excluded.
 - Non-reciprocal versus reciprocal threats, multiple eligible targets, and different physical pieces of the same rank/color.
-- Anchor starts at zero; first and second returns accepted; third-return candidate rejected with exact state/timeline unchanged. Exercise the example above and a different qualifying route.
+- Each position starts at zero returns; first and second returns accepted; third-return candidate rejected with exact state/timeline unchanged. Exercise the example above, a different qualifying route, and a later loop on other squares after the first rejection.
 - A non-closing pursuit does not trigger this prohibition; the normal 60-ply draw still applies.
 - Every listed reset, fresh-chain seeding, and rejected-attempt behavior.
-- Legal-action enumeration excludes the prohibited candidate; alternatives remain playable; rejection and chase filtering never themselves cause a loss. Add the no-alternative-case test when the owner specifies that case.
+- Legal-action enumeration excludes the prohibited candidate; alternatives remain playable; rejection and filtering never themselves cause a loss. When no permitted alternative exists, preserve ACTIVE/result-null and the previous state on rejection.
 - Undo before/after cycle boundaries restores the exact tracker; undo followed by a different action cannot inherit discarded cycles; replay deterministically reproduces accepted positions and trackers.
 
 ## 11. Invalid Actions
@@ -303,7 +305,7 @@ Rejected actions:
 - Do not update turn counters.
 - Do not change the current player.
 - Do not create history records.
-- Do not change any approved chase-tracking state. Chase-related rejection is a Task 3 feature and must not be introduced in Task 1.
+- Do not change chase tracking, counters, turn, or result, including when a prohibited candidate would otherwise reach a draw threshold.
 
 ## 12. Test Scenarios — Approved Baseline
 
@@ -336,7 +338,7 @@ Rejected actions:
 | Move from index 3 to 4 as if adjacent | Illegal |
 | Position is negative, fractional, missing, or 32 | Illegal; unchanged state and timeline |
 
-The approved chase scenarios in section 10 are Task 3 acceptance tests, not Task 1 behavior. The no-alternative edge-case test still awaits its gameplay decision.
+Section 10's chase scenarios are Task 3 acceptance tests. The no-alternative case verifies the explicit limited behavior above; it does not authorize a new end condition.
 
 ## 13. Excluded Variants
 

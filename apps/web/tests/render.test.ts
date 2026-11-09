@@ -2,7 +2,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { applyAction, createInitialState, getObservation } from '@dark-chess/game-core';
-import { App } from '../src/App';
+import type { GameResult } from '@dark-chess/game-core';
+import { App, gameStatusText } from '../src/App';
 import { Board } from '../src/components/Board';
 import { createShuffledDeck } from '../src/game/deck';
 
@@ -56,5 +57,24 @@ describe('player-facing render boundary', () => {
     expect(html).toContain('第 1 列，第 1 欄，空格');
     expect(html).toContain('<button');
     expect(html).not.toContain('disabled');
+  });
+
+  it.each([
+    [{ type: 'WIN', winner: 'P1', reason: 'NO_PIECES' }, 'P2', '玩家一獲勝：對手已無棋子。'],
+    [{ type: 'WIN', winner: 'P2', reason: 'NO_LEGAL_ACTION' }, 'P1', '玩家二獲勝：對手無法行動。'],
+    [{ type: 'DRAW', reason: 'NO_PROGRESS' }, 'P2', '和棋：連續 60 手沒有翻棋或吃子。'],
+  ] as const)('uses the stored result rather than terminal currentPlayer: %j', (result, currentPlayer, expected) => {
+    const observation = { ...getObservation(initial()), status: 'FINISHED' as const, result: result as GameResult, currentPlayer };
+    expect(gameStatusText(observation)).toBe(expected);
+  });
+
+  it('keeps active turn text and disables every finished board cell without exposing hidden data', () => {
+    const observation = getObservation(initial());
+    expect(gameStatusText(observation)).toBe('輪到玩家一');
+    const html = renderToStaticMarkup(createElement(Board, {
+      squares: observation.board, disabled: true, onSquareClick: () => {},
+    }));
+    expect(html.match(/disabled=""/g)).toHaveLength(32);
+    expect(html).not.toMatch(/GENERAL|SOLDIER|RED-GENERAL|BLACK-/);
   });
 });

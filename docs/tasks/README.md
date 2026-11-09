@@ -1,7 +1,7 @@
 # Phase 1 Tasks
 
 **Updated:** 2026-11-09  
-**Current state:** Tasks 1–2 complete and accepted; Tasks 3–6 not started or authorized.
+**Current state:** Tasks 1–2 accepted; Task 3 implemented pending review; Tasks 4–6 not authorized.
 
 These files are the detailed task instructions. The [Phase 1 overview](../phase-1-plan.md) provides navigation and shared decisions. Preparing these documents does not authorize implementation of the remaining tasks.
 
@@ -9,7 +9,7 @@ These files are the detailed task instructions. The [Phase 1 overview](../phase-
 |---|---|---|---|
 | [1 — Workspace and first flip](task-1-workspace-first-flip.md) | Workspace, initialization, flips, public observations | Complete | Approved specifications |
 | [2 — Movement and capture](task-2-movement-capture.md) | Rules, enumeration, selection, destination interaction | Complete; owner accepted | Task 1 |
-| [3 — Outcomes and chase](task-3-outcomes-chase.md) | Results, no-progress counter, approved chase prohibition | Planned; authorization and open decision required | Task 2 |
+| [3 — Outcomes and chase](task-3-outcomes-chase.md) | Results, no-progress counter, approved chase prohibition | Implemented; owner review pending | Task 2 |
 | [4 — History, undo, restart](task-4-history-undo-restart.md) | Canonical timeline projections and exact reconstruction | Planned; not authorized | Task 3 |
 | [5 — Progressive Review](task-5-progressive-review.md) | Read-only, post-game historical prefixes | Planned; not authorized | Tasks 3–4 |
 | [6 — Usability and verification](task-6-usability-verification.md) | Visual finish, accessibility, E2E, device/performance checks | Planned; not authorized | Tasks 1–5 |
@@ -42,4 +42,4 @@ See the [Task 2 execution report](../task-2-report.md) for actual multi-agent ow
 
 ## Next gate
 
-Before implementing Task 3, obtain its authorization and resolve the all-actions-chase-prohibited behavior and tracker contract described in [Task 3](task-3-outcomes-chase.md). Do not assume a loss, pass, draw, or exception to the approved prohibition.
+Task 3 is implemented under the owner's narrow house-rule authorization, including the documented ACTIVE/no-alternative limitation. Stop for owner review; Task 4 requires separate authorization. Do not introduce a loss, pass, draw, or exception to resolve that limitation without a later policy decision.

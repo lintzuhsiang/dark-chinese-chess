@@ -2,6 +2,8 @@ import type {
   ActionResult, GameAction, GameResult, GameState, InitialStateResult,
   Piece, PieceColor, PieceRank, PlayerId, PlayerObservation, PublicPiece,
 } from './types';
+import { evaluateOutcome } from './outcomes';
+import { getChaseUpdate } from './chase';
 import { getActionError } from './validation';
 
 export type * from './types';
@@ -52,6 +54,7 @@ export function createInitialState(deck: readonly Piece[]): InitialStateResult {
       result: null,
       plyCount: 0,
       noProgressCount: 0,
+      chase: null,
     },
   };
 }
@@ -60,9 +63,10 @@ function publicPiece({ color, rank }: Piece): PublicPiece {
   return { color, rank };
 }
 
-export function applyAction(state: GameState, playerId: PlayerId, action: GameAction): ActionResult {
-  const error = getActionError(state, playerId, action);
-  if (error !== null) return { ok: false, error };
+// This helper is called only after ordinary action validation.
+function transitionAction(
+  state: GameState, playerId: PlayerId, action: GameAction,
+): Extract<ActionResult, { readonly ok: true }> {
   if (action.type === 'MOVE') {
     const source = state.board[action.from]!;
     const target = state.board[action.to];
@@ -74,7 +78,7 @@ export function applyAction(state: GameState, playerId: PlayerId, action: GameAc
       board,
       currentPlayer: playerId === 'P1' ? 'P2' : 'P1',
       plyCount: state.plyCount + 1,
-      // No-progress policy and outcome evaluation belong to Task 3.
+      noProgressCount: target === null ? state.noProgressCount + 1 : 0,
     };
     return {
       ok: true,
@@ -107,15 +111,35 @@ export function applyAction(state: GameState, playerId: PlayerId, action: GameAc
   };
 }
 
+// Submission and enumeration share both ordinary validation and chase screening.
+function permittedTransition(state: GameState, playerId: PlayerId, action: GameAction): ActionResult {
+  const error = getActionError(state, playerId, action);
+  if (error !== null) return { ok: false, error };
+  const result = transitionAction(state, playerId, action);
+  const update = getChaseUpdate(state, result.state, action);
+  if (update.prohibited) return { ok: false, error: { code: 'PERPETUAL_CHASE' } };
+  return { ...result, state: { ...result.state, chase: update.chase } };
+}
+
+export function applyAction(state: GameState, playerId: PlayerId, action: GameAction): ActionResult {
+  const result = permittedTransition(state, playerId, action);
+  if (!result.ok) return result;
+  const outcome = evaluateOutcome(result.state);
+  return {
+    ...result,
+    state: { ...result.state, status: outcome === null ? 'ACTIVE' : 'FINISHED', result: outcome },
+  };
+}
+
 export function getLegalActions(state: GameState, playerId: PlayerId): GameAction[] {
   if (state.status === 'FINISHED' || playerId !== state.currentPlayer) return [];
   const actions: GameAction[] = [];
   for (let position = 0; position < 32; position += 1) {
     const flip: GameAction = { type: 'FLIP', position };
-    if (getActionError(state, playerId, flip) === null) actions.push(flip);
+    if (permittedTransition(state, playerId, flip).ok) actions.push(flip);
     for (let to = 0; to < 32; to += 1) {
       const move: GameAction = { type: 'MOVE', from: position, to };
-      if (getActionError(state, playerId, move) === null) actions.push(move);
+      if (permittedTransition(state, playerId, move).ok) actions.push(move);
     }
   }
   return actions;

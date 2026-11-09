@@ -1,6 +1,6 @@
 # Dark Chess · 暗棋
 
-Task 2 local-play slice: randomized 8×4 hidden board, first-flip color assignment, revealed-piece selection, movement, normal/Cannon captures, and turn display in Traditional Chinese. Outcome evaluation and the remaining features are later tasks.
+Task 3 local-play slice: randomized 8×4 hidden board, color assignment, selection/movement/capture, terminal outcomes, no-progress draw, and a narrow perpetual-chase prohibition. Undo, history display, restart, and Review remain later tasks.
 
 ## Run locally
 
@@ -29,8 +29,9 @@ The production output is `apps/web/dist/`. Tests run in Node, including public-m
 - Click a revealed piece of the current player's color to select it. Click it again to deselect, or another friendly revealed piece to switch selection. Selection uses a static border and consumes no turn.
 - With a piece selected, click an empty square or revealed enemy to attempt a move/capture. Game Core validates adjacency, ranks, and Cannon screens. Success clears selection and advances the turn; rejection preserves selection, board, timeline, and turn.
 - Tapping a hidden piece flips it immediately, even while another piece is selected. A successful flip clears the selection and advances the turn; no separate deselection is needed. No legal-move indicators or strategy overlays are shown.
-- Outcome evaluation, no-progress counter policy, undo, history display, restart, Review, AI, and multiplayer remain unimplemented. This increment preserves the existing `noProgressCount` on MOVE; it does not yet adjudicate wins or draws. A page refresh returns to the entry screen.
-- Chase coverage/threshold and prohibition-only enforcement are approved for Task 3. Chase bans must not cause a loss; what happens when every ordinary action is chase-prohibited remains an explicit Task 3 decision. Task 2 adds no chase logic or tracker.
+- Accepted actions evaluate elimination, ordinary immobilization, then a draw at 60 quiet plies. Flips/captures reset the quiet counter. Finished cells are disabled and the result identifies the winner independently of the next-player field.
+- Chase enforcement follows the single-pair house rule in `docs/game-rules.md`: two qualifying logical-position returns are allowed; the third renewal is rejected. If every ordinary action is chase-prohibited, the game stays active without inventing a loss/pass/draw; this documented limitation can stall play.
+- Undo, history display, restart, Review, AI, and multiplayer remain unimplemented. Refresh returns to the entry screen; there is no post-game restart control until Task 4.
 - The full randomized deck exists in the trusted browser session. Rendered components receive only observations with generic hidden squares; this prevents application-level disclosure, not inspection of local browser memory.
 
 ## Review map
@@ -68,3 +69,11 @@ On 2026-11-09, final `pnpm typecheck`, `pnpm test` (338 tests in five files), `p
 Three actual subagents implemented Core and Web in parallel and independently reviewed the integrated result. See the [Task 2 report](docs/task-2-report.md) for their ownership, independent oracle checks, measured timing, files to review, and verification limitations. ESLint/Prettier are not configured and were not executed. The owned verification server is stopped after testing; restart the dev command and refresh your browser to try the new behavior. Task 3 has not started.
 
 Subsequent owner UX amendment: a hidden-piece tap flips directly even with another piece selected, clears selection on success, and consumes exactly one turn. Typecheck, 340 tests across five files, and the production build passed after this change. The original selected-hidden-target rejection smoke steps above are historical; no additional browser smoke is claimed for this amendment.
+
+## Task 3 verification record
+
+`pnpm typecheck`, `pnpm test` (396 tests in eight files), and `pnpm build` passed on 2026-11-09. Three actual subagents delivered outcomes, isolated chase tracking, and read-only QA; Main integrated shared submission/enumeration enforcement, result display, and deterministic session tests. QA independently matched 145,728 candidate submissions and reconstructed all prefixes of 20 seeded games totaling 4,902 accepted actions.
+
+Browser/E2E checks were not run for this domain-focused task. Result labels and disabled finished cells have Node/SSR coverage. ESLint/Prettier remain unconfigured. No commit, push, deployment, or Task 4 implementation was performed.
+
+Owner chase follow-up: fixed a later repeated chase pattern on different squares escaping the original single-anchor check. Chase-local position counts now reject the third return to any qualifying threat position in the same continuous chase. Typecheck, 399 tests across eight files, and production build passed, including repeat-warning, rejection immutability, enumeration, reset, and deterministic reconstruction regressions. No additional browser verification was performed.
