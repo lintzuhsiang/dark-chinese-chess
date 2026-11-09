@@ -1,0 +1,60 @@
+# Dark Chess · 暗棋
+
+Task 1 vertical slice: local two-player entry, randomized 8×4 hidden board, first-flip color assignment, subsequent flips, and turn display in Traditional Chinese.
+
+## Run locally
+
+Use Node.js 22.x (at least 22.12), 24.x, or 26+ and pnpm 12.18.0. Verification used Node 26.10.0. Run commands from this directory, which contains `pnpm-workspace.yaml`.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Open the Local URL printed by Vite, normally `http://127.0.0.1:5173/`. If pnpm is unavailable, use `npx --yes pnpm@12.18.0` in place of `pnpm`; no global installation is required.
+
+## Verification
+
+```sh
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+The production output is `apps/web/dist/`. Tests run in Node, including server-rendered public markup checks; no DOM simulator, test-only production deck endpoint, or browser automation dependency is added for Task 1. Browser smoke verification is performed separately.
+
+## Scope and limitations
+
+- Click 「本機雙人」, then click or keyboard-activate a hidden square. The first flip assigns P1 that color and P2 the opposite color; every accepted flip advances the turn. Either color may be flipped later.
+- Revealed-square clicks are rejected without consuming a turn. Rejection feedback retains the current-player text.
+- Movement, capture, legal-action enumeration, outcome evaluation, undo, history display, restart, Review, AI, and multiplayer belong to later tasks and are not implemented. All 32 pieces may be flipped, but this slice cannot complete a full game. A page refresh returns to the entry screen.
+- The approved `MOVE` action type remains declared for contract continuity, but Task 1 rejects it without mutation. Declared result types and the finished-game guard do not mean Task 3 outcomes are implemented.
+- Chase coverage/threshold and prohibition-only enforcement are approved for Task 3. Chase bans must not cause a loss; what happens when every ordinary action is chase-prohibited remains an explicit Task 3 decision. Task 1 adds no chase logic or tracker.
+- The full randomized deck exists in the trusted browser session. Rendered components receive only observations with generic hidden squares; this prevents application-level disclosure, not inspection of local browser memory.
+
+## Review map
+
+- `packages/game-core/src/index.ts`: runtime deck validation, copied initialization, immutable `applyAction`, public event projection, and `getObservation`.
+- `packages/game-core/src/types.ts`: approved domain contracts, with readonly data throughout.
+- `apps/web/src/game/deck.ts`: Fisher–Yates shuffle outside reducers/transitions; injectable random source for tests only, not a player-facing seed.
+- `apps/web/src/game/session.ts`: pure reducer retaining the original deck and one accepted actor/action timeline; rejected operations preserve the session reference.
+- `apps/web/src/hooks/useLocalGame.ts`: trusted-state boundary; memoizes public observations and exposes no full session to rendering components.
+- `apps/web/src/components/Board.tsx` and `App.tsx`: public-only cells, coordinate labels, native buttons, color/turn labels, and minimal status feedback.
+
+See [agent instructions](AGENTS.md), [product specification](docs/product-spec.md), [rules](docs/game-rules.md), [architecture](docs/architecture.md), and the [implementation plan](docs/phase-1-plan.md).
+
+## Task 1 verification record
+
+Verified on 2026-11-09 with pnpm installed in a temporary tool directory, without changing the global Node setup:
+
+| Check | Actual result |
+|---|---|
+| `pnpm install --store-dir /private/tmp/dark-chess-pnpm-store` | Passed; all three workspace projects linked, lockfile generated |
+| `pnpm typecheck` | Passed; root tooling, Game Core, and web application/tests |
+| `pnpm test` | Passed; 62 tests in three files, Node environment |
+| `pnpm build` | Passed; production output in `apps/web/dist/` |
+| Local Chrome smoke test | Passed; entry → 32 hidden cells → first flip → opposite color assignments → next-player label |
+| Keyboard and rejection smoke test | Passed; Tab/Enter flips one additional piece; repeating Enter on that piece preserves the turn and shows rejection text |
+| Desktop screenshot review | All 32 cells visible after correcting the viewport sizing |
+
+Physical iPhone/Android checks, the full Phase 1 E2E suite, and long-timeline performance measurements remain Task 6 work and are not claimed by this slice. The local server is stopped after verification; use the run command above to review. No deployment or remote push is performed.
