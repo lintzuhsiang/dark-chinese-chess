@@ -1,9 +1,5 @@
-import type { PieceColor, PieceRank, PublicSquare } from '@dark-chess/game-core';
-
-const glyphs: Readonly<Record<PieceColor, Record<PieceRank, string>>> = {
-  RED: { GENERAL: '帥', ADVISOR: '仕', ELEPHANT: '相', CHARIOT: '俥', HORSE: '傌', CANNON: '炮', SOLDIER: '兵' },
-  BLACK: { GENERAL: '將', ADVISOR: '士', ELEPHANT: '象', CHARIOT: '車', HORSE: '馬', CANNON: '包', SOLDIER: '卒' },
-};
+import type { PublicSquare } from '@dark-chess/game-core';
+import { coordinateLabel, pieceGlyph, pieceLabel } from './labels';
 
 export function Board({ squares, selectedSquare = null, onSquareClick, disabled = false }: {
   readonly squares: readonly PublicSquare[];
@@ -14,10 +10,10 @@ export function Board({ squares, selectedSquare = null, onSquareClick, disabled 
   return (
     <ol className="board" aria-label="暗棋棋盤，八列四欄">
       {squares.map((square, position) => {
-        const coordinate = `第 ${Math.floor(position / 4) + 1} 列，第 ${position % 4 + 1} 欄`;
+        const coordinate = coordinateLabel(position);
         const piece = square.kind === 'REVEALED' ? square.piece : null;
-        const glyph = piece ? glyphs[piece.color][piece.rank] : '暗';
-        const label = piece ? `${piece.color === 'RED' ? '紅方' : '黑方'}${glyph}`
+        const glyph = piece ? pieceGlyph(piece) : '暗';
+        const label = piece ? pieceLabel(piece)
           : square.kind === 'HIDDEN' ? '暗棋' : '空格';
         return (
           <li key={position}>

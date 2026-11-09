@@ -1,6 +1,6 @@
 # Dark Chess · 暗棋
 
-Task 3 local-play slice: randomized 8×4 hidden board, color assignment, selection/movement/capture, terminal outcomes, no-progress draw, and a narrow perpetual-chase prohibition. Undo, history display, restart, and Review remain later tasks.
+Task 4 local-play slice: randomized 8×4 hidden board, color assignment, selection/movement/capture, terminal outcomes, no-progress draw, chase prohibition, exact undo, read-only history/captured pieces, and confirmed restart. Progressive Review remains Task 5.
 
 ## Run locally
 
@@ -31,7 +31,10 @@ The production output is `apps/web/dist/`. Tests run in Node, including public-m
 - Tapping a hidden piece flips it immediately, even while another piece is selected. A successful flip clears the selection and advances the turn; no separate deselection is needed. No legal-move indicators or strategy overlays are shown.
 - Accepted actions evaluate elimination, ordinary immobilization, then a draw at 60 quiet plies. Flips/captures reset the quiet counter. Finished cells are disabled and the result identifies the winner independently of the next-player field.
 - Chase enforcement follows the single-pair house rule in `docs/game-rules.md`: two qualifying logical-position returns are allowed; the third renewal is rejected. If every ordinary action is chase-prohibited, the game stays active without inventing a loss/pass/draw; this documented limitation can stall play.
-- Undo, history display, restart, Review, AI, and multiplayer remain unimplemented. Refresh returns to the entry screen; there is no post-game restart control until Task 4.
+- 「悔棋」 removes the most recent accepted action while active and reconstructs the exact previous state, including counters/chase tracking. Repeated undo reaches the original hidden deck; the button is disabled at zero actions and after completion. There is no redo.
+- 「棋譜」 opens read-only numbered actions, coordinates, and captured pieces derived from the current accepted timeline. Undo removes the corresponding entry/reveal/capture from this projection. Escape or 「返回棋盤」 closes it and restores focus.
+- 「重新開始」 asks for confirmation during active play, with Cancel initially focused. Cancel preserves the game/selection; confirmation validates a fresh shuffled deck before replacing the session. Completed-game restart is immediate. History, counters, colors, selection, errors, and chase tracking reset.
+- Review, AI, and multiplayer remain unimplemented. Refresh returns to the entry screen; there is no persistence or saved-game library.
 - The full randomized deck exists in the trusted browser session. Rendered components receive only observations with generic hidden squares; this prevents application-level disclosure, not inspection of local browser memory.
 
 ## Review map
@@ -40,9 +43,10 @@ The production output is `apps/web/dist/`. Tests run in Node, including public-m
 - `packages/game-core/src/types.ts`: approved domain contracts, with readonly data throughout.
 - `apps/web/src/game/deck.ts`: Fisher–Yates shuffle outside reducers/transitions; injectable random source for tests only, not a player-facing seed.
 - `apps/web/src/game/session.ts`: pure reducer retaining the original deck and one accepted actor/action timeline; rejected operations preserve the session reference.
+- `apps/web/src/game/reconstruct.ts`: one deterministic fold regenerating domain state and public events; undo truncates and rebuilds from the original deck.
 - `apps/web/src/game/interaction.ts`: React-owned selection reducer; routes destinations through the existing session without implementing game rules.
 - `apps/web/src/hooks/useLocalGame.ts`: trusted-state boundary; memoizes public observations and exposes no full session to rendering components.
-- `apps/web/src/components/Board.tsx` and `App.tsx`: public-only cells, coordinate labels, native buttons, color/turn labels, and minimal status feedback.
+- `apps/web/src/components/Board.tsx`, `GameControls.tsx`, `History.tsx`, and `App.tsx`: public-only cells/history, coordinate labels, native buttons/dialogs, turn/result text, undo, and restart confirmation.
 
 See [agent instructions](AGENTS.md), [product specification](docs/product-spec.md), [rules](docs/game-rules.md), [architecture](docs/architecture.md), and the [implementation plan](docs/phase-1-plan.md).
 
@@ -77,3 +81,11 @@ Subsequent owner UX amendment: a hidden-piece tap flips directly even with anoth
 Browser/E2E checks were not run for this domain-focused task. Result labels and disabled finished cells have Node/SSR coverage. ESLint/Prettier remain unconfigured. No commit, push, deployment, or Task 4 implementation was performed.
 
 Owner chase follow-up: fixed a later repeated chase pattern on different squares escaping the original single-anchor check. Chase-local position counts now reject the third return to any qualifying threat position in the same continuous chase. Typecheck, 399 tests across eight files, and production build passed, including repeat-warning, rejection immutability, enumeration, reset, and deterministic reconstruction regressions. No additional browser verification was performed.
+
+## Task 4 verification record
+
+On 2026-11-09, `pnpm typecheck`, `pnpm test` (420 tests across 10 files), and `pnpm build` passed. New frozen valid-deck fixtures verify every prefix and repeated undo through ordinary/Cannon captures, chase returns/later patterns, and resets. Tests also cover initial/terminal guards, undo followed by different play, invalid replacement, completed restart, history order/captures, and hidden-data redaction after undo.
+
+Chrome native controls verified first-flip undo to the original hidden board, a legal capture/history entry, ordinary-move undo, capture undo, history Escape dismissal/focus return, and restart Cancel/confirm while a piece was selected. History uses a separate scrollable dialog so it does not displace the board. The browser extension API failed; no E2E pass is claimed. Completed restart/Cannon/chase undo have automated coverage rather than separate live browser play-throughs. Phone viewport/zoom/performance verification remains Task 6, and ESLint/Prettier remain unconfigured.
+
+Task 4 is implemented for owner review. No push, deployment, new dependencies, Core contract change, or Task 5 implementation was performed.

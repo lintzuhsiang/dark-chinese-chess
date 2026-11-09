@@ -1,6 +1,6 @@
 # Task 3 — Outcomes, No-Progress Rule, and Chase Prohibition
 
-**Status:** Implemented; owner review pending\
+**Status:** Complete; committed as `c1a9916`; owner authorized Task 4\
 **Dependencies:** [Task 2](task-2-movement-capture.md) complete  
 **Authorization:** Owner authorized Task 3, narrow chase interpretation, and minimal additive state/type changes on 2026-11-09.
 

@@ -1,9 +1,11 @@
 import { applyAction, createInitialState } from '@dark-chess/game-core';
 import type { ActionError, GameAction, GameState, Piece, PlayerId } from '@dark-chess/game-core';
+import { reconstructGame } from './reconstruct';
+import type { AcceptedAction } from './reconstruct';
 
 export interface LocalGameSession {
   readonly initialDeck: readonly Piece[];
-  readonly actions: readonly { readonly playerId: PlayerId; readonly action: GameAction }[];
+  readonly actions: readonly AcceptedAction[];
   readonly currentState: GameState;
 }
 
@@ -14,16 +16,21 @@ export interface LocalGameState {
 
 export type SessionCommand =
   | { readonly type: 'START'; readonly deck: readonly Piece[] }
+  | { readonly type: 'RESTART'; readonly deck: readonly Piece[]; readonly confirmed: boolean }
+  | { readonly type: 'UNDO' }
   | { readonly type: 'SUBMIT'; readonly playerId: PlayerId; readonly action: GameAction };
 
 export const initialLocalGame: LocalGameState = { session: null, error: null };
 
 export function sessionReducer(state: LocalGameState, command: SessionCommand): LocalGameState {
-  if (command.type === 'START') {
+  if (command.type === 'START' || command.type === 'RESTART') {
+    if (command.type === 'RESTART' && (state.session === null
+      || (state.session.currentState.status === 'ACTIVE' && !command.confirmed))) {
+      return { ...state, error: { code: 'INVALID_ACTION' } };
+    }
     const result = createInitialState(command.deck);
     if (!result.ok) return { ...state, error: result.error };
-    // Starting an already active game is not a Task 1 restart feature.
-    if (state.session !== null) return { ...state, error: { code: 'INVALID_ACTION' } };
+    if (command.type === 'START' && state.session !== null) return { ...state, error: { code: 'INVALID_ACTION' } };
     return {
       session: {
         initialDeck: command.deck.map(({ id, color, rank }) => ({ id, color, rank })),
@@ -34,6 +41,16 @@ export function sessionReducer(state: LocalGameState, command: SessionCommand): 
     };
   }
   if (state.session === null) return { ...state, error: { code: 'INVALID_ACTION' } };
+  if (command.type === 'UNDO') {
+    if (state.session.currentState.status === 'FINISHED') return { ...state, error: { code: 'GAME_FINISHED' } };
+    if (state.session.actions.length === 0) return { ...state, error: { code: 'INVALID_ACTION' } };
+    const actions = state.session.actions.slice(0, -1);
+    const reconstructed = reconstructGame(state.session.initialDeck, actions);
+    return {
+      session: { ...state.session, actions, currentState: reconstructed.state },
+      error: null,
+    };
+  }
   const result = applyAction(state.session.currentState, command.playerId, command.action);
   if (!result.ok) return { ...state, error: result.error };
   const event = result.event;

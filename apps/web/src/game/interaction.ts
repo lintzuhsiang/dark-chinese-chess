@@ -11,12 +11,14 @@ export interface BoardUiState {
 
 export type BoardUiCommand =
   | { readonly type: 'START'; readonly deck: readonly Piece[] }
+  | { readonly type: 'RESTART'; readonly deck: readonly Piece[]; readonly confirmed: boolean }
+  | { readonly type: 'UNDO' }
   | { readonly type: 'CLICK'; readonly position: number };
 
 export const initialBoardUi: BoardUiState = { local: initialLocalGame, selectedSquare: null };
 
 export function boardUiReducer(state: BoardUiState, command: BoardUiCommand): BoardUiState {
-  if (command.type === 'START') {
+  if (command.type === 'START' || command.type === 'RESTART' || command.type === 'UNDO') {
     const local = sessionReducer(state.local, command);
     return {
       local,

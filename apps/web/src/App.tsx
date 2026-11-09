@@ -1,5 +1,6 @@
 import type { PlayerColors, PlayerId, PlayerObservation } from '@dark-chess/game-core';
 import { Board } from './components/Board';
+import { GameControls } from './components/GameControls';
 import { useLocalGame } from './hooks/useLocalGame';
 
 const playerNames: Readonly<Record<PlayerId, string>> = { P1: '玩家一', P2: '玩家二' };
@@ -41,7 +42,8 @@ function Players({ colors, current }: { readonly colors: PlayerColors; readonly 
 }
 
 export function App() {
-  const { observation, error, selectedSquare, startGame, clickSquare } = useLocalGame();
+  const { observation, error, selectedSquare, history, captured, canUndo,
+    startGame, clickSquare, undo, restartGame } = useLocalGame();
   const finished = observation?.status === 'FINISHED';
   const turnText = observation === null ? '同一台裝置，輪流對弈。'
     : gameStatusText(observation);
@@ -68,6 +70,7 @@ export function App() {
               <p>{turnText}{error && <span className="error-message"> · {errorMessages[error.code]}</span>}</p>
             </div>
             <Board squares={observation.board} selectedSquare={selectedSquare} onSquareClick={clickSquare} disabled={finished} />
+            <GameControls canUndo={canUndo} finished={finished} history={history} captured={captured} onUndo={undo} onRestart={restartGame} />
             <p className="board-note">{finished ? '對局已結束。' : observation.playerColors.P1 === null ? '第一枚棋子，決定你的顏色。'
               : selectedSquare !== null ? '點選目的地，或直接翻開暗棋。' : '翻暗棋，或選擇自己的明棋。'}</p>
           </section>

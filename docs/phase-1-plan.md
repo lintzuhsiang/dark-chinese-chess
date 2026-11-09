@@ -1,7 +1,7 @@
 # Dark Chess — Phase 1 Implementation Plan
 
-**Version:** 0.6 — Individual task documents  
-**Status:** Tasks 1–2 accepted; Task 3 implemented pending review; Tasks 4–6 not authorized\
+**Version:** 0.7 — Task 4 implementation\
+**Status:** Tasks 1–4 implemented; Task 4 review pending; Tasks 5–6 not authorized\
 **Updated:** 2026-11-09
 
 ## Task documents
@@ -12,8 +12,8 @@ This file is the navigation overview. Detailed scope, acceptance criteria, verif
 |---|---|---|
 | 1 | [Workspace and first flip](tasks/task-1-workspace-first-flip.md) | Complete |
 | 2 | [Movement, capture, and board interaction](tasks/task-2-movement-capture.md) | Complete; owner confirmed |
-| 3 | [Outcomes, no-progress rule, and chase prohibition](tasks/task-3-outcomes-chase.md) | Implemented; owner review pending |
-| 4 | [History, exact undo, and restart](tasks/task-4-history-undo-restart.md) | Planned; not authorized |
+| 3 | [Outcomes, no-progress rule, and chase prohibition](tasks/task-3-outcomes-chase.md) | Complete; committed as `c1a9916` |
+| 4 | [History, exact undo, and restart](tasks/task-4-history-undo-restart.md) | Implemented; owner review pending |
 | 5 | [Progressive post-game Review](tasks/task-5-progressive-review.md) | Planned; not authorized |
 | 6 | [Usability, visual finish, and final verification](tasks/task-6-usability-verification.md) | Planned; not authorized |
 
@@ -34,7 +34,7 @@ Read [AGENTS.md](../AGENTS.md), [product specification](product-spec.md), [game 
 
 Task 1 recorded 62 passing tests at its completion. Task 2 used actual Core/Frontend/QA subagents and, after the owner's UX amendment, recorded typecheck, 340 tests across five files, and production build passing. The [Task 2 report](task-2-report.md) distinguishes original browser/QA evidence from its later UX amendment. These are historical verification results; the current task-file organization adds no application code and does not rerun those checks.
 
-Task 3 now implements counters, outcomes, and the narrow chase prohibition with 399 passing tests, typecheck, and build, including the owner's later-pattern chase regression. Tasks 4–6 remain plans and are not authorized. The accepted timeline deterministically reconstructs all rule state, preparing Task 4 without implementing it.
+Task 3 implements counters, outcomes, and the narrow chase prohibition, including the owner's later-pattern chase regression, and is committed as `c1a9916`. Task 4 adds exact undo, derived history/captures, and confirmed restart. Typecheck, 420 tests in 10 files, and build pass; Chrome smoke checks cover undo/history and restart cancellation/confirmation. See the Task 4 record for verification limits. Tasks 5–6 remain plans and are not authorized.
 
 The latest Task 3 authorization allows minimal additive tracking types and narrow interpretation of ambiguous chase cases. If all ordinary actions are chase-prohibited, preserve ACTIVE without inventing adjudication; this documented stalemate limitation remains for future owner policy review.
 
@@ -42,4 +42,4 @@ The repository currently has typecheck/test/build scripts, no ESLint/Prettier se
 
 ## Authorization and handoff
 
-The owner authorized Task 3 and requires a review handoff before Task 4. Rule/public contract changes beyond authorized additive tracking, significant dependencies/layers, commits, pushes, deployment, and destructive operations remain approval boundaries.
+The owner authorized Task 4 and requires a review handoff before Task 5. Rule/public contract changes, significant dependencies/layers, commits, pushes, deployment, and destructive operations remain approval boundaries.

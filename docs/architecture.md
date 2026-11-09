@@ -1,10 +1,10 @@
 # Dark Chess — Architecture
 
-**Version:** 0.7 — Task 3 contracts\
-**Status:** Task 3 implemented; Tasks 4–6 not authorized\
+**Version:** 0.8 — Task 4 session operations\
+**Status:** Tasks 1–4 implemented; Task 4 review pending; Tasks 5–6 not authorized\
 **Scope:** Phase 1 implementation with future AI and multiplayer compatibility
 
-Task 3 adds counters, terminal outcomes, and a minimal Core-owned chase tracker under the owner's authorization for additive state/type changes. GameAction, ActionResult, public events, observations, and the session timeline retain their shapes. Chase-induced loss and generic repetition draws remain prohibited. The no-alternative case preserves ACTIVE as a documented house-rule limitation; Tasks 4–6 remain unimplemented and unauthorized.
+Task 4 adds deterministic session reconstruction, exact undo, derived public history/captures, and validated restart with confirmation. Game Core, GameAction, ActionResult, public events, observations, and the canonical session shape are unchanged. Task 3's chase prohibition/no-alternative limitation remains unchanged. Tasks 5–6 remain unimplemented and unauthorized.
 
 ## 1. Architecture Goals
 
@@ -396,6 +396,8 @@ During play, apply only the next accepted action to `currentState`. Reconstruct 
 
 Derive a history prefix in a single pass, without reconstructing every earlier prefix separately. Avoid repeating this work on unrelated renders by using the session/timeline and cursor as dependencies. Do not implement snapshot caching, inverse undo operations, advanced event sourcing, workers, or speculative optimization. Revisit performance only after the lightweight measurements in `product-spec.md` identify a problem.
 
+**Task 4 implementation:** `apps/web/src/game/reconstruct.ts` exports `reconstructGame(initialDeck, actions)`, returning `{ state, events }` from one fold. Invalid trusted replay input throws with the failing action number and Core error code rather than skipping it. `useLocalGame` memoizes the public event projection by original deck/action-array identity and derives captured public pieces from those events; selection/errors do not trigger another fold. Normal accepted play still advances `currentState` incrementally. Undo reconstructs the retained prefix; its subsequent public-history projection is separately memoized, without retaining a second event log or snapshot cache.
+
 ### Normal Gameplay
 
 1. User submits an action.
@@ -425,6 +427,8 @@ Undo is enforced at the session boundary as well as in the button state. Multipl
 ### Restart
 
 Request confirmation before replacing an active session. Canceling retains it unchanged; confirming creates a newly shuffled valid initial deck and clears all action/domain/UI state for that game. Completed-game restart may replace the session directly. An invalid initialization must preserve the old session. Refresh may reset the game; persistence is out of scope.
+
+Task 4 adds internal `UNDO` and `RESTART { deck, confirmed }` session/interaction commands. The session rejects undo at zero actions or after completion and refuses an unconfirmed active restart. The hook generates the replacement deck once outside the reducer. Native HTML dialogs provide restart confirmation and read-only history, including Escape dismissal/focus restoration; Cancel performs no session command. Successful session replacement/undo clears selection and errors. No Review state or controls are implemented yet.
 
 ### History
 
@@ -621,7 +625,7 @@ When making implementation decisions:
 - Changing the documented no-alternative chase policy or tracker contract beyond authorized additive Task 3 changes
 - Deploying, pushing, or deleting files, as required by `AGENTS.md`
 
-Small internal implementation decisions may be made within the authorized task. The owner authorized Task 3 and its minimal additive tracker/error types; Tasks 4–6 are not authorized.
+Small internal implementation decisions may be made within the authorized task. The owner authorized Task 4's session/UI operations after Task 3, including its additive tracker/error types and later-pattern chase fix. Tasks 5–6 are not authorized.
 
 ## 15. Phase 1 Architecture Acceptance
 

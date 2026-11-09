@@ -1,10 +1,10 @@
 # Dark Chess — Product Specification
 
-**Version:** 0.5 — Task 2 authorization  
-**Status:** Tasks 1–2 accepted; Task 3 implemented pending review; Tasks 4–6 not authorized\
+**Version:** 0.6 — Task 4 implementation\
+**Status:** Tasks 1–4 implemented; Task 4 review pending; Tasks 5–6 not authorized\
 **Target:** Phase 1 — Functional MVP
 
-Task 3 now implements outcomes/counters and the narrow chase interpretation recorded in `game-rules.md`, section 10, under the owner's latest authorization. The no-alternative position is a documented house-rule limitation, not a new loss condition. Tasks 4–6 remain later work; this increment is not the completed MVP. Product requirements below are unchanged.
+Task 4 implements history, exact undo, and confirmed restart under the owner's authorization. Task 3's outcomes/counters and chase interpretation remain unchanged, including the documented no-alternative limitation. Tasks 5–6 remain later work; this increment is not the completed MVP. Product requirements below are unchanged.
 
 ## 1. Product Vision
 
