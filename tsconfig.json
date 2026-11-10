@@ -6,6 +6,7 @@
     "playwright.config.ts",
     "playwright.performance.config.ts",
     "e2e",
-    "verification"
+    "verification",
+    "scripts/ai-eval"
   ]
 }
