@@ -16,6 +16,7 @@ import { getChaseUpdate } from './chase';
 import { getActionError } from './validation';
 
 export type * from './types';
+export { getPublicOrdinaryMoves } from './validation';
 
 // Shared domain data: the session builds a deck; the core independently validates it.
 export const PIECE_DISTRIBUTION: Readonly<Record<PieceRank, number>> = Object.freeze({
