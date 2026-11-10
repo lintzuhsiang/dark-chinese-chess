@@ -2,6 +2,21 @@ import { createHmac } from 'node:crypto';
 import type { PlayerId } from '../../packages/game-core/src/index';
 
 export const DECISION_SEED_ALGORITHM = 'hmac-sha256-u32le-v1';
+export const PAIR_SEED_ALGORITHM = 'hmac-sha256-pair-u32le-v1';
+
+export function derivePairSeed(agentSeed: number, pairIndex: number): number {
+  if (
+    !Number.isInteger(agentSeed) ||
+    agentSeed < 0 ||
+    agentSeed > 0xffffffff ||
+    !Number.isSafeInteger(pairIndex) ||
+    pairIndex < 0
+  ) {
+    throw new RangeError('Pair seed requires a uint32 Agent root and nonnegative safe pair index.');
+  }
+  const message = JSON.stringify(['dark-chess-pair-agent-v1', pairIndex]);
+  return createHmac('sha256', String(agentSeed)).update(message).digest().readUInt32LE(0);
+}
 
 export function deriveDecisionSeed(
   agentSeed: number,

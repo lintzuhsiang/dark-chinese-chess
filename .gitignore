@@ -4,6 +4,7 @@ coverage/
 test-results/
 playwright-report/
 performance-results/
+benchmark-results/
 .DS_Store
 *.local
 *.log

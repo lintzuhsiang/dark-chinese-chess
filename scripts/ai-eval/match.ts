@@ -1,4 +1,5 @@
 import { isDeepStrictEqual } from 'node:util';
+import { performance } from 'node:perf_hooks';
 import { createSeededRandom } from '../../packages/ai-agents/src/index';
 import type { ActionEvent, GameAction, GameState, Piece } from '../../packages/game-core/src/index';
 import { applyAction, createInitialState } from '../../packages/game-core/src/index';
@@ -12,6 +13,7 @@ import type {
   CommitResult,
   DecisionRequest,
   DecisionResponse,
+  DecisionMetric,
   MatchError,
   MatchOptions,
   MatchOutcome,
@@ -68,6 +70,7 @@ export function createMatchRunner(options: MatchOptions) {
   let revision = 0;
   let requestId = 0;
   let pending: DecisionRequest | null = null;
+  let decisions: DecisionMetric[] = [];
 
   function getSnapshot(): MatchSnapshot {
     return structuredClone({ initialDeck, state, actions, publicHistory, generation, revision });
@@ -130,19 +133,48 @@ export function createMatchRunner(options: MatchOptions) {
   async function step(): Promise<CommitResult | null> {
     const request = requestDecision();
     if (request === null) return null;
+    // Input preparation is finished; stop the clock before any Core commit.
+    const started = performance.now();
+    const record = (durationMs: number, status: DecisionMetric['status']) => {
+      // An old in-flight decision belongs to its original game, not a restarted one.
+      if (request.generation === generation) {
+        decisions.push({
+          playerId: request.playerId,
+          ply: request.input.publicHistory.length,
+          durationMs,
+          status,
+        });
+      }
+    };
     let action: GameAction;
     try {
       action = await policies[request.playerId](request.input, { seed: request.seed });
     } catch (cause) {
+      record(Math.max(0, performance.now() - started), 'AGENT_ERROR');
       return rejection('AGENT_ERROR', cause instanceof Error ? cause.message : String(cause));
     }
-    return commitDecision({
-      requestId: request.requestId,
-      generation: request.generation,
-      revision: request.revision,
-      playerId: request.playerId,
-      action,
-    });
+    const durationMs = Math.max(0, performance.now() - started);
+    try {
+      const result = commitDecision({
+        requestId: request.requestId,
+        generation: request.generation,
+        revision: request.revision,
+        playerId: request.playerId,
+        action,
+      });
+      record(
+        durationMs,
+        result.ok
+          ? 'ACCEPTED'
+          : result.error.code === 'INVALID_ACTION'
+            ? 'INVALID_ACTION'
+            : 'REJECTED',
+      );
+      return result;
+    } catch (cause) {
+      record(durationMs, 'RUNNER_ERROR');
+      throw cause;
+    }
   }
 
   function restart(): void {
@@ -154,9 +186,17 @@ export function createMatchRunner(options: MatchOptions) {
     generation = ++nextGeneration;
     revision += 1;
     pending = null;
+    decisions = [];
   }
 
-  return { getSnapshot, requestDecision, commitDecision, step, restart };
+  return {
+    getSnapshot,
+    requestDecision,
+    commitDecision,
+    step,
+    restart,
+    getDecisionMetrics: (): readonly DecisionMetric[] => structuredClone(decisions),
+  };
 }
 
 export async function runMatch(
@@ -186,7 +226,13 @@ export async function runMatch(
   while (true) {
     const snapshot = runner.getSnapshot();
     if (snapshot.state.status === 'FINISHED') {
-      if (snapshot.state.result === null) throw new Error('Finished match has no GameResult.');
+      if (snapshot.state.result === null) {
+        outcome = {
+          type: 'FAILED',
+          error: { code: 'RUNNER_ERROR', message: 'Finished match has no GameResult.' },
+        };
+        break;
+      }
       outcome = { type: 'COMPLETED', result: snapshot.state.result };
       break;
     }
@@ -194,8 +240,26 @@ export async function runMatch(
       outcome = { type: 'TRUNCATED', reason: 'PLY_LIMIT' };
       break;
     }
-    const result = await runner.step();
-    if (result === null) throw new Error('Active match did not issue a decision.');
+    let result: CommitResult | null;
+    try {
+      result = await runner.step();
+    } catch (cause) {
+      outcome = {
+        type: 'FAILED',
+        error: {
+          code: 'RUNNER_ERROR',
+          message: cause instanceof Error ? cause.message : String(cause),
+        },
+      };
+      break;
+    }
+    if (result === null) {
+      outcome = {
+        type: 'FAILED',
+        error: { code: 'RUNNER_ERROR', message: 'Active match did not issue a decision.' },
+      };
+      break;
+    }
     if (!result.ok) {
       outcome = { type: 'FAILED', error: result.error };
       break;
@@ -224,6 +288,7 @@ export async function runMatch(
     publicHistory: snapshot.publicHistory,
     finalState: snapshot.state,
     outcome,
+    decisions: runner.getDecisionMetrics(),
   };
 }
 

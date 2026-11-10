@@ -40,7 +40,8 @@ export interface MatchError {
     | 'NO_PENDING_REQUEST'
     | 'MISMATCHED_RESPONSE'
     | 'INVALID_ACTION'
-    | 'AGENT_ERROR';
+    | 'AGENT_ERROR'
+    | 'RUNNER_ERROR';
   readonly message: string;
 }
 
@@ -78,6 +79,13 @@ export interface MatchMetadata {
   };
 }
 
+export interface DecisionMetric {
+  readonly playerId: PlayerId;
+  readonly ply: number;
+  readonly durationMs: number;
+  readonly status: 'ACCEPTED' | 'INVALID_ACTION' | 'AGENT_ERROR' | 'RUNNER_ERROR' | 'REJECTED';
+}
+
 // Trusted artifact: includes the private deck and final state. Never pass to a policy.
 export interface MatchReport {
   readonly metadata: MatchMetadata;
@@ -86,4 +94,5 @@ export interface MatchReport {
   readonly publicHistory: readonly ActionEvent[];
   readonly finalState: GameState;
   readonly outcome: MatchOutcome;
+  readonly decisions: readonly DecisionMetric[];
 }

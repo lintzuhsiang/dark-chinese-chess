@@ -1,7 +1,7 @@
 # Phase 2 — AI Opponent Plan
 
-**Version:** 0.3 — AI-0 finalized; AI-1 implemented, 2026-11-10  
-**Status:** AI-0 complete. AI-1 implemented and verified; AI-2 remains unauthorized.  
+**Version:** 0.4 — AI-2 Tournament Harness, 2026-11-10  
+**Status:** AI-0/AI-1 complete and committed. AI-2 implemented and verified; owner authorized its commit on phase-2. AI-3 remains unauthorized.  
 **Authority:** This plan supersedes the earlier [phase-2-plan.md](phase-2-plan.md) draft.
 
 ## 1. Approved Architecture Decisions
@@ -52,7 +52,7 @@ interface GameAgent {
 
 ### Reproducible Core baseline
 
-Pin commit **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). Core and rules files match this commit; the existing Core/outcome integration checks passed before AI-1. No new commit or worktree was required. Work proceeds on branch phase-2; existing untracked plans are preserved.
+Pin commit **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). Core and rules files match this commit; the existing Core/outcome integration checks passed before AI-1. No Core commit or worktree was required. Work proceeds on branch phase-2; both planning documents are preserved in the AI-1 commit.
 
 Runner metadata records this pin, randomness versions, roots, and environment. Before a match, verify the checkout's Core/rules match the pin; unrelated Phase 2 changes do not invalidate the Core baseline. Never label a later modified Core with this revision.
 
@@ -128,7 +128,7 @@ Assume uniform shuffling without remembered undone disclosures. Enumerate only p
 
 ## 6. Implementation Tasks and Dependencies
 
-**Authorization:** AI-0 decisions are approved and the reproducible baseline is available. AI-1 is explicitly authorized. Do not begin AI-2 or later implementation, commit, push, or deploy without further approval.
+**Authorization:** AI-0/AI-1 were committed as 24b7e1228b2095443794daf0ee4c5653f4dad056 under explicit owner approval. The owner subsequently authorized committing the verified AI-2 implementation on phase-2. Do not begin AI-3, commit further work, push, or deploy without approval.
 
 | Task                                   | Scope / dependency                                                                                                                                                                   | Acceptance and verification                                                                                                                                                                             |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -169,7 +169,25 @@ Do not include heuristics, public successor simulation, Core extraction, full to
 - A fixed replay fixture (deckSeed 1543, agentSeed 7) completes 199 accepted plies with P1 winning NO_PIECES while currentPlayer is P2. Tests cover hidden permutations around captures/chase, first flip, both seats, invalid/stale/duplicate responses, cross-runner generations, delayed responses, and transcript/event/full-state/result tampering.
 - Two subagents handled isolated policy/adapter development and independent QA; main owned baseline, runner, seed protocol, wiring, and integration. QA's mutable-options provenance finding was fixed by capturing configuration before the first await.
 - Existing cached tooling was restored offline after pnpm unexpectedly reconciled the added workspace package: 161 existing packages reused, zero downloads, frozen lockfile unchanged. No new dependency was added.
-- No commit, push, deployment, or AI-2 implementation was performed. Browser execution, hard timeouts, packaged CLI, and tournament scheduling remain deferred.
+- The AI-1 milestone was subsequently committed with owner approval; CLI/tournament work is covered by AI-2 below. Browser execution and hard timeouts remain deferred. No push or deployment was performed.
+
+### AI-2 implementation decisions
+
+- Extend the existing runMatch loop with Agent-only latency samples and retained runner/Core invariant failures; preserve Core, Session, UI, and the Agent interface.
+- One pair per distinct deck seed swaps A/B seats on the same deck. Both legs share a per-pair Agent root derived with HMAC-SHA256 message ["dark-chess-pair-agent-v1", pairIndex], independently of deck seeds; AI-1 per-player/per-ply derivation is unchanged.
+- Every attempted game remains visible. Completed-game W/D/L and mean use completed legs; paired inference uses only pairs with both legs completed. Invalid actions, Agent exceptions, invariant failures, and administrative truncations are unscored execution outcomes, never draws.
+- Confidence intervals use Hoeffding bounds over bounded pair scores, not individual legs: radius sqrt(log(2 / (1-confidenceLevel)) / (2 * completePairs)), clipped to [0,1]. No randomized CI procedure is used. Independent representative pair sampling is an assumption; distinct deterministic seeds alone do not establish it. Incomplete-case bias and denominators remain explicit.
+- JSON manifests identify Core pin, Agent/configuration and runner versions, Git HEAD/dirty status, exact selected source hashes, dirty tracked patch/deletions, untracked source bytes, seed versions/schedules, limits, and environment. End-of-run source checks flag changes during execution.
+- CLI compares labeled Random Agents without introducing another strategy. Reports go to ignored benchmark-results; latency includes policy work/Promise settlement and excludes input preparation/Core commit. Hard timeouts, process isolation, cancellation, and budgets remain outside AI-2.
+- See [runner documentation](../scripts/ai-eval/README.md) for command, report interpretation, assumptions, and limitations.
+
+### AI-2 verification record
+
+- Repository typecheck, lint, format check, all **562 tests across 22 files** (55 additional AI-2 tests), and production build passed. Core, existing Session/UI, Agent policy/interface, dependency versions, and lockfile remain unchanged.
+- The standalone Node CLI completed 20 pairs / 40 games using deck seeds 1543–1562 and Agent root 7: A W/D/L 5/30/5, mean 0.500, paired 95% Hoeffding interval [0.196, 0.804], 10,126 decisions, and zero illegal actions, Agent errors, invariant failures, or truncations.
+- A repeat command reproduced actions, final outcomes, and scoring; all 40 first-run transcripts replayed exactly. Both source snapshots were stable during execution. Their dirty-source manifests archive 12 untracked source files plus the tracked source patch against the AI-1 commit; they do not claim the working tree was clean.
+- Evaluation and independent QA subagents owned separate files. QA reviewed pair-level inference and accounting and identified source-archive edge cases, which were fixed. Main verified CLI execution and the timing boundary with a controlled-clock test.
+- Verification was performed before the owner authorized the AI-2 commit. Generated benchmark JSON reports remain ignored by Git. No AI-3, push, or deployment was performed.
 
 ## 7. Research Extensions
 
@@ -182,8 +200,8 @@ Phase 2 completion requires a usable browser opponent, public-only policies, rep
 ## 8. Remaining Open Decisions
 
 - **AI-0:** Complete; contract, seed schedule, revision semantics, file scope, and Core pin are recorded above.
-- **AI-2:** Pilot size, target confidence precision, held-out seed set, and explicit administrative scoring/reporting policy.
+- **AI-2:** Complete-case scoring, paired Hoeffding intervals, seed schedule, source manifest, and failure categories are defined above. A small Random baseline verifies the harness; broader sample sizes, held-out sets, and strength claims remain experiment-specific.
 - **AI-3:** Concrete missing public capabilities, minimal shared boundary, public continuity/chase context if required, differential-test cases, feature scales/weights, and complete Heuristic FLIP fallback.
 - **AI-5:** Worker cancellation, timeouts, failure recovery, human-seat UX, and evidence-based difficulty settings.
 
-Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Authorization covers AI-1 only; dependency installation, AI-2, commits, pushes, and deployment require separate approval.
+Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Authorization covers AI-2 implementation only; AI-3, new dependencies, further commits, pushes, and deployment require separate approval.
