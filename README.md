@@ -75,15 +75,15 @@ See [agent instructions](AGENTS.md), [product specification](docs/product-spec.m
 
 Verified on 2026-11-09 with pnpm installed in a temporary tool directory, without changing the global Node setup:
 
-| Check | Actual result |
-|---|---|
-| `pnpm install --store-dir /private/tmp/dark-chess-pnpm-store` | Passed; all three workspace projects linked, lockfile generated |
-| `pnpm typecheck` | Passed; root tooling, Game Core, and web application/tests |
-| `pnpm test` | Passed; 62 tests in three files, Node environment |
-| `pnpm build` | Passed; production output in `apps/web/dist/` |
-| Local Chrome smoke test | Passed; entry → 32 hidden cells → first flip → opposite color assignments → next-player label |
-| Keyboard and rejection smoke test | Passed; Tab/Enter flips one additional piece; repeating Enter on that piece preserves the turn and shows rejection text |
-| Desktop screenshot review | All 32 cells visible after correcting the viewport sizing |
+| Check                                                         | Actual result                                                                                                           |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install --store-dir /private/tmp/dark-chess-pnpm-store` | Passed; all three workspace projects linked, lockfile generated                                                         |
+| `pnpm typecheck`                                              | Passed; root tooling, Game Core, and web application/tests                                                              |
+| `pnpm test`                                                   | Passed; 62 tests in three files, Node environment                                                                       |
+| `pnpm build`                                                  | Passed; production output in `apps/web/dist/`                                                                           |
+| Local Chrome smoke test                                       | Passed; entry → 32 hidden cells → first flip → opposite color assignments → next-player label                           |
+| Keyboard and rejection smoke test                             | Passed; Tab/Enter flips one additional piece; repeating Enter on that piece preserves the turn and shows rejection text |
+| Desktop screenshot review                                     | All 32 cells visible after correcting the viewport sizing                                                               |
 
 This is the historical Task 1 record; the repeat-revealed-click expectation above is superseded by Task 2 selection behavior. Physical iPhone/Android checks, the full Phase 1 E2E suite, and long-timeline performance measurements remain Task 6 work and are not claimed by this slice. No deployment or remote push is performed.
 

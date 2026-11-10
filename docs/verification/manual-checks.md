@@ -40,7 +40,7 @@ The [standalone console script](../../verification/phone-check.js) prepares lega
 3. Start it with your actual device details:
 
    ```js
-   await runPhoneVerification('device model / OS version / browser version')
+   await runPhoneVerification('device model / OS version / browser version');
    ```
 
 4. Keep the phone tab in the foreground. Wait while it prepares the short game. For each of five prompts, tap the empty square **第 2 列，第 2 欄** (the Horse is preselected), then tap **悔棋** when prompted.
@@ -49,7 +49,7 @@ The [standalone console script](../../verification/phone-check.js) prepares lega
 7. Copy the resulting `phoneVerificationReport` from the console:
 
    ```js
-   JSON.stringify(phoneVerificationReport, null, 2)
+   JSON.stringify(phoneVerificationReport, null, 2);
    ```
 
 The report includes all five samples and medians for ordinary action, undo, and Review jump in both games. Timing begins at click activation and ends after two animation-frame callbacks, allowing an intervening paint; selection/setup and automation round-trip time are excluded. The target median is ≤100 ms for each operation. This is a browser paint estimate, not a hardware display measurement. No timing threshold is enforced in CI.
@@ -58,16 +58,16 @@ The procedure itself has automated Chromium/WebKit coverage, including the real 
 
 ## Acceptance record — fill after testing
 
-| Check | iPhone Safari | Android Chrome |
-|---|---|---|
-| Device / OS / browser version | Pending | Pending |
-| CSS viewport / normal layout / touch targets | Pending | Pending |
-| Gameplay / invalid feedback / undo / restart | Pending | Pending |
-| History / Progressive Review / exit | Pending | Pending |
-| Native 200% zoom / larger text / reachability | Pending | Pending |
-| Keyboard / focus / accessibility labels where available | Pending | Pending |
-| Short action / undo / Review medians; five samples each | Pending | Pending |
-| Long action / undo / Review medians; five samples each | Pending | Pending |
-| Defects / observations | Pending | Pending |
+| Check                                                   | iPhone Safari | Android Chrome |
+| ------------------------------------------------------- | ------------- | -------------- |
+| Device / OS / browser version                           | Pending       | Pending        |
+| CSS viewport / normal layout / touch targets            | Pending       | Pending        |
+| Gameplay / invalid feedback / undo / restart            | Pending       | Pending        |
+| History / Progressive Review / exit                     | Pending       | Pending        |
+| Native 200% zoom / larger text / reachability           | Pending       | Pending        |
+| Keyboard / focus / accessibility labels where available | Pending       | Pending        |
+| Short action / undo / Review medians; five samples each | Pending       | Pending        |
+| Long action / undo / Review medians; five samples each  | Pending       | Pending        |
+| Defects / observations                                  | Pending       | Pending        |
 
 Hosted CI execution is also pending. After the owner authorizes committing/pushing, record the run URL and outcome for `.github/workflows/verify.yml`. The local workflow file and matching local command passes do not constitute a hosted run. Phase 1 acceptance remains pending these checks and owner review, including acceptance of the existing no-alternative chase limitation or a separately approved policy change.

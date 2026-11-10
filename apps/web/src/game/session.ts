@@ -24,13 +24,17 @@ export const initialLocalGame: LocalGameState = { session: null, error: null };
 
 export function sessionReducer(state: LocalGameState, command: SessionCommand): LocalGameState {
   if (command.type === 'START' || command.type === 'RESTART') {
-    if (command.type === 'RESTART' && (state.session === null
-      || (state.session.currentState.status === 'ACTIVE' && !command.confirmed))) {
+    if (
+      command.type === 'RESTART' &&
+      (state.session === null ||
+        (state.session.currentState.status === 'ACTIVE' && !command.confirmed))
+    ) {
       return { ...state, error: { code: 'INVALID_ACTION' } };
     }
     const result = createInitialState(command.deck);
     if (!result.ok) return { ...state, error: result.error };
-    if (command.type === 'START' && state.session !== null) return { ...state, error: { code: 'INVALID_ACTION' } };
+    if (command.type === 'START' && state.session !== null)
+      return { ...state, error: { code: 'INVALID_ACTION' } };
     return {
       session: {
         initialDeck: command.deck.map(({ id, color, rank }) => ({ id, color, rank })),
@@ -42,7 +46,8 @@ export function sessionReducer(state: LocalGameState, command: SessionCommand): 
   }
   if (state.session === null) return { ...state, error: { code: 'INVALID_ACTION' } };
   if (command.type === 'UNDO') {
-    if (state.session.currentState.status === 'FINISHED') return { ...state, error: { code: 'GAME_FINISHED' } };
+    if (state.session.currentState.status === 'FINISHED')
+      return { ...state, error: { code: 'GAME_FINISHED' } };
     if (state.session.actions.length === 0) return { ...state, error: { code: 'INVALID_ACTION' } };
     const actions = state.session.actions.slice(0, -1);
     const reconstructed = reconstructGame(state.session.initialDeck, actions);
@@ -54,9 +59,10 @@ export function sessionReducer(state: LocalGameState, command: SessionCommand): 
   const result = applyAction(state.session.currentState, command.playerId, command.action);
   if (!result.ok) return { ...state, error: result.error };
   const event = result.event;
-  const action: GameAction = event.type === 'FLIP'
-    ? { type: 'FLIP', position: event.position }
-    : { type: 'MOVE', from: event.from, to: event.to };
+  const action: GameAction =
+    event.type === 'FLIP'
+      ? { type: 'FLIP', position: event.position }
+      : { type: 'MOVE', from: event.from, to: event.to };
   return {
     session: {
       ...state.session,

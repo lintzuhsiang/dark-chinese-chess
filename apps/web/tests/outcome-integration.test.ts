@@ -1,6 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { applyAction, createInitialState, getLegalActions, getObservation } from '@dark-chess/game-core';
-import type { GameAction, GameState, Piece, PieceColor, PieceRank, Square } from '@dark-chess/game-core';
+import {
+  applyAction,
+  createInitialState,
+  getLegalActions,
+  getObservation,
+} from '@dark-chess/game-core';
+import type {
+  GameAction,
+  GameState,
+  Piece,
+  PieceColor,
+  PieceRank,
+  Square,
+} from '@dark-chess/game-core';
 import { getActionError } from '../../../packages/game-core/src/validation';
 import { boardUiReducer, initialBoardUi } from '../src/game/interaction';
 import type { BoardUiState } from '../src/game/interaction';
@@ -18,21 +30,25 @@ function freeze<T>(value: T): T {
 function arrangedDeck(attacker: 'CHARIOT' | 'HORSE' = 'CHARIOT'): Piece[] {
   const remaining = createShuffledDeck(() => 1 - Number.EPSILON);
   function take(color: PieceColor, rank: PieceRank): Piece {
-    const position = remaining.findIndex(piece => piece.color === color && piece.rank === rank);
+    const position = remaining.findIndex((piece) => piece.color === color && piece.rank === rank);
     if (position < 0) throw new Error('Missing fixture piece.');
     return remaining.splice(position, 1)[0]!;
   }
   const fixed = new Map<number, Piece>([
-    [0, take('RED', attacker)], [1, take('BLACK', 'SOLDIER')],
-    [4, take('RED', 'SOLDIER')], [5, take('BLACK', 'HORSE')],
+    [0, take('RED', attacker)],
+    [1, take('BLACK', 'SOLDIER')],
+    [4, take('RED', 'SOLDIER')],
+    [5, take('BLACK', 'HORSE')],
   ]);
   return Array.from({ length: 32 }, (_, position) => fixed.get(position) ?? remaining.shift()!);
 }
 
-const click = (state: BoardUiState, position: number) => boardUiReducer(freeze(state), { type: 'CLICK', position });
+const click = (state: BoardUiState, position: number) =>
+  boardUiReducer(freeze(state), { type: 'CLICK', position });
 function move(state: BoardUiState, from: number, to: number): BoardUiState {
   const next = click(click(state, from), to);
-  if (next.local.error !== null) throw new Error(`Expected legal UI move: ${next.local.error.code}`);
+  if (next.local.error !== null)
+    throw new Error(`Expected legal UI move: ${next.local.error.code}`);
   return next;
 }
 
@@ -44,13 +60,21 @@ function opening(attacker: 'CHARIOT' | 'HORSE' = 'CHARIOT'): BoardUiState {
   return move(state, 1, 0); // Newly threatens Horse at 4; anchor for non-reciprocal Chariot.
 }
 
-const cycle = [[4, 5], [0, 1], [5, 4], [1, 0]] as const;
+const cycle = [
+  [4, 5],
+  [0, 1],
+  [5, 4],
+  [1, 0],
+] as const;
 
 describe('outcome/chase/session integration', () => {
   it('rejects the third return before committing counters, turn, selection, or timeline', () => {
     let ui = opening();
     const key = Object.keys(ui.local.session!.currentState.chase!.positionCounts)[0]!;
-    expect(ui.local.session?.currentState.chase).toMatchObject({ positionCounts: { [key]: 1 }, phase: 'ESCAPE' });
+    expect(ui.local.session?.currentState.chase).toMatchObject({
+      positionCounts: { [key]: 1 },
+      phase: 'ESCAPE',
+    });
     for (const returns of [1, 2]) {
       for (const [from, to] of cycle) ui = move(ui, from, to);
       expect(ui.local.session?.currentState.chase?.positionCounts[key]).toBe(returns + 1);
@@ -59,15 +83,21 @@ describe('outcome/chase/session integration', () => {
     const selected = click(ui, 1);
     const before = selected.local.session!;
     const snapshot = JSON.stringify(before);
-    expect(getLegalActions(before.currentState, 'P1')).not.toContainEqual({ type: 'MOVE', from: 1, to: 0 });
+    expect(getLegalActions(before.currentState, 'P1')).not.toContainEqual({
+      type: 'MOVE',
+      from: 1,
+      to: 0,
+    });
     const rejected = click(selected, 0);
     expect(rejected.local.error?.code).toBe('PERPETUAL_CHASE');
     expect(rejected.selectedSquare).toBe(1);
     expect(rejected.local.session).toBe(before);
     expect(JSON.stringify(before)).toBe(snapshot);
     const at59 = freeze({ ...before.currentState, noProgressCount: 59 });
-    expect(applyAction(at59, 'P1', { type: 'MOVE', from: 1, to: 0 }))
-      .toEqual({ ok: false, error: { code: 'PERPETUAL_CHASE' } });
+    expect(applyAction(at59, 'P1', { type: 'MOVE', from: 1, to: 0 })).toEqual({
+      ok: false,
+      error: { code: 'PERPETUAL_CHASE' },
+    });
     expect(at59.noProgressCount).toBe(59);
     expect(at59.result).toBeNull();
     const flipped = click(rejected, 2); // Owner UX: hidden FLIP overrides selected-source MOVE.
@@ -114,7 +144,12 @@ describe('outcome/chase/session integration', () => {
     ui = click(ui, 5); // Same attacker takes a permitted route while continuing its threat.
     expect(ui.local.error).toBeNull();
     expect(ui.selectedSquare).toBeNull();
-    const laterCycle = [[4, 0], [5, 1], [0, 4], [1, 5]] as const;
+    const laterCycle = [
+      [4, 0],
+      [5, 1],
+      [0, 4],
+      [1, 5],
+    ] as const;
     for (let returns = 0; returns < 2; returns += 1) {
       for (const [from, to] of laterCycle) ui = move(ui, from, to);
     }
@@ -122,14 +157,21 @@ describe('outcome/chase/session integration', () => {
     ui = click(ui, 1);
     const before = ui.local.session!;
     const snapshot = JSON.stringify(before);
-    expect(getLegalActions(before.currentState, 'P1')).not.toContainEqual({ type: 'MOVE', from: 1, to: 5 });
+    expect(getLegalActions(before.currentState, 'P1')).not.toContainEqual({
+      type: 'MOVE',
+      from: 1,
+      to: 5,
+    });
     ui = click(ui, 5);
     expect(ui.local.error?.code).toBe('PERPETUAL_CHASE');
     expect(ui.selectedSquare).toBe(1);
     expect(ui.local.session).toBe(before);
     expect(JSON.stringify(before)).toBe(snapshot);
 
-    let reconstructed = sessionReducer({ session: null, error: null }, { type: 'START', deck: before.initialDeck });
+    let reconstructed = sessionReducer(
+      { session: null, error: null },
+      { type: 'START', deck: before.initialDeck },
+    );
     for (const entry of before.actions) {
       reconstructed = sessionReducer(reconstructed, { type: 'SUBMIT', ...entry });
       expect(reconstructed.error).toBeNull();
@@ -144,7 +186,10 @@ describe('outcome/chase/session integration', () => {
       for (const [from, to] of cycle) ui = move(ui, from, to);
     }
     const session = ui.local.session!;
-    let reconstructed = sessionReducer({ session: null, error: null }, { type: 'START', deck: session.initialDeck });
+    let reconstructed = sessionReducer(
+      { session: null, error: null },
+      { type: 'START', deck: session.initialDeck },
+    );
     const initial = createInitialState(session.initialDeck);
     if (!initial.ok) throw new Error('Expected valid initial deck.');
     let state = initial.state;
@@ -155,7 +200,9 @@ describe('outcome/chase/session integration', () => {
       state = result.state;
       expect(reconstructed.session?.currentState).toEqual(state);
       expect(getObservation(state)).not.toHaveProperty('chase');
-      expect(JSON.stringify(getObservation(state))).not.toMatch(/RED-CHARIOT-|BLACK-HORSE-|positionCounts/);
+      expect(JSON.stringify(getObservation(state))).not.toMatch(
+        /RED-CHARIOT-|BLACK-HORSE-|positionCounts/,
+      );
     }
     expect(state).toEqual(session.currentState);
     expect(reconstructed.session).toEqual(session);
@@ -188,17 +235,30 @@ describe('outcome/chase/session integration', () => {
     if (!initialized.ok) throw new Error('Expected valid deck.');
     const board: Square[] = Array.from({ length: 32 }, () => null);
     for (const [position, rank, color] of [
-      [1, 'CANNON', 'RED'], [12, 'HORSE', 'BLACK'],
-      [2, 'GENERAL', 'BLACK'], [4, 'SOLDIER', 'BLACK'], [5, 'SOLDIER', 'BLACK'],
-    ] as const) board[position] = { revealed: true, piece: { id: `edge-${position}`, rank, color } };
-    let state: GameState = freeze({ ...initialized.state, board, playerColors: { P1: 'RED', P2: 'BLACK' } });
+      [1, 'CANNON', 'RED'],
+      [12, 'HORSE', 'BLACK'],
+      [2, 'GENERAL', 'BLACK'],
+      [4, 'SOLDIER', 'BLACK'],
+      [5, 'SOLDIER', 'BLACK'],
+    ] as const)
+      board[position] = { revealed: true, piece: { id: `edge-${position}`, rank, color } };
+    let state: GameState = freeze({
+      ...initialized.state,
+      board,
+      playerColors: { P1: 'RED', P2: 'BLACK' },
+    });
     function accept(action: GameAction) {
       const result = applyAction(freeze(state), state.currentPlayer, action);
       if (!result.ok) throw new Error(`Expected fixture action: ${result.error.code}`);
       state = result.state;
     }
     accept({ type: 'MOVE', from: 1, to: 0 });
-    const cannonCycle = [[12, 13], [0, 1], [13, 12], [1, 0]] as const;
+    const cannonCycle = [
+      [12, 13],
+      [0, 1],
+      [13, 12],
+      [1, 0],
+    ] as const;
     for (let returns = 0; returns < 2; returns += 1) {
       for (const [from, to] of cannonCycle) accept({ type: 'MOVE', from, to });
     }
@@ -209,7 +269,10 @@ describe('outcome/chase/session integration', () => {
     expect(getActionError(state, 'P1', closing)).toBeNull();
     expect(getLegalActions(state, 'P1')).toEqual([]);
     const snapshot = JSON.stringify(state);
-    expect(applyAction(state, 'P1', closing)).toEqual({ ok: false, error: { code: 'PERPETUAL_CHASE' } });
+    expect(applyAction(state, 'P1', closing)).toEqual({
+      ok: false,
+      error: { code: 'PERPETUAL_CHASE' },
+    });
     expect(JSON.stringify(state)).toBe(snapshot);
   });
 });

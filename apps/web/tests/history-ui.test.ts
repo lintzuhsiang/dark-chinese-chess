@@ -10,12 +10,15 @@ import type { BoardUiState } from '../src/game/interaction';
 import { reconstructGame } from '../src/game/reconstruct';
 import { cycle, flip, freeze, opening, pairDeck, recordedGame } from './history-fixtures';
 
-const click = (state: BoardUiState, position: number) => boardUiReducer(freeze(state), { type: 'CLICK', position });
+const click = (state: BoardUiState, position: number) =>
+  boardUiReducer(freeze(state), { type: 'CLICK', position });
 const start = () => boardUiReducer(initialBoardUi, { type: 'START', deck: pairDeck() });
 function historyHtml(ui: BoardUiState): string {
   const session = ui.local.session!;
   const { events } = reconstructGame(session.initialDeck, session.actions);
-  const captured = events.flatMap(event => event.type === 'MOVE' && event.captured ? [event.captured] : []);
+  const captured = events.flatMap((event) =>
+    event.type === 'MOVE' && event.captured ? [event.captured] : [],
+  );
   return renderToStaticMarkup(createElement(History, { events, captured }));
 }
 
@@ -51,9 +54,14 @@ describe('history and session controls', () => {
     expect(historyHtml(ui)).not.toContain('吃掉黑方卒');
     expect(historyHtml(ui)).toContain('黑方被吃：無');
     for (let index = 0; index < 4; index += 1) ui = boardUiReducer(ui, { type: 'UNDO' });
-    const html = historyHtml(ui) + renderToStaticMarkup(createElement(Board, {
-      squares: getObservation(ui.local.session!.currentState).board, onSquareClick: () => {},
-    }));
+    const html =
+      historyHtml(ui) +
+      renderToStaticMarkup(
+        createElement(Board, {
+          squares: getObservation(ui.local.session!.currentState).board,
+          onSquareClick: () => {},
+        }),
+      );
     expect(html).toContain('尚無行動紀錄。');
     expect(html.match(/，暗棋"/g)).toHaveLength(32);
     expect(html).not.toMatch(/紅方俥|黑方馬|黑方卒|紅方兵|RED-|BLACK-|第 1 手/);
@@ -76,11 +84,18 @@ describe('history and session controls', () => {
   });
 
   it('preserves selection on failed replacement and clears all game/UI data after a valid restart', () => {
-    let ui: BoardUiState = { ...initialBoardUi, local: recordedGame(pairDeck(), [...opening, ...cycle]).final };
+    let ui: BoardUiState = {
+      ...initialBoardUi,
+      local: recordedGame(pairDeck(), [...opening, ...cycle]).final,
+    };
     ui = click(click(ui, 4), 32); // P2 selects its Horse, then submits an invalid destination.
     expect(ui.selectedSquare).toBe(4);
     const before = freeze(ui);
-    const unconfirmed = boardUiReducer(before, { type: 'RESTART', deck: pairDeck(), confirmed: false });
+    const unconfirmed = boardUiReducer(before, {
+      type: 'RESTART',
+      deck: pairDeck(),
+      confirmed: false,
+    });
     expect(unconfirmed.local.session).toBe(before.local.session);
     expect(unconfirmed.selectedSquare).toBe(4);
     const invalid = boardUiReducer(before, { type: 'RESTART', deck: [], confirmed: true });
@@ -100,18 +115,30 @@ describe('history and session controls', () => {
   });
 
   it.each([
-    ['initial', false, false], ['finished', false, true], ['active with history', true, false],
+    ['initial', false, false],
+    ['finished', false, true],
+    ['active with history', true, false],
     ['finished despite a stale availability flag', true, true],
-  ] as const)('renders native undo guards and read-only history access: %s', (_name, canUndo, finished) => {
-    const html = renderToStaticMarkup(createElement(GameControls, {
-      canUndo, finished, history: [], captured: [], onUndo: () => {}, onRestart: () => {},
-    }));
-    expect(html.includes('disabled=""')).toBe(!canUndo || finished);
-    expect(html).toContain('悔棋');
-    expect(html).toContain('重新開始');
-    expect(html).toContain('棋譜 · 0');
-    expect(html).toContain('<dialog');
-    expect(html).toContain('aria-labelledby="history-title"');
-    expect(html).not.toMatch(/覆盤|前一步|下一步|建議|data-id/);
-  });
+  ] as const)(
+    'renders native undo guards and read-only history access: %s',
+    (_name, canUndo, finished) => {
+      const html = renderToStaticMarkup(
+        createElement(GameControls, {
+          canUndo,
+          finished,
+          history: [],
+          captured: [],
+          onUndo: () => {},
+          onRestart: () => {},
+        }),
+      );
+      expect(html.includes('disabled=""')).toBe(!canUndo || finished);
+      expect(html).toContain('悔棋');
+      expect(html).toContain('重新開始');
+      expect(html).toContain('棋譜 · 0');
+      expect(html).toContain('<dialog');
+      expect(html).toContain('aria-labelledby="history-title"');
+      expect(html).not.toMatch(/覆盤|前一步|下一步|建議|data-id/);
+    },
+  );
 });

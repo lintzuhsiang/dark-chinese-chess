@@ -22,12 +22,12 @@ Task 3 policy is intentionally absent: MOVE preserves the stored noProgressCount
 
 All three specialists were created with actual Codex delegation. They shared the checkout; no isolated worktree was assumed.
 
-| Agent | Owned work | Observed interval, UTC+08:00 |
-|---|---|---|
-| Main /root | Contract alignment, root/docs, integrated review, checks, native browser smoke, final report | Measured checkpoint interval 13:48:00 to 14:35:17 |
-| A /root/core_engineer | Writes only packages/game-core/: validator, transitions, enumeration, core tests | 13:48:37–13:52:47; 4m10s |
-| B /root/frontend_engineer | Writes only apps/web/: selection reducer, UI wiring, markup, interaction tests | 13:48:53–13:53:10; 4m17s |
-| C /root/qa_reviewer | Read-only source/test review and separate in-memory oracle/integration probes | 13:49:04–13:57:27; 8m23s including waiting |
+| Agent                     | Owned work                                                                                   | Observed interval, UTC+08:00                      |
+| ------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Main /root                | Contract alignment, root/docs, integrated review, checks, native browser smoke, final report | Measured checkpoint interval 13:48:00 to 14:35:17 |
+| A /root/core_engineer     | Writes only packages/game-core/: validator, transitions, enumeration, core tests             | 13:48:37–13:52:47; 4m10s                          |
+| B /root/frontend_engineer | Writes only apps/web/: selection reducer, UI wiring, markup, interaction tests               | 13:48:53–13:53:10; 4m17s                          |
+| C /root/qa_reviewer       | Read-only source/test review and separate in-memory oracle/integration probes                | 13:49:04–13:57:27; 8m23s including waiting        |
 
 Core and frontend implementation overlapped by 3m54s. Their combined observed work intervals total 8m27s within a 4m33s shared window. This demonstrates concurrent work; no controlled sequential run exists, so a precise speedup or cost saving is not claimed.
 
@@ -39,18 +39,18 @@ Both implementation agents explicitly stopped edits at handoff. Main subsequentl
 
 Commands used the existing pnpm installation via PATH=/private/tmp/dark-chess-toolchain/node_modules/.bin:$PATH.
 
-| Check | Actual result |
-|---|---|
-| Agent A: pnpm exec vitest run packages/game-core/tests | 309 passed in 2 files before Main's two added regressions |
-| Agent A: pnpm --filter @dark-chess/game-core typecheck | Exit 0 |
-| Agent B: pnpm exec vitest run apps/web/tests | 27 passed in 3 files |
-| Agent B: pnpm --filter @dark-chess/web typecheck | Exit 0 |
-| Main: pnpm typecheck | Exit 0; root tooling, core, web, and tests |
-| Main: pnpm test | 338 passed in 5 files after both final added regressions |
-| Main: pnpm build | Exit 0; 23 modules, production output in apps/web/dist/ |
-| Main: git diff --check -- apps packages | Exit 0 |
-| Existing scripts: pnpm run | Only dev, typecheck, test, build; no lint/format scripts |
-| ESLint / Prettier | Not configured or executed; no pass claimed and no new dependencies introduced |
+| Check                                                  | Actual result                                                                  |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Agent A: pnpm exec vitest run packages/game-core/tests | 309 passed in 2 files before Main's two added regressions                      |
+| Agent A: pnpm --filter @dark-chess/game-core typecheck | Exit 0                                                                         |
+| Agent B: pnpm exec vitest run apps/web/tests           | 27 passed in 3 files                                                           |
+| Agent B: pnpm --filter @dark-chess/web typecheck       | Exit 0                                                                         |
+| Main: pnpm typecheck                                   | Exit 0; root tooling, core, web, and tests                                     |
+| Main: pnpm test                                        | 338 passed in 5 files after both final added regressions                       |
+| Main: pnpm build                                       | Exit 0; 23 modules, production output in apps/web/dist/                        |
+| Main: git diff --check -- apps packages                | Exit 0                                                                         |
+| Existing scripts: pnpm run                             | Only dev, typecheck, test, build; no lint/format scripts                       |
+| ESLint / Prettier                                      | Not configured or executed; no pass claimed and no new dependencies introduced |
 
 The original Task 1 coverage is retained. Its obsolete assertion that MOVE is unavailable now checks that its still-hidden source returns INVALID_SOURCE. This reflects the new feature rather than weakening rejection or immutability tests.
 
@@ -103,4 +103,3 @@ No further conversational approval or clarification was requested after the init
 ESLint/Prettier remain unavailable; actual mobile devices, full Phase 1 E2E coverage, and long-timeline performance checks remain Task 6 work. Outcomes/no-progress/chase remain Task 3, including the unresolved all-actions-chase-prohibited case. This is a completed Task 2 increment, not the completed Phase 1 game.
 
 No commits, pushes, deployments, destructive operations, public contract changes, or new dependencies were performed. Stop here for the owner's independent review; do not begin Task 3.
-

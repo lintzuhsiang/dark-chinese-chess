@@ -13,27 +13,27 @@ Initial session date: 2026-11-09; Review refinement checked on 2026-11-10. Tasks
 
 ## Commands and scope
 
-| Command/check | Result |
-|---|---|
-| `pnpm typecheck` | Passed |
-| `pnpm test` | Passed; 451 tests in 13 files |
-| `pnpm build` | Passed; production bundle served by browser checks |
-| `pnpm test:e2e` | Passed; 22 checks across Chromium and WebKit, followed by three stable WebKit screenshot rechecks |
-| `pnpm verify:performance` | Passed; two Chromium reference configurations, short and long games, five samples per operation |
-| `git diff --check` | Passed |
-| ESLint / Prettier | Unconfigured; no pass claimed |
-| Hosted GitHub Actions run | Not executed; workflow authored/reviewed locally only |
-| Physical iPhone Safari / Android Chrome | Not available in this session; manual checks pending |
+| Command/check                           | Result                                                                                            |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `pnpm typecheck`                        | Passed                                                                                            |
+| `pnpm test`                             | Passed; 451 tests in 13 files                                                                     |
+| `pnpm build`                            | Passed; production bundle served by browser checks                                                |
+| `pnpm test:e2e`                         | Passed; 22 checks across Chromium and WebKit, followed by three stable WebKit screenshot rechecks |
+| `pnpm verify:performance`               | Passed; two Chromium reference configurations, short and long games, five samples per operation   |
+| `git diff --check`                      | Passed                                                                                            |
+| ESLint / Prettier                       | Unconfigured; no pass claimed                                                                     |
+| Hosted GitHub Actions run               | Not executed; workflow authored/reviewed locally only                                             |
+| Physical iPhone Safari / Android Chrome | Not available in this session; manual checks pending                                              |
 
 ## Browser layout and accessibility evidence
 
 Chromium 158 and Playwright WebKit on macOS passed the default-size geometry checks below. These are desktop browser engines, not physical phones. Screenshots and raw geometry/contrast JSON are generated under ignored `test-results/` paths.
 
-| CSS viewport | Normal play | Progressive Review | Smallest target |
-|---|---|---|---|
-| 320×640 | Fits without page overflow/target overlap | Board/controls fit; full history below, vertical page scrolling allowed | 44×44 CSS px |
-| 390×844 | Fits without page overflow/target overlap | Board/controls fit; full history below, vertical page scrolling allowed | 44×44 CSS px |
-| 1280×800 | Fits without page overflow/target overlap | Fits without page overflow/target overlap | 44×44 CSS px |
+| CSS viewport | Normal play                               | Progressive Review                                                      | Smallest target |
+| ------------ | ----------------------------------------- | ----------------------------------------------------------------------- | --------------- |
+| 320×640      | Fits without page overflow/target overlap | Board/controls fit; full history below, vertical page scrolling allowed | 44×44 CSS px    |
+| 390×844      | Fits without page overflow/target overlap | Board/controls fit; full history below, vertical page scrolling allowed | 44×44 CSS px    |
+| 1280×800     | Fits without page overflow/target overlap | Fits without page overflow/target overlap                               | 44×44 CSS px    |
 
 Both engines measured minimum text contrast **4.862:1**, essential control-boundary contrast **3.893:1**, and keyboard-focus contrast **4.808:1** against the tested backgrounds. The calculation uses [W3C relative luminance](https://www.w3.org/WAI/WCAG21/Understanding/relative-luminance.html). Inactive controls/decorative separators are not treated as interactive boundaries. Filled controls may distinguish their boundary through their fill; outlined controls use their border.
 
@@ -45,29 +45,29 @@ Automated 200% root text size doubles actual text and preserves reachability of 
 
 Reference host: **Apple M1, macOS 27.2, arm64, Node 26.10.0, Chromium 158.0.8127.18**. Production build, other browser checks idle. The touch configuration is a **390×844 emulated viewport on this Mac**, not an Android/iPhone result. Raw samples are retained in `performance-baseline.json`.
 
-| Configuration / game | Active / completed actions | Ordinary action median | Undo median | Review jump median |
-|---|---:|---:|---:|---:|
-| Desktop 1280×800 / short | 7 / 66 | 30.8 ms | 31.6 ms | 31.6 ms |
-| Desktop 1280×800 / long | 547 / 607 | 31.7 ms | 31.6 ms | 31.4 ms |
-| Touch viewport 390×844 / short | 7 / 66 | 31.3 ms | 31.2 ms | 31.0 ms |
-| Touch viewport 390×844 / long | 547 / 607 | 31.8 ms | 31.9 ms | 31.6 ms |
+| Configuration / game           | Active / completed actions | Ordinary action median | Undo median | Review jump median |
+| ------------------------------ | -------------------------: | ---------------------: | ----------: | -----------------: |
+| Desktop 1280×800 / short       |                     7 / 66 |                30.8 ms |     31.6 ms |            31.6 ms |
+| Desktop 1280×800 / long        |                  547 / 607 |                31.7 ms |     31.6 ms |            31.4 ms |
+| Touch viewport 390×844 / short |                     7 / 66 |                31.3 ms |     31.2 ms |            31.0 ms |
+| Touch viewport 390×844 / long  |                  547 / 607 |                31.8 ms |     31.9 ms |            31.6 ms |
 
 Each median uses five click-activation → two-animation-frame samples, allowing an intervening paint and excluding automation RPC time. Setup uses real accepted actions. Twenty progress flips keep the long fixture below the no-progress limit until its final 60 quiet plies. Unit tests check every action, piece conservation, and selected reconstruction prefixes. Measurements are informative and do not impose timing-sensitive CI assertions. No snapshot optimization was justified by these host baselines.
 
 ## Acceptance audit
 
-| Requirement area | Evidence / remaining limit |
-|---|---|
-| Initialization, first flip, movement/capture, expected invalid actions | Core/session tests and real-UI gameplay scenarios |
-| Terminal next-player/result priority, hidden-piece survival, 59/60 quiet boundary | Core outcome tests; real-UI completed draws |
-| Chase versus ordinary repetition; later patterns; reset/rejection invariants | Core chase tests and browser later-pattern/undo-reset scenario; approved no-alternative ACTIVE limitation remains unchanged |
-| Canonical history, exact undo, restart validation | Session/reconstruction tests and browser undo/restart cancellation/confirmation |
-| Progressive Review accuracy/read-only/redaction | Every-prefix tests for completed fixtures, actual-App SSR checks, production browser completion/direct row selection/navigation/exit; full public history is intentionally visible after the 2026-11-10 amendment |
-| Hidden data isolated from rendered observations/events/attributes | Core/SSR/browser checks; verification code excluded from production imports/bundle |
-| Layout, text, targets, keyboard, focus, contrast | Geometry/contrast/keyboard/larger-text browser tests and screenshot inspection; native zoom/physical device checks pending |
-| Incremental play, deterministic reconstruction, no duplicate authority | Existing session/cache; one memoized public prefix projection; 607-action fixture and host measurements |
-| CI typecheck/test/build/E2E | Local command results and `.github/workflows/verify.yml`; hosted execution pending owner-authorized push |
-| Full Phase 1 acceptance | Pending physical-phone results, hosted CI, and owner review, including the existing no-alternative chase limitation |
+| Requirement area                                                                  | Evidence / remaining limit                                                                                                                                                                                        |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Initialization, first flip, movement/capture, expected invalid actions            | Core/session tests and real-UI gameplay scenarios                                                                                                                                                                 |
+| Terminal next-player/result priority, hidden-piece survival, 59/60 quiet boundary | Core outcome tests; real-UI completed draws                                                                                                                                                                       |
+| Chase versus ordinary repetition; later patterns; reset/rejection invariants      | Core chase tests and browser later-pattern/undo-reset scenario; approved no-alternative ACTIVE limitation remains unchanged                                                                                       |
+| Canonical history, exact undo, restart validation                                 | Session/reconstruction tests and browser undo/restart cancellation/confirmation                                                                                                                                   |
+| Progressive Review accuracy/read-only/redaction                                   | Every-prefix tests for completed fixtures, actual-App SSR checks, production browser completion/direct row selection/navigation/exit; full public history is intentionally visible after the 2026-11-10 amendment |
+| Hidden data isolated from rendered observations/events/attributes                 | Core/SSR/browser checks; verification code excluded from production imports/bundle                                                                                                                                |
+| Layout, text, targets, keyboard, focus, contrast                                  | Geometry/contrast/keyboard/larger-text browser tests and screenshot inspection; native zoom/physical device checks pending                                                                                        |
+| Incremental play, deterministic reconstruction, no duplicate authority            | Existing session/cache; one memoized public prefix projection; 607-action fixture and host measurements                                                                                                           |
+| CI typecheck/test/build/E2E                                                       | Local command results and `.github/workflows/verify.yml`; hosted execution pending owner-authorized push                                                                                                          |
+| Full Phase 1 acceptance                                                           | Pending physical-phone results, hosted CI, and owner review, including the existing no-alternative chase limitation                                                                                               |
 
 Use [manual-checks.md](manual-checks.md) for the remaining device steps, timing procedure, and result table. The unrelated Phase 1.5/Phase 2 roadmap drafts were preserved. The owner authorized a local commit on 2026-11-10 after the Review refinement. No push, deployment, or Phase 1.5/2 implementation was performed.
 

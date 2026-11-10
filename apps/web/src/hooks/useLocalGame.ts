@@ -9,9 +9,12 @@ export function useLocalGame() {
   const currentState = session?.currentState;
   // Public completed-game history is stable while seeking. The board and capture
   // summary still come from the selected prefix, never from this full timeline.
-  const liveView = useMemo(() => session ? projectSession(session, null) : null, [session]);
-  const view = useMemo(() => session && ui.reviewCursor !== null
-    ? projectSession(session, ui.reviewCursor) : liveView, [session, ui.reviewCursor, liveView]);
+  const liveView = useMemo(() => (session ? projectSession(session, null) : null), [session]);
+  const view = useMemo(
+    () =>
+      session && ui.reviewCursor !== null ? projectSession(session, ui.reviewCursor) : liveView,
+    [session, ui.reviewCursor, liveView],
+  );
   const isReview = ui.reviewCursor !== null;
   const totalActions = session?.actions.length ?? 0;
   const canUndo = !isReview && currentState?.status === 'ACTIVE' && totalActions > 0;
@@ -35,10 +38,21 @@ export function useLocalGame() {
   }
 
   // Rendering receives no session, deck, IDs, full state, or raw timeline.
-  return { observation: view?.observation ?? null, history: view?.history ?? [], captured: view?.captured ?? [],
-    reviewHistory: isReview ? liveView?.history ?? [] : [],
-    canUndo, canReview, reviewCursor: ui.reviewCursor, totalActions, error: ui.local.error, selectedSquare: ui.selectedSquare,
-    startGame, clickSquare, undo, restartGame,
+  return {
+    observation: view?.observation ?? null,
+    history: view?.history ?? [],
+    captured: view?.captured ?? [],
+    reviewHistory: isReview ? (liveView?.history ?? []) : [],
+    canUndo,
+    canReview,
+    reviewCursor: ui.reviewCursor,
+    totalActions,
+    error: ui.local.error,
+    selectedSquare: ui.selectedSquare,
+    startGame,
+    clickSquare,
+    undo,
+    restartGame,
     openReview: () => dispatch({ type: 'OPEN_REVIEW' }),
     closeReview: () => dispatch({ type: 'CLOSE_REVIEW' }),
     seekReview: (cursor: number) => dispatch({ type: 'REVIEW_TO', cursor }),

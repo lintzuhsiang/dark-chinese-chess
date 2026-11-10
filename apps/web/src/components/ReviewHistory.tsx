@@ -2,7 +2,12 @@ import { useEffect, useRef } from 'react';
 import type { ActionEvent, PublicPiece } from '@dark-chess/game-core';
 import { CapturedPieces, HistoryEventDetails } from './History';
 
-export function ReviewHistory({ events, captured, cursor, onSeek }: {
+export function ReviewHistory({
+  events,
+  captured,
+  cursor,
+  onSeek,
+}: {
   readonly events: readonly ActionEvent[];
   readonly captured: readonly PublicPiece[];
   readonly cursor: number;
@@ -27,12 +32,28 @@ export function ReviewHistory({ events, captured, cursor, onSeek }: {
       <p className="review-history-position">目前局面 · 第 {cursor} 手</p>
       <CapturedPieces captured={captured} />
       <ol ref={list} className="history-list review-history-list" aria-label="完整對局紀錄">
-        <li><button type="button" tabIndex={0} className="review-step" aria-label="檢視開局" aria-current={cursor === 0 ? 'step' : undefined}
-          onClick={() => onSeek(0)}>開局 · 尚未翻棋</button></li>
-        {events.map(event => (
+        <li>
+          <button
+            type="button"
+            tabIndex={0}
+            className="review-step"
+            aria-label="檢視開局"
+            aria-current={cursor === 0 ? 'step' : undefined}
+            onClick={() => onSeek(0)}
+          >
+            開局 · 尚未翻棋
+          </button>
+        </li>
+        {events.map((event) => (
           <li key={event.ply}>
-            <button type="button" tabIndex={0} className="review-step" aria-label={`檢視第 ${event.ply} 手`}
-              aria-current={cursor === event.ply ? 'step' : undefined} onClick={() => onSeek(event.ply)}>
+            <button
+              type="button"
+              tabIndex={0}
+              className="review-step"
+              aria-label={`檢視第 ${event.ply} 手`}
+              aria-current={cursor === event.ply ? 'step' : undefined}
+              onClick={() => onSeek(event.ply)}
+            >
               <HistoryEventDetails event={event} />
             </button>
           </li>

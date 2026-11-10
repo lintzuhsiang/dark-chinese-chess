@@ -2,11 +2,20 @@ import { expect, test } from '@playwright/test';
 import { cycle, fixtureDeck, flip, move, opening, pairDeck } from '../verification/fixtures';
 import { cellsFor, playActions, startGame } from './support';
 
-test('selection, rejected capture, direct hidden flip, capture/move undo, and restart', async ({ page }) => {
-  await startGame(page, fixtureDeck([
-    [0, 'RED', 'CHARIOT'], [1, 'BLACK', 'HORSE'], [2, 'RED', 'HORSE'],
-    [3, 'BLACK', 'GENERAL'], [4, 'BLACK', 'SOLDIER'], [8, 'RED', 'SOLDIER'],
-  ]));
+test('selection, rejected capture, direct hidden flip, capture/move undo, and restart', async ({
+  page,
+}) => {
+  await startGame(
+    page,
+    fixtureDeck([
+      [0, 'RED', 'CHARIOT'],
+      [1, 'BLACK', 'HORSE'],
+      [2, 'RED', 'HORSE'],
+      [3, 'BLACK', 'GENERAL'],
+      [4, 'BLACK', 'SOLDIER'],
+      [8, 'RED', 'SOLDIER'],
+    ]),
+  );
   const cells = cellsFor(page);
   const status = page.getByRole('status');
   await playActions(page, [0, 1, 2, 3, 4, 8].map(flip));

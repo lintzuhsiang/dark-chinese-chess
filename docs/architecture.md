@@ -21,18 +21,18 @@ The application should:
 
 ### Phase 1
 
-| Layer | Technology |
-|---|---|
-| Language | TypeScript |
-| Frontend | React + Vite |
-| Styling | Plain CSS / CSS Modules |
-| Game Engine | Framework-independent TypeScript |
-| Local State | React reducer and custom hooks |
-| Unit Testing | Vitest |
-| E2E Testing | Playwright |
-| Package Manager | pnpm |
-| CI | GitHub Actions |
-| Hosting | Static web hosting |
+| Layer           | Technology                       |
+| --------------- | -------------------------------- |
+| Language        | TypeScript                       |
+| Frontend        | React + Vite                     |
+| Styling         | Plain CSS / CSS Modules          |
+| Game Engine     | Framework-independent TypeScript |
+| Local State     | React reducer and custom hooks   |
+| Unit Testing    | Vitest                           |
+| E2E Testing     | Playwright                       |
+| Package Manager | pnpm                             |
+| CI              | GitHub Actions                   |
+| Hosting         | Static web hosting               |
 
 No backend, database, authentication, or external game service is required.
 
@@ -142,17 +142,10 @@ It must not independently determine move legality.
 Task 3 preserves existing action/result shapes and adds the tracker below to authoritative state, plus the typed `PERPETUAL_CHASE` rejection code. Quiet MOVE now increments `noProgressCount`; FLIP/capture reset it. Public observations and action events deliberately omit the tracker.
 
 ```ts
-type PlayerId = "P1" | "P2";
-type PieceColor = "RED" | "BLACK";
+type PlayerId = 'P1' | 'P2';
+type PieceColor = 'RED' | 'BLACK';
 
-type PieceRank =
-  | "GENERAL"
-  | "ADVISOR"
-  | "ELEPHANT"
-  | "CHARIOT"
-  | "HORSE"
-  | "CANNON"
-  | "SOLDIER";
+type PieceRank = 'GENERAL' | 'ADVISOR' | 'ELEPHANT' | 'CHARIOT' | 'HORSE' | 'CANNON' | 'SOLDIER';
 
 interface Piece {
   id: string;
@@ -178,11 +171,11 @@ Indexing is row-major: `row * 4 + column`, eight rows and four columns. Validate
 ```ts
 type GameAction =
   | {
-      type: "FLIP";
+      type: 'FLIP';
       position: number;
     }
   | {
-      type: "MOVE";
+      type: 'MOVE';
       from: number;
       to: number;
     };
@@ -197,12 +190,9 @@ interface GameState {
   board: Board;
   currentPlayer: PlayerId;
 
-  playerColors: Record<
-    PlayerId,
-    PieceColor | null
-  >;
+  playerColors: Record<PlayerId, PieceColor | null>;
 
-  status: "ACTIVE" | "FINISHED";
+  status: 'ACTIVE' | 'FINISHED';
   result: GameResult | null;
 
   plyCount: number;
@@ -214,7 +204,7 @@ interface ChaseState {
   attackerPlayer: PlayerId;
   attackerId: string;
   targetId: string;
-  phase: "ESCAPE" | "RENEW";
+  phase: 'ESCAPE' | 'RENEW';
   positionCounts: Readonly<Record<string, number>>;
 }
 ```
@@ -222,13 +212,13 @@ interface ChaseState {
 ```ts
 type GameResult =
   | {
-      type: "WIN";
+      type: 'WIN';
       winner: PlayerId;
-      reason: "NO_PIECES" | "NO_LEGAL_ACTION";
+      reason: 'NO_PIECES' | 'NO_LEGAL_ACTION';
     }
   | {
-      type: "DRAW";
-      reason: "NO_PROGRESS";
+      type: 'DRAW';
+      reason: 'NO_PROGRESS';
     };
 ```
 
@@ -270,13 +260,13 @@ It deliberately does not include historical actions or a captured-piece list. Th
 Proposed public square representation:
 
 ```ts
-type PublicPiece = Pick<Piece, "color" | "rank">;
+type PublicPiece = Pick<Piece, 'color' | 'rank'>;
 
 type PublicSquare =
-  | { kind: "EMPTY" }
-  | { kind: "HIDDEN" }
+  | { kind: 'EMPTY' }
+  | { kind: 'HIDDEN' }
   | {
-      kind: "REVEALED";
+      kind: 'REVEALED';
       piece: PublicPiece;
     };
 
@@ -284,7 +274,7 @@ interface PlayerObservation {
   board: readonly PublicSquare[];
   currentPlayer: PlayerId;
   playerColors: Record<PlayerId, PieceColor | null>;
-  status: "ACTIVE" | "FINISHED";
+  status: 'ACTIVE' | 'FINISHED';
   result: GameResult | null;
 }
 ```
@@ -338,14 +328,14 @@ type ActionEvent =
   | {
       ply: number;
       playerId: PlayerId;
-      type: "FLIP";
+      type: 'FLIP';
       position: number;
       piece: PublicPiece;
     }
   | {
       ply: number;
       playerId: PlayerId;
-      type: "MOVE";
+      type: 'MOVE';
       from: number;
       to: number;
       piece: PublicPiece;

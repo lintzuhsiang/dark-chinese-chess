@@ -8,7 +8,10 @@ export default defineConfig({
   workers: 1,
   projects: [
     { name: 'desktop-chromium', use: { viewport: { width: 1280, height: 800 } } },
-    { name: 'touch-viewport-chromium', use: { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true } },
+    {
+      name: 'touch-viewport-chromium',
+      use: { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true },
+    },
   ],
   use: { browserName: 'chromium', baseURL: 'http://127.0.0.1:5186' },
   webServer: {

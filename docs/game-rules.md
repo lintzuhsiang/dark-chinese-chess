@@ -22,15 +22,15 @@ Task 3 implements outcomes, counters, and the simplified chase house rule under 
 
 Each color has 16 pieces.
 
-| Rank | Red | Black | Count per Color |
-|---|---|---|---|
-| General | 帥 | 將 | 1 |
-| Advisor | 仕 | 士 | 2 |
-| Elephant | 相 | 象 | 2 |
-| Chariot | 俥 | 車 | 2 |
-| Horse | 傌 | 馬 | 2 |
-| Cannon | 炮 | 包 | 2 |
-| Soldier | 兵 | 卒 | 5 |
+| Rank     | Red | Black | Count per Color |
+| -------- | --- | ----- | --------------- |
+| General  | 帥  | 將    | 1               |
+| Advisor  | 仕  | 士    | 2               |
+| Elephant | 相  | 象    | 2               |
+| Chariot  | 俥  | 車    | 2               |
+| Horse    | 傌  | 馬    | 2               |
+| Cannon   | 炮  | 包    | 2               |
+| Soldier  | 兵  | 卒    | 5               |
 
 Total: 32 pieces.
 
@@ -309,34 +309,34 @@ Rejected actions:
 
 ## 12. Test Scenarios — Approved Baseline
 
-| Scenario | Expected Result |
-|---|---|
-| First flip reveals Red Horse | Player 1 becomes Red |
-| Player 2 flips a Red piece | Legal |
-| Chariot captures Horse | Legal |
-| Horse captures Chariot | Illegal |
-| General captures Soldier | Illegal |
-| Soldier captures General | Legal |
-| Soldier captures Cannon | Illegal |
-| Cannon captures adjacent piece | Illegal |
-| Cannon jumps one screen to capture General | Legal |
-| Cannon jumps one hidden screen to capture | Legal, if target is revealed |
-| Cannon jumps two screens | Illegal |
-| Cannon captures a face-down target | Illegal |
-| Any piece moves diagonally | Illegal |
-| Flip an already revealed piece | Illegal |
-| Ordinary move into empty adjacent square | Legal |
-| Attempt to move when not current player | Illegal |
-| 60 consecutive quiet moves | Draw |
-| Same public position occurs three times without a chase violation or another end condition | Continue; no repetition draw |
-| All opponent pieces captured | Acting player wins with `NO_PIECES`; `currentPlayer` is the opponent |
-| Next player has no movable revealed pieces but a hidden piece remains | A flip is legal; no immobilization loss |
-| Next player has pieces but no ordinary legal action | Acting player wins with `NO_LEGAL_ACTION`; chase filtering alone cannot trigger this |
-| Winning move also reaches 60 quiet plies | Win takes priority over draw |
-| Move attempted after game end | Illegal |
-| Invalid initial piece distribution or duplicate/missing ID | Typed initialization failure; preserve any existing session |
-| Move from index 3 to 4 as if adjacent | Illegal |
-| Position is negative, fractional, missing, or 32 | Illegal; unchanged state and timeline |
+| Scenario                                                                                   | Expected Result                                                                      |
+| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| First flip reveals Red Horse                                                               | Player 1 becomes Red                                                                 |
+| Player 2 flips a Red piece                                                                 | Legal                                                                                |
+| Chariot captures Horse                                                                     | Legal                                                                                |
+| Horse captures Chariot                                                                     | Illegal                                                                              |
+| General captures Soldier                                                                   | Illegal                                                                              |
+| Soldier captures General                                                                   | Legal                                                                                |
+| Soldier captures Cannon                                                                    | Illegal                                                                              |
+| Cannon captures adjacent piece                                                             | Illegal                                                                              |
+| Cannon jumps one screen to capture General                                                 | Legal                                                                                |
+| Cannon jumps one hidden screen to capture                                                  | Legal, if target is revealed                                                         |
+| Cannon jumps two screens                                                                   | Illegal                                                                              |
+| Cannon captures a face-down target                                                         | Illegal                                                                              |
+| Any piece moves diagonally                                                                 | Illegal                                                                              |
+| Flip an already revealed piece                                                             | Illegal                                                                              |
+| Ordinary move into empty adjacent square                                                   | Legal                                                                                |
+| Attempt to move when not current player                                                    | Illegal                                                                              |
+| 60 consecutive quiet moves                                                                 | Draw                                                                                 |
+| Same public position occurs three times without a chase violation or another end condition | Continue; no repetition draw                                                         |
+| All opponent pieces captured                                                               | Acting player wins with `NO_PIECES`; `currentPlayer` is the opponent                 |
+| Next player has no movable revealed pieces but a hidden piece remains                      | A flip is legal; no immobilization loss                                              |
+| Next player has pieces but no ordinary legal action                                        | Acting player wins with `NO_LEGAL_ACTION`; chase filtering alone cannot trigger this |
+| Winning move also reaches 60 quiet plies                                                   | Win takes priority over draw                                                         |
+| Move attempted after game end                                                              | Illegal                                                                              |
+| Invalid initial piece distribution or duplicate/missing ID                                 | Typed initialization failure; preserve any existing session                          |
+| Move from index 3 to 4 as if adjacent                                                      | Illegal                                                                              |
+| Position is negative, fractional, missing, or 32                                           | Illegal; unchanged state and timeline                                                |
 
 Section 10's chase scenarios are Task 3 acceptance tests. The no-alternative case verifies the explicit limited behavior above; it does not authorize a new end condition.
 

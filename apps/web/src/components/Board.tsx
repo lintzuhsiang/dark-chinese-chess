@@ -1,7 +1,12 @@
 import type { PublicSquare } from '@dark-chess/game-core';
 import { coordinateLabel, pieceGlyph, pieceLabel } from './labels';
 
-export function Board({ squares, selectedSquare = null, onSquareClick, disabled = false }: {
+export function Board({
+  squares,
+  selectedSquare = null,
+  onSquareClick,
+  disabled = false,
+}: {
   readonly squares: readonly PublicSquare[];
   readonly selectedSquare?: number | null;
   readonly onSquareClick: (position: number) => void;
@@ -13,8 +18,7 @@ export function Board({ squares, selectedSquare = null, onSquareClick, disabled 
         const coordinate = coordinateLabel(position);
         const piece = square.kind === 'REVEALED' ? square.piece : null;
         const glyph = piece ? pieceGlyph(piece) : '暗';
-        const label = piece ? pieceLabel(piece)
-          : square.kind === 'HIDDEN' ? '暗棋' : '空格';
+        const label = piece ? pieceLabel(piece) : square.kind === 'HIDDEN' ? '暗棋' : '空格';
         return (
           <li key={position}>
             <button
@@ -26,7 +30,9 @@ export function Board({ squares, selectedSquare = null, onSquareClick, disabled 
               onClick={() => onSquareClick(position)}
               disabled={disabled}
             >
-              <span className="piece" aria-hidden="true">{square.kind === 'EMPTY' ? '' : glyph}</span>
+              <span className="piece" aria-hidden="true">
+                {square.kind === 'EMPTY' ? '' : glyph}
+              </span>
             </button>
           </li>
         );

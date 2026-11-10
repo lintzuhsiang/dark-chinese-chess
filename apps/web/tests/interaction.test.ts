@@ -9,19 +9,23 @@ import { createShuffledDeck } from '../src/game/deck';
 function arrangedDeck(): Piece[] {
   const remaining = createShuffledDeck(() => 1 - Number.EPSILON);
   function take(color: PieceColor, rank: PieceRank): Piece {
-    const index = remaining.findIndex(piece => piece.color === color && piece.rank === rank);
+    const index = remaining.findIndex((piece) => piece.color === color && piece.rank === rank);
     if (index < 0) throw new Error('Fixture piece is missing.');
     return remaining.splice(index, 1)[0]!;
   }
   const fixed = new Map<number, Piece>([
-    [0, take('RED', 'CHARIOT')], [1, take('BLACK', 'HORSE')],
-    [2, take('RED', 'HORSE')], [3, take('BLACK', 'GENERAL')], [4, take('BLACK', 'SOLDIER')],
+    [0, take('RED', 'CHARIOT')],
+    [1, take('BLACK', 'HORSE')],
+    [2, take('RED', 'HORSE')],
+    [3, take('BLACK', 'GENERAL')],
+    [4, take('BLACK', 'SOLDIER')],
     [8, take('RED', 'SOLDIER')],
   ]);
   return Array.from({ length: 32 }, (_, index) => fixed.get(index) ?? remaining.shift()!);
 }
 
-const click = (state: BoardUiState, position: number) => boardUiReducer(state, { type: 'CLICK', position });
+const click = (state: BoardUiState, position: number) =>
+  boardUiReducer(state, { type: 'CLICK', position });
 const start = () => boardUiReducer(initialBoardUi, { type: 'START', deck: arrangedDeck() });
 
 function revealedBoard(): BoardUiState {
@@ -88,7 +92,10 @@ describe('board interaction and session integration', () => {
     expect(captureState.board[0]).toBeNull();
     expect(captureState.board[1]?.piece).toMatchObject({ color: 'RED', rank: 'CHARIOT' });
     expect(captureState.currentPlayer).toBe('P2');
-    expect(captured.local.session?.actions.at(-1)).toEqual({ playerId: 'P1', action: { type: 'MOVE', from: 0, to: 1 } });
+    expect(captured.local.session?.actions.at(-1)).toEqual({
+      playerId: 'P1',
+      action: { type: 'MOVE', from: 0, to: 1 },
+    });
     expect(initial.local.session?.currentState.board[0]?.piece.color).toBe('RED');
     expect(initial.local.session?.currentState.board[1]?.piece.color).toBe('BLACK');
 
@@ -96,12 +103,18 @@ describe('board interaction and session integration', () => {
     expect(moved.local.error).toBeNull();
     expect(moved.selectedSquare).toBeNull();
     expect(moved.local.session?.currentState.board[4]).toBeNull();
-    expect(moved.local.session?.currentState.board[0]?.piece).toMatchObject({ color: 'BLACK', rank: 'SOLDIER' });
+    expect(moved.local.session?.currentState.board[0]?.piece).toMatchObject({
+      color: 'BLACK',
+      rank: 'SOLDIER',
+    });
     expect(moved.local.session?.currentState.currentPlayer).toBe('P1');
     const next = click(click(moved, 8), 4);
     expect(next.local.error).toBeNull();
     expect(next.local.session?.currentState.board[8]).toBeNull();
-    expect(next.local.session?.currentState.board[4]?.piece).toMatchObject({ color: 'RED', rank: 'SOLDIER' });
+    expect(next.local.session?.currentState.board[4]?.piece).toMatchObject({
+      color: 'RED',
+      rank: 'SOLDIER',
+    });
     expect(next.local.session?.actions).toHaveLength(35);
     expect(next.local.session?.currentState.plyCount).toBe(35);
   });
@@ -122,7 +135,7 @@ describe('board interaction and session integration', () => {
     expect(accepted.selectedSquare).toBeNull();
   });
 
-  it.each([2, 4])('flips hidden square %i directly while another piece is selected', position => {
+  it.each([2, 4])('flips hidden square %i directly while another piece is selected', (position) => {
     const firstTwo = click(click(start(), 0), 1);
     const selected = click(freeze(firstTwo), 0);
     const flipped = click(freeze(selected), position);
@@ -131,10 +144,15 @@ describe('board interaction and session integration', () => {
     expect(flipped.local.session?.currentState.board[position]?.revealed).toBe(true);
     expect(flipped.local.session?.currentState.currentPlayer).toBe('P2');
     expect(flipped.local.session?.currentState.playerColors).toEqual({ P1: 'RED', P2: 'BLACK' });
-    expect(flipped.local.session?.currentState.board[0]).toEqual(firstTwo.local.session?.currentState.board[0]);
+    expect(flipped.local.session?.currentState.board[0]).toEqual(
+      firstTwo.local.session?.currentState.board[0],
+    );
     expect(flipped.local.session?.currentState.plyCount).toBe(3);
     expect(flipped.local.session?.actions).toHaveLength(3);
-    expect(flipped.local.session?.actions.at(-1)).toEqual({ playerId: 'P1', action: { type: 'FLIP', position } });
+    expect(flipped.local.session?.actions.at(-1)).toEqual({
+      playerId: 'P1',
+      action: { type: 'FLIP', position },
+    });
     expect(firstTwo.local.session?.currentState.board[position]?.revealed).toBe(false);
     expect(firstTwo.local.session?.actions).toHaveLength(2);
     expect(selected.selectedSquare).toBe(0);
@@ -151,7 +169,10 @@ describe('board interaction and session integration', () => {
     expect(flipped.selectedSquare).toBeNull();
     expect(flipped.local.session?.currentState.currentPlayer).toBe('P2');
     expect(flipped.local.session?.actions).toHaveLength(3);
-    expect(flipped.local.session?.actions.at(-1)).toEqual({ playerId: 'P1', action: { type: 'FLIP', position: 4 } });
+    expect(flipped.local.session?.actions.at(-1)).toEqual({
+      playerId: 'P1',
+      action: { type: 'FLIP', position: 4 },
+    });
   });
 
   it('does not act on an empty square without a selected source', () => {
@@ -166,9 +187,17 @@ describe('board interaction and session integration', () => {
     const firstTwo = click(click(start(), 0), 1);
     const flipped = click(click(freeze(firstTwo), 0), 2);
     const observation = getObservation(flipped.local.session!.currentState);
-    expect(observation.board[0]).toEqual({ kind: 'REVEALED', piece: { color: 'RED', rank: 'CHARIOT' } });
-    expect(observation.board[2]).toEqual({ kind: 'REVEALED', piece: { color: 'RED', rank: 'HORSE' } });
-    expect(observation.board.slice(3)).toEqual(Array.from({ length: 29 }, () => ({ kind: 'HIDDEN' })));
+    expect(observation.board[0]).toEqual({
+      kind: 'REVEALED',
+      piece: { color: 'RED', rank: 'CHARIOT' },
+    });
+    expect(observation.board[2]).toEqual({
+      kind: 'REVEALED',
+      piece: { color: 'RED', rank: 'HORSE' },
+    });
+    expect(observation.board.slice(3)).toEqual(
+      Array.from({ length: 29 }, () => ({ kind: 'HIDDEN' })),
+    );
     expect(JSON.stringify(observation)).not.toContain('RED-CHARIOT-');
     expect(JSON.stringify(observation)).not.toContain('RED-HORSE-');
     expect(observation).not.toHaveProperty('selectedSquare');
@@ -191,7 +220,11 @@ describe('board interaction and session integration', () => {
         ...initial.local,
         session: {
           ...initial.local.session!,
-          currentState: { ...initial.local.session!.currentState, status: 'FINISHED', result: { type: 'DRAW', reason: 'NO_PROGRESS' } },
+          currentState: {
+            ...initial.local.session!.currentState,
+            status: 'FINISHED',
+            result: { type: 'DRAW', reason: 'NO_PROGRESS' },
+          },
         },
       },
     };

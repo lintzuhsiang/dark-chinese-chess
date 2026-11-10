@@ -28,10 +28,16 @@ export function gameStatusText(observation: PlayerObservation): string {
   return `輪到${playerNames[observation.currentPlayer]}`;
 }
 
-function Players({ colors, current }: { readonly colors: PlayerColors; readonly current: PlayerId | null }) {
+function Players({
+  colors,
+  current,
+}: {
+  readonly colors: PlayerColors;
+  readonly current: PlayerId | null;
+}) {
   return (
     <div className="players" aria-label="玩家與顏色">
-      {(['P1', 'P2'] as const).map(player => (
+      {(['P1', 'P2'] as const).map((player) => (
         <div className={`player ${current === player ? 'current' : ''}`} key={player}>
           <span className="player-name">{playerNames[player]}</span>
           <span className={`assignment ${colors[player]?.toLowerCase() ?? ''}`}>
@@ -44,17 +50,44 @@ function Players({ colors, current }: { readonly colors: PlayerColors; readonly 
 }
 
 export function App() {
-  const { observation, error, selectedSquare, history, reviewHistory, captured, canUndo, canReview, reviewCursor, totalActions,
-    startGame, clickSquare, undo, restartGame, openReview, closeReview, seekReview } = useLocalGame();
+  const {
+    observation,
+    error,
+    selectedSquare,
+    history,
+    reviewHistory,
+    captured,
+    canUndo,
+    canReview,
+    reviewCursor,
+    totalActions,
+    startGame,
+    clickSquare,
+    undo,
+    restartGame,
+    openReview,
+    closeReview,
+    seekReview,
+  } = useLocalGame();
   const isReview = reviewCursor !== null;
   const finished = observation?.status === 'FINISHED';
-  const turnText = observation === null ? '同一台裝置，輪流對弈。'
-    : `${isReview ? `覆盤 · 第 ${reviewCursor}/${totalActions} 手 · ` : ''}${gameStatusText(observation)}`;
+  const turnText =
+    observation === null
+      ? '同一台裝置，輪流對弈。'
+      : `${isReview ? `覆盤 · 第 ${reviewCursor}/${totalActions} 手 · ` : ''}${gameStatusText(observation)}`;
 
   return (
     <div className={`app ${observation ? 'playing' : 'welcome'}${isReview ? ' reviewing' : ''}`}>
       <header className="masthead">
-        <div><p className="eyebrow">台灣暗棋</p><h1>暗棋<span className="title-dot" aria-hidden="true">。</span></h1></div>
+        <div>
+          <p className="eyebrow">台灣暗棋</p>
+          <h1>
+            暗棋
+            <span className="title-dot" aria-hidden="true">
+              。
+            </span>
+          </h1>
+        </div>
         <span className="mode-label">本機雙人</span>
       </header>
       <main className={isReview ? 'review-layout' : undefined}>
@@ -62,25 +95,78 @@ export function App() {
           <section className="start-panel" aria-labelledby="start-title">
             <p className="eyebrow">一盤棋，兩個人</p>
             <h2 id="start-title">翻開，開始對弈。</h2>
-            <p className="start-copy">三十二枚棋子，藏著下一步的可能。<br />與朋友坐下，輪流翻開第一枚棋。</p>
-            <button className="start-button" type="button" tabIndex={0} onClick={startGame}>本機雙人<span aria-hidden="true"> →</span></button>
+            <p className="start-copy">
+              三十二枚棋子，藏著下一步的可能。
+              <br />
+              與朋友坐下，輪流翻開第一枚棋。
+            </p>
+            <button className="start-button" type="button" tabIndex={0} onClick={startGame}>
+              本機雙人<span aria-hidden="true"> →</span>
+            </button>
             <p className="start-note">無須帳號 · 共用一台裝置</p>
           </section>
         ) : (
           <section className="game" aria-label="本機雙人對局">
-            <Players colors={observation.playerColors} current={finished ? null : observation.currentPlayer} />
+            <Players
+              colors={observation.playerColors}
+              current={finished ? null : observation.currentPlayer}
+            />
             <div className="game-status" role="status" aria-live="polite" aria-atomic="true">
-              <p>{turnText}{error && <span className="error-message"> · {errorMessages[error.code]}</span>}</p>
+              <p>
+                {turnText}
+                {error && <span className="error-message"> · {errorMessages[error.code]}</span>}
+              </p>
             </div>
-            <Board squares={observation.board} selectedSquare={selectedSquare} onSquareClick={clickSquare} disabled={isReview || finished} />
-            {isReview ? <ReviewControls cursor={reviewCursor} total={totalActions} onSeek={seekReview} onExit={closeReview} />
-              : <GameControls canUndo={canUndo} finished={finished} history={history} captured={captured} onUndo={undo} onRestart={restartGame} onReview={canReview ? openReview : undefined} />}
-            <p className="board-note">{isReview ? '覆盤模式，棋盤僅供檢視。' : finished ? '對局已結束。' : observation.playerColors.P1 === null ? '第一枚棋子，決定你的顏色。'
-              : selectedSquare !== null ? '點選目的地，或直接翻開暗棋。' : '翻暗棋，或選擇自己的明棋。'}</p>
+            <Board
+              squares={observation.board}
+              selectedSquare={selectedSquare}
+              onSquareClick={clickSquare}
+              disabled={isReview || finished}
+            />
+            {isReview ? (
+              <ReviewControls
+                cursor={reviewCursor}
+                total={totalActions}
+                onSeek={seekReview}
+                onExit={closeReview}
+              />
+            ) : (
+              <GameControls
+                canUndo={canUndo}
+                finished={finished}
+                history={history}
+                captured={captured}
+                onUndo={undo}
+                onRestart={restartGame}
+                onReview={canReview ? openReview : undefined}
+              />
+            )}
+            <p className="board-note">
+              {isReview
+                ? '覆盤模式，棋盤僅供檢視。'
+                : finished
+                  ? '對局已結束。'
+                  : observation.playerColors.P1 === null
+                    ? '第一枚棋子，決定你的顏色。'
+                    : selectedSquare !== null
+                      ? '點選目的地，或直接翻開暗棋。'
+                      : '翻暗棋，或選擇自己的明棋。'}
+            </p>
           </section>
         )}
-        {isReview && <ReviewHistory events={reviewHistory} captured={captured} cursor={reviewCursor} onSeek={seekReview} />}
-        {observation === null && <p className="entry-status" role="status">{error ? errorMessages[error.code] : turnText}</p>}
+        {isReview && (
+          <ReviewHistory
+            events={reviewHistory}
+            captured={captured}
+            cursor={reviewCursor}
+            onSeek={seekReview}
+          />
+        )}
+        {observation === null && (
+          <p className="entry-status" role="status">
+            {error ? errorMessages[error.code] : turnText}
+          </p>
+        )}
       </main>
       <footer className="footer">專注一盤棋。</footer>
     </div>

@@ -20,21 +20,43 @@ export type BoardUiCommand =
   | { readonly type: 'REVIEW_TO'; readonly cursor: number }
   | { readonly type: 'CLICK'; readonly position: number };
 
-export const initialBoardUi: BoardUiState = { local: initialLocalGame, selectedSquare: null, reviewCursor: null };
+export const initialBoardUi: BoardUiState = {
+  local: initialLocalGame,
+  selectedSquare: null,
+  reviewCursor: null,
+};
 
 export function boardUiReducer(state: BoardUiState, command: BoardUiCommand): BoardUiState {
   if (command.type === 'OPEN_REVIEW') {
-    if (state.local.session?.currentState.status !== 'FINISHED' || state.reviewCursor !== null) return state;
-    return { ...state, local: { ...state.local, error: null }, selectedSquare: null, reviewCursor: 0 };
+    if (state.local.session?.currentState.status !== 'FINISHED' || state.reviewCursor !== null)
+      return state;
+    return {
+      ...state,
+      local: { ...state.local, error: null },
+      selectedSquare: null,
+      reviewCursor: 0,
+    };
   }
   if (command.type === 'CLOSE_REVIEW') {
-    return state.reviewCursor === null ? state
-      : { ...state, local: { ...state.local, error: null }, selectedSquare: null, reviewCursor: null };
+    return state.reviewCursor === null
+      ? state
+      : {
+          ...state,
+          local: { ...state.local, error: null },
+          selectedSquare: null,
+          reviewCursor: null,
+        };
   }
   if (command.type === 'REVIEW_TO') {
-    if (state.reviewCursor === null || state.local.session?.currentState.status !== 'FINISHED'
-      || !isReviewCursor(command.cursor, state.local.session.actions.length)) return state;
-    return command.cursor === state.reviewCursor ? state : { ...state, reviewCursor: command.cursor };
+    if (
+      state.reviewCursor === null ||
+      state.local.session?.currentState.status !== 'FINISHED' ||
+      !isReviewCursor(command.cursor, state.local.session.actions.length)
+    )
+      return state;
+    return command.cursor === state.reviewCursor
+      ? state
+      : { ...state, reviewCursor: command.cursor };
   }
   // A historical ACTIVE observation never makes its completed session editable.
   if (state.reviewCursor !== null) return state;
@@ -51,8 +73,9 @@ export function boardUiReducer(state: BoardUiState, command: BoardUiCommand): Bo
   if (session === null) return state;
   const observation = getObservation(session.currentState);
   const square = observation.board[command.position];
-  const ownPiece = square?.kind === 'REVEALED'
-    && square.piece.color === observation.playerColors[observation.currentPlayer];
+  const ownPiece =
+    square?.kind === 'REVEALED' &&
+    square.piece.color === observation.playerColors[observation.currentPlayer];
 
   // Ownership controls selection only. All destination legality stays in the core.
   if (observation.status === 'ACTIVE' && ownPiece) {
@@ -63,18 +86,24 @@ export function boardUiReducer(state: BoardUiState, command: BoardUiCommand): Bo
     };
   }
 
-  if (observation.status === 'ACTIVE' && state.selectedSquare === null
-      && (square?.kind === 'REVEALED' || square?.kind === 'EMPTY')) {
+  if (
+    observation.status === 'ACTIVE' &&
+    state.selectedSquare === null &&
+    (square?.kind === 'REVEALED' || square?.kind === 'EMPTY')
+  ) {
     return { ...state, local: { ...state.local, error: { code: 'INVALID_SOURCE' } } };
   }
 
   // Hidden pieces always flip, even with an existing selection. Revealed/empty
   // destinations use MOVE; the core still owns validation for either action.
-  const action: GameAction = square?.kind === 'HIDDEN' || state.selectedSquare === null
-    ? { type: 'FLIP', position: command.position }
-    : { type: 'MOVE', from: state.selectedSquare, to: command.position };
+  const action: GameAction =
+    square?.kind === 'HIDDEN' || state.selectedSquare === null
+      ? { type: 'FLIP', position: command.position }
+      : { type: 'MOVE', from: state.selectedSquare, to: command.position };
   const local = sessionReducer(state.local, {
-    type: 'SUBMIT', playerId: observation.currentPlayer, action,
+    type: 'SUBMIT',
+    playerId: observation.currentPlayer,
+    action,
   });
   return {
     ...state,

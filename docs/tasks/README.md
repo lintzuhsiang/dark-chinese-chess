@@ -5,14 +5,14 @@
 
 These files are the detailed task instructions. The [Phase 1 overview](../phase-1-plan.md) provides navigation and shared decisions. Preparing these documents does not authorize implementation of the remaining tasks.
 
-| Task | Scope | Status | Depends on |
-|---|---|---|---|
-| [1 — Workspace and first flip](task-1-workspace-first-flip.md) | Workspace, initialization, flips, public observations | Complete | Approved specifications |
-| [2 — Movement and capture](task-2-movement-capture.md) | Rules, enumeration, selection, destination interaction | Complete; owner accepted | Task 1 |
-| [3 — Outcomes and chase](task-3-outcomes-chase.md) | Results, no-progress counter, approved chase prohibition | Complete; committed as `c1a9916` | Task 2 |
-| [4 — History, undo, restart](task-4-history-undo-restart.md) | Canonical timeline projections and exact reconstruction | Complete; committed as `d73538d` | Task 3 |
-| [5 — Progressive Review](task-5-progressive-review.md) | Read-only historical boards with full selectable public history | Implemented; owner review pending | Tasks 3–4 |
-| [6 — Usability and verification](task-6-usability-verification.md) | Visual finish, accessibility, E2E, device/performance checks | Implemented; device/hosted-CI acceptance pending | Tasks 1–5 |
+| Task                                                               | Scope                                                           | Status                                           | Depends on              |
+| ------------------------------------------------------------------ | --------------------------------------------------------------- | ------------------------------------------------ | ----------------------- |
+| [1 — Workspace and first flip](task-1-workspace-first-flip.md)     | Workspace, initialization, flips, public observations           | Complete                                         | Approved specifications |
+| [2 — Movement and capture](task-2-movement-capture.md)             | Rules, enumeration, selection, destination interaction          | Complete; owner accepted                         | Task 1                  |
+| [3 — Outcomes and chase](task-3-outcomes-chase.md)                 | Results, no-progress counter, approved chase prohibition        | Complete; committed as `c1a9916`                 | Task 2                  |
+| [4 — History, undo, restart](task-4-history-undo-restart.md)       | Canonical timeline projections and exact reconstruction         | Complete; committed as `d73538d`                 | Task 3                  |
+| [5 — Progressive Review](task-5-progressive-review.md)             | Read-only historical boards with full selectable public history | Implemented; owner review pending                | Tasks 3–4               |
+| [6 — Usability and verification](task-6-usability-verification.md) | Visual finish, accessibility, E2E, device/performance checks    | Implemented; device/hosted-CI acceptance pending | Tasks 1–5               |
 
 ## Read before implementation
 

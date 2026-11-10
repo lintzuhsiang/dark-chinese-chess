@@ -11,17 +11,31 @@ function deepFreeze<T>(value: T): T {
   return value;
 }
 
-function piece(position: number, rank: PieceRank, color: PieceColor = 'RED', revealed = true,
-  id = `${color}-${rank}-${position}`): readonly [number, Square] {
+function piece(
+  position: number,
+  rank: PieceRank,
+  color: PieceColor = 'RED',
+  revealed = true,
+  id = `${color}-${rank}-${position}`,
+): readonly [number, Square] {
   return [position, { piece: { id, color, rank }, revealed }];
 }
 
-function positionState(entries: readonly (readonly [number, Square])[], currentPlayer: PlayerId = 'P1'): GameState {
+function positionState(
+  entries: readonly (readonly [number, Square])[],
+  currentPlayer: PlayerId = 'P1',
+): GameState {
   const board: Square[] = Array.from({ length: 32 }, () => null);
   for (const [position, square] of entries) board[position] = square;
   return deepFreeze({
-    board, currentPlayer, playerColors: { P1: 'RED', P2: 'BLACK' },
-    status: 'ACTIVE', result: null, plyCount: 0, noProgressCount: 0, chase: null,
+    board,
+    currentPlayer,
+    playerColors: { P1: 'RED', P2: 'BLACK' },
+    status: 'ACTIVE',
+    result: null,
+    plyCount: 0,
+    noProgressCount: 0,
+    chase: null,
   });
 }
 
@@ -30,14 +44,17 @@ function candidate(before: GameState, action: GameAction): GameState {
   expect(getActionError(before, before.currentPlayer, action)).toBeNull();
   const board = [...before.board];
   let capture = false;
-  if (action.type === 'FLIP') board[action.position] = { ...board[action.position]!, revealed: true };
+  if (action.type === 'FLIP')
+    board[action.position] = { ...board[action.position]!, revealed: true };
   else {
     capture = board[action.to] !== null;
     board[action.to] = board[action.from]!;
     board[action.from] = null;
   }
   return deepFreeze({
-    ...before, board, currentPlayer: before.currentPlayer === 'P1' ? 'P2' : 'P1',
+    ...before,
+    board,
+    currentPlayer: before.currentPlayer === 'P1' ? 'P2' : 'P1',
     plyCount: before.plyCount + 1,
     noProgressCount: action.type === 'FLIP' || capture ? 0 : before.noProgressCount + 1,
   });
@@ -58,9 +75,21 @@ function anchor(extra: readonly (readonly [number, Square])[] = []): GameState {
   return move(positionState([piece(0, 'CHARIOT'), piece(5, 'HORSE', 'BLACK'), ...extra]), 0, 1);
 }
 
-const shortRoute: readonly (readonly [number, number])[] = [[5, 4], [1, 0], [4, 5], [0, 1]];
+const shortRoute: readonly (readonly [number, number])[] = [
+  [5, 4],
+  [1, 0],
+  [4, 5],
+  [0, 1],
+];
 const alternateRoute: readonly (readonly [number, number])[] = [
-  [5, 6], [1, 5], [6, 2], [5, 6], [2, 1], [6, 2], [1, 5], [2, 1],
+  [5, 6],
+  [1, 5],
+  [6, 2],
+  [5, 6],
+  [2, 1],
+  [6, 2],
+  [1, 5],
+  [2, 1],
 ];
 
 function route(before: GameState, steps = shortRoute): GameState {
@@ -71,7 +100,9 @@ describe('single-pair chase returns', () => {
   it('anchors at zero, accepts two returns, and prohibits the third without mutating either input', () => {
     let state = anchor();
     expect(state.chase).toMatchObject({
-      attackerPlayer: 'P1', attackerId: 'RED-CHARIOT-0', targetId: 'BLACK-HORSE-5',
+      attackerPlayer: 'P1',
+      attackerId: 'RED-CHARIOT-0',
+      targetId: 'BLACK-HORSE-5',
       phase: 'ESCAPE',
     });
     const key = Object.keys(state.chase!.positionCounts)[0]!;
@@ -109,20 +140,36 @@ describe('single-pair chase returns', () => {
     let state = route(route(anchor()));
     state = route(state, shortRoute.slice(0, -1));
     const firstClosing: GameAction = { type: 'MOVE', from: 0, to: 1 };
-    expect(getChaseUpdate(state, candidate(state, firstClosing), firstClosing).prohibited).toBe(true);
+    expect(getChaseUpdate(state, candidate(state, firstClosing), firstClosing).prohibited).toBe(
+      true,
+    );
     state = move(state, 0, 4); // A different legal renewal; the initial anchor is never visited again.
-    const laterRoute = [[5, 9], [4, 8], [9, 5], [8, 4]] as const;
+    const laterRoute = [
+      [5, 9],
+      [4, 8],
+      [9, 5],
+      [8, 4],
+    ] as const;
     state = route(route(state, laterRoute), laterRoute);
     state = route(state, laterRoute.slice(0, -1));
     const laterClosing: GameAction = { type: 'MOVE', from: 8, to: 4 };
-    expect(getChaseUpdate(state, candidate(state, laterClosing), laterClosing).prohibited).toBe(true);
+    expect(getChaseUpdate(state, candidate(state, laterClosing), laterClosing).prohibited).toBe(
+      true,
+    );
   });
 
   it('retains a continuous non-closing pursuit without counting a return', () => {
     let state = anchor();
-    for (const [from, to] of [[5, 9], [1, 5], [9, 13], [5, 9], [13, 17], [9, 13]] as const) {
+    for (const [from, to] of [
+      [5, 9],
+      [1, 5],
+      [9, 13],
+      [5, 9],
+      [13, 17],
+      [9, 13],
+    ] as const) {
       state = move(state, from, to);
-      expect(Object.values(state.chase!.positionCounts).every(count => count === 1)).toBe(true);
+      expect(Object.values(state.chase!.positionCounts).every((count) => count === 1)).toBe(true);
     }
     expect(state.chase?.phase).toBe('ESCAPE');
   });
@@ -141,15 +188,22 @@ describe('single-pair chase returns', () => {
 
 describe('eligible immediate capture threats', () => {
   it.each([
-    ['GENERAL', 'ADVISOR', true], ['GENERAL', 'SOLDIER', false],
-    ['SOLDIER', 'GENERAL', true], ['SOLDIER', 'SOLDIER', false],
-    ['SOLDIER', 'CANNON', false], ['CHARIOT', 'HORSE', true],
-    ['HORSE', 'CHARIOT', false], ['HORSE', 'HORSE', false],
+    ['GENERAL', 'ADVISOR', true],
+    ['GENERAL', 'SOLDIER', false],
+    ['SOLDIER', 'GENERAL', true],
+    ['SOLDIER', 'SOLDIER', false],
+    ['SOLDIER', 'CANNON', false],
+    ['CHARIOT', 'HORSE', true],
+    ['HORSE', 'CHARIOT', false],
+    ['HORSE', 'HORSE', false],
     ['CANNON', 'SOLDIER', false],
-  ] as const)('starts a %s against %s chase only for a new non-reciprocal threat (%s)', (attacker, target, expected) => {
-    const state = move(positionState([piece(0, attacker), piece(5, target, 'BLACK')]), 0, 1);
-    expect(state.chase !== null).toBe(expected);
-  });
+  ] as const)(
+    'starts a %s against %s chase only for a new non-reciprocal threat (%s)',
+    (attacker, target, expected) => {
+      const state = move(positionState([piece(0, attacker), piece(5, target, 'BLACK')]), 0, 1);
+      expect(state.chase !== null).toBe(expected);
+    },
+  );
 
   it('excludes multiple eligible new targets but does not count a reciprocal extra target', () => {
     expect(anchor([piece(2, 'SOLDIER', 'BLACK')]).chase).toBeNull();
@@ -157,35 +211,68 @@ describe('eligible immediate capture threats', () => {
   });
 
   it('ignores a newly discovered threat by a different piece', () => {
-    const state = move(positionState([
-      piece(0, 'CANNON'), piece(8, 'HORSE'), piece(12, 'SOLDIER', 'RED', false),
-      piece(16, 'GENERAL', 'BLACK'),
-    ]), 8, 9);
+    const state = move(
+      positionState([
+        piece(0, 'CANNON'),
+        piece(8, 'HORSE'),
+        piece(12, 'SOLDIER', 'RED', false),
+        piece(16, 'GENERAL', 'BLACK'),
+      ]),
+      8,
+      9,
+    );
     expect(state.chase).toBeNull();
   });
 
-  it.each([true, false])('uses a single Cannon screen regardless of revelation (%s)', revealed => {
-    const state = move(positionState([
-      piece(1, 'CANNON'), piece(8, 'SOLDIER', 'RED', revealed), piece(12, 'GENERAL', 'BLACK'),
-    ]), 1, 0);
-    expect(state.chase).toMatchObject({ attackerId: 'RED-CANNON-1', targetId: 'BLACK-GENERAL-12' });
-  });
+  it.each([true, false])(
+    'uses a single Cannon screen regardless of revelation (%s)',
+    (revealed) => {
+      const state = move(
+        positionState([
+          piece(1, 'CANNON'),
+          piece(8, 'SOLDIER', 'RED', revealed),
+          piece(12, 'GENERAL', 'BLACK'),
+        ]),
+        1,
+        0,
+      );
+      expect(state.chase).toMatchObject({
+        attackerId: 'RED-CANNON-1',
+        targetId: 'BLACK-GENERAL-12',
+      });
+    },
+  );
 
   it.each([
-    { screens: [], revealed: true }, { screens: [4, 8], revealed: true },
+    { screens: [], revealed: true },
+    { screens: [4, 8], revealed: true },
     { screens: [8], revealed: false },
-  ])('excludes zero/two screens or hidden targets: $screens, target revealed=$revealed', ({ screens, revealed }) => {
-    const state = move(positionState([
-      piece(1, 'CANNON'), piece(12, 'GENERAL', 'BLACK', revealed),
-      ...screens.map(position => piece(position, 'SOLDIER', 'RED', false)),
-    ]), 1, 0);
-    expect(state.chase).toBeNull();
-  });
+  ])(
+    'excludes zero/two screens or hidden targets: $screens, target revealed=$revealed',
+    ({ screens, revealed }) => {
+      const state = move(
+        positionState([
+          piece(1, 'CANNON'),
+          piece(12, 'GENERAL', 'BLACK', revealed),
+          ...screens.map((position) => piece(position, 'SOLDIER', 'RED', false)),
+        ]),
+        1,
+        0,
+      );
+      expect(state.chase).toBeNull();
+    },
+  );
 
   it('does not start a chase for a threat that already existed before the quiet move', () => {
-    const state = move(positionState([
-      piece(0, 'CANNON'), piece(8, 'SOLDIER', 'RED', false), piece(16, 'GENERAL', 'BLACK'),
-    ]), 0, 4);
+    const state = move(
+      positionState([
+        piece(0, 'CANNON'),
+        piece(8, 'SOLDIER', 'RED', false),
+        piece(16, 'GENERAL', 'BLACK'),
+      ]),
+      0,
+      4,
+    );
     expect(state.chase).toBeNull();
   });
 });
@@ -197,9 +284,15 @@ describe('continuity, resets, and new chains', () => {
   });
 
   it('requires an escape to remove the capture threat', () => {
-    const start = move(positionState([
-      piece(1, 'CANNON'), piece(8, 'SOLDIER', 'RED', false), piece(12, 'HORSE', 'BLACK'),
-    ]), 1, 0);
+    const start = move(
+      positionState([
+        piece(1, 'CANNON'),
+        piece(8, 'SOLDIER', 'RED', false),
+        piece(12, 'HORSE', 'BLACK'),
+      ]),
+      1,
+      0,
+    );
     expect(move(start, 12, 16).chase).toBeNull();
   });
 
@@ -207,7 +300,9 @@ describe('continuity, resets, and new chains', () => {
     expect(move(move(anchor(), 5, 4), 1, 2).chase).toBeNull();
     const state = move(move(anchor([piece(6, 'SOLDIER', 'BLACK')]), 5, 4), 1, 2);
     expect(state.chase).toMatchObject({
-      attackerId: 'RED-CHARIOT-0', targetId: 'BLACK-SOLDIER-6', phase: 'ESCAPE',
+      attackerId: 'RED-CHARIOT-0',
+      targetId: 'BLACK-SOLDIER-6',
+      phase: 'ESCAPE',
     });
     expect(Object.values(state.chase!.positionCounts)).toEqual([1]);
   });
@@ -215,7 +310,9 @@ describe('continuity, resets, and new chains', () => {
   it('starts a new chain when a different revealed attacker pursues the target', () => {
     const state = move(move(anchor([piece(3, 'CHARIOT')]), 5, 6), 3, 2);
     expect(state.chase).toMatchObject({
-      attackerId: 'RED-CHARIOT-3', targetId: 'BLACK-HORSE-5', phase: 'ESCAPE',
+      attackerId: 'RED-CHARIOT-3',
+      targetId: 'BLACK-HORSE-5',
+      phase: 'ESCAPE',
     });
     expect(Object.values(state.chase!.positionCounts)).toEqual([1]);
   });
@@ -243,25 +340,41 @@ describe('continuity, resets, and new chains', () => {
 describe('logical position keys and physical pair identities', () => {
   it('excludes physical IDs, hidden values, and unrelated counters from position keys', () => {
     const original = positionState([
-      piece(0, 'CHARIOT'), piece(5, 'HORSE', 'BLACK'), piece(31, 'GENERAL', 'RED', false),
+      piece(0, 'CHARIOT'),
+      piece(5, 'HORSE', 'BLACK'),
+      piece(31, 'GENERAL', 'RED', false),
     ]);
     const renamed: GameState = deepFreeze({
-      ...original, plyCount: 25, noProgressCount: 38,
-      board: original.board.map((square, index) => !square ? null : !square.revealed
-        ? piece(index, 'SOLDIER', 'BLACK', false, 'different-hidden-id')[1]
-        : { ...square, piece: { ...square.piece, id: `renamed-${index}` } }),
+      ...original,
+      plyCount: 25,
+      noProgressCount: 38,
+      board: original.board.map((square, index) =>
+        !square
+          ? null
+          : !square.revealed
+            ? piece(index, 'SOLDIER', 'BLACK', false, 'different-hidden-id')[1]
+            : { ...square, piece: { ...square.piece, id: `renamed-${index}` } },
+      ),
     });
     const first = move(original, 0, 1);
     const second = move(renamed, 0, 1);
     expect(first.chase?.positionCounts).toEqual(second.chase?.positionCounts);
     expect(first.chase?.attackerId).not.toBe(second.chase?.attackerId);
-    expect(JSON.stringify(first.chase?.positionCounts)).not.toMatch(/GENERAL|different-hidden-id|RED-CHARIOT-0/);
+    expect(JSON.stringify(first.chase?.positionCounts)).not.toMatch(
+      /GENERAL|different-hidden-id|RED-CHARIOT-0/,
+    );
   });
 
   it('includes the next player and assignments in logical position comparison', () => {
     const original = positionState([piece(0, 'CHARIOT'), piece(5, 'HORSE', 'BLACK')]);
-    const reversed: GameState = deepFreeze({ ...original, currentPlayer: 'P2', playerColors: { P1: 'BLACK', P2: 'RED' } });
-    expect(move(original, 0, 1).chase?.positionCounts).not.toEqual(move(reversed, 0, 1).chase?.positionCounts);
+    const reversed: GameState = deepFreeze({
+      ...original,
+      currentPlayer: 'P2',
+      playerColors: { P1: 'BLACK', P2: 'RED' },
+    });
+    expect(move(original, 0, 1).chase?.positionCounts).not.toEqual(
+      move(reversed, 0, 1).chase?.positionCounts,
+    );
   });
 
   it('does not treat an equal-valued replacement as the same escaping physical target', () => {

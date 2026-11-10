@@ -8,7 +8,10 @@ export interface AcceptedAction {
 
 // Trusted session inputs: a failure means the canonical timeline is corrupt.
 // Keep it observable rather than displaying a silently shortened game/history.
-export function reconstructGame(initialDeck: readonly Piece[], actions: readonly AcceptedAction[]): {
+export function reconstructGame(
+  initialDeck: readonly Piece[],
+  actions: readonly AcceptedAction[],
+): {
   readonly state: GameState;
   readonly events: readonly ActionEvent[];
 } {

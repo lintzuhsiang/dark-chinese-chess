@@ -1,8 +1,7 @@
 export type PlayerId = 'P1' | 'P2';
 export type PieceColor = 'RED' | 'BLACK';
 export type PieceRank =
-  | 'GENERAL' | 'ADVISOR' | 'ELEPHANT' | 'CHARIOT'
-  | 'HORSE' | 'CANNON' | 'SOLDIER';
+  'GENERAL' | 'ADVISOR' | 'ELEPHANT' | 'CHARIOT' | 'HORSE' | 'CANNON' | 'SOLDIER';
 
 export interface Piece {
   readonly id: string;
@@ -24,7 +23,11 @@ export type GameAction =
   | { readonly type: 'MOVE'; readonly from: number; readonly to: number };
 
 export type GameResult =
-  | { readonly type: 'WIN'; readonly winner: PlayerId; readonly reason: 'NO_PIECES' | 'NO_LEGAL_ACTION' }
+  | {
+      readonly type: 'WIN';
+      readonly winner: PlayerId;
+      readonly reason: 'NO_PIECES' | 'NO_LEGAL_ACTION';
+    }
   | { readonly type: 'DRAW'; readonly reason: 'NO_PROGRESS' };
 
 // Authoritative rule state only; never included in PlayerObservation or events.
@@ -81,8 +84,15 @@ export type ActionEvent =
     };
 
 export interface ActionError {
-  readonly code: 'NOT_YOUR_TURN' | 'INVALID_SOURCE' | 'INVALID_DESTINATION'
-    | 'ILLEGAL_MOVE' | 'INVALID_FLIP' | 'INVALID_ACTION' | 'GAME_FINISHED' | 'PERPETUAL_CHASE';
+  readonly code:
+    | 'NOT_YOUR_TURN'
+    | 'INVALID_SOURCE'
+    | 'INVALID_DESTINATION'
+    | 'ILLEGAL_MOVE'
+    | 'INVALID_FLIP'
+    | 'INVALID_ACTION'
+    | 'GAME_FINISHED'
+    | 'PERPETUAL_CHASE';
 }
 
 export type ActionResult =

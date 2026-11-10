@@ -9,13 +9,19 @@ export function isReviewCursor(cursor: number, actionCount: number): boolean {
 
 // Only public values cross this boundary. Board and captures follow this prefix.
 // The hook separately memoizes the completed game's public history for seeking.
-export function projectSession(session: LocalGameSession, reviewCursor: number | null): {
+export function projectSession(
+  session: LocalGameSession,
+  reviewCursor: number | null,
+): {
   readonly observation: PlayerObservation;
   readonly history: readonly ActionEvent[];
   readonly captured: readonly PublicPiece[];
 } {
-  if (reviewCursor !== null && (session.currentState.status !== 'FINISHED'
-    || !isReviewCursor(reviewCursor, session.actions.length))) {
+  if (
+    reviewCursor !== null &&
+    (session.currentState.status !== 'FINISHED' ||
+      !isReviewCursor(reviewCursor, session.actions.length))
+  ) {
     throw new Error('Invalid Review projection');
   }
   const actions = reviewCursor === null ? session.actions : session.actions.slice(0, reviewCursor);
@@ -23,6 +29,8 @@ export function projectSession(session: LocalGameSession, reviewCursor: number |
   return {
     observation: getObservation(reviewCursor === null ? session.currentState : reconstructed.state),
     history: reconstructed.events,
-    captured: reconstructed.events.flatMap(event => event.type === 'MOVE' && event.captured ? [event.captured] : []),
+    captured: reconstructed.events.flatMap((event) =>
+      event.type === 'MOVE' && event.captured ? [event.captured] : [],
+    ),
   };
 }

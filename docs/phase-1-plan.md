@@ -8,14 +8,14 @@
 
 This file is the navigation overview. Detailed scope, acceptance criteria, verification, and stop conditions live in the individual files under [docs/tasks](tasks/README.md). Do not keep competing per-task checklists here.
 
-| Task | Detailed instructions | State |
-|---|---|---|
-| 1 | [Workspace and first flip](tasks/task-1-workspace-first-flip.md) | Complete |
-| 2 | [Movement, capture, and board interaction](tasks/task-2-movement-capture.md) | Complete; owner confirmed |
-| 3 | [Outcomes, no-progress rule, and chase prohibition](tasks/task-3-outcomes-chase.md) | Complete; committed as `c1a9916` |
-| 4 | [History, exact undo, and restart](tasks/task-4-history-undo-restart.md) | Complete; committed as `d73538d` |
-| 5 | [Progressive post-game Review](tasks/task-5-progressive-review.md) | Implemented; owner review pending |
-| 6 | [Usability, visual finish, and final verification](tasks/task-6-usability-verification.md) | Implemented; device/hosted-CI acceptance pending |
+| Task | Detailed instructions                                                                      | State                                            |
+| ---- | ------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| 1    | [Workspace and first flip](tasks/task-1-workspace-first-flip.md)                           | Complete                                         |
+| 2    | [Movement, capture, and board interaction](tasks/task-2-movement-capture.md)               | Complete; owner confirmed                        |
+| 3    | [Outcomes, no-progress rule, and chase prohibition](tasks/task-3-outcomes-chase.md)        | Complete; committed as `c1a9916`                 |
+| 4    | [History, exact undo, and restart](tasks/task-4-history-undo-restart.md)                   | Complete; committed as `d73538d`                 |
+| 5    | [Progressive post-game Review](tasks/task-5-progressive-review.md)                         | Implemented; owner review pending                |
+| 6    | [Usability, visual finish, and final verification](tasks/task-6-usability-verification.md) | Implemented; device/hosted-CI acceptance pending |
 
 ## Authoritative context
 
