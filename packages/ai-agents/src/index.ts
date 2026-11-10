@@ -16,3 +16,15 @@ export type {
 } from './heuristic-evaluation';
 export { createHeuristicAgent, explainDecision, heuristicAgent } from './heuristic-agent';
 export type { HeuristicDecision, MoveEvaluation } from './heuristic-agent';
+export { getHiddenPieceDistribution } from './hidden-piece-distribution';
+export type { HiddenPieceDistribution, HiddenPieceOutcome } from './hidden-piece-distribution';
+export {
+  createExpectedValueAgent,
+  expectedValueAgent,
+  explainExpectedValueDecision,
+} from './expected-value-agent';
+export type {
+  ExpectedValueActionEvaluation,
+  ExpectedValueDecision,
+  FlipOutcomeEvaluation,
+} from './expected-value-agent';

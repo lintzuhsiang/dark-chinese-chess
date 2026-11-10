@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-export const CORE_REVISION = 'b779f98101e95b9aff925c920e0021dda5cd6835';
+export const CORE_REVISION = 'b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75';
 
 // This source runner requires the checkout, not an installed or bundled Core.
 export function assertCoreBaseline(): void {

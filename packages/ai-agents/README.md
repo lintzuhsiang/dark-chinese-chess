@@ -1,6 +1,6 @@
 # Public-information Agents
 
-Random and Heuristic Agents implement the same GameAgent interface. Policies receive
+Random, Heuristic, and Expected Value Agents implement the same GameAgent interface. Policies receive
 only PlayerObservation, permitted GameActions, accepted public ActionEvents, fixed
 PlayerId perspective, and a derived decision seed.
 
@@ -60,6 +60,64 @@ This policy does not evaluate FLIP probabilities, information value, or expected
 utility. FLIPs are an explicit fallback rather than scores comparable with MOVE
 outcomes. Expected-value comparison belongs to AI-4.
 
+## AI-4 public hidden inventory and Expected Value policy
+
+`getHiddenPieceDistribution({ observation, publicHistory })` returns totalHidden
+and positive-count `{ piece: { color, rank }, count, probability }` outcomes.
+Counts equal initial inventory minus public captures minus currently revealed
+pieces. Historical FLIPs are not deducted a second time. The same marginal
+distribution applies to each hidden square under uniform shuffling without
+remembered undone disclosures. It uses no deck seed, hidden identity, or piece ID.
+
+The helper rejects negative counts or inventory totals inconsistent with the
+number of hidden squares. Zero hidden squares produce an empty outcome list.
+It is independent of evaluation weights; probability will weight successor values.
+
+The helper does not adjudicate hypothetical outcomes or change Heuristic behavior.
+
+`createExpectedValueAgent(configuration?)` captures the same values/weights as the
+Heuristic; `expectedValueAgent` uses defaults. `explainExpectedValueDecision(input,
+{ seed }, configuration?)` returns the current breakdown, distribution, each
+candidate's expected score, all FLIP outcome breakdowns/probability contributions,
+and the selected action.
+
+For every supplied MOVE, the approved Core `projectPermittedPublicAction` query
+returns the exact public successor/event/GameResult. For each supplied FLIP,
+enumerate only positive-count color/rank outcomes and project each through the
+same Core query. Append the projected public event, keep perspective fixed, and
+evaluate with the same Material/Threat/Mobility weights. MOVE score is V(successor);
+FLIP score is the sum of probability times V(successor). Choose the maximum using
+the decision seed only for exact score ties. There is no FLIP fallback or separate
+reveal/material/information bonus.
+
+First-FLIP branches assign colors and advance the turn through shared Core logic.
+Terminal branch GameResult overrides features with +2/-2/0 for the original player.
+No other hidden square is assigned an identity. No reply, search, sampling, time
+budget, Worker, or backend is introduced. Public history must be the complete
+accepted prefix; Core reconstructs only its quiet suffix for chase/counter context.
+See the [approved projection boundary](../../docs/ai-4-public-projection-proposal.md).
+
+AI-3 retains its existing partial MOVE projection and seeded FLIP fallback for a
+stable baseline. EV comparisons therefore include both FLIP outcome weighting and
+exact hypothetical terminal handling; they are not an isolated FLIP-only ablation.
+The static evaluator still does not model the opponent's next reply or longer-term
+information value. Strength and latency must be assessed through paired benchmarks.
+
+The approved Core extraction is committed and pinned. Controlled comparisons use
+unchanged default weights, 100 pairs each, and fresh deck ranges:
+
+```sh
+node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
+  --agent-a expected-value --agent-b heuristic --pairs 100 --deck-start 20000 \
+  --agent-seed 20261110 --output benchmark-results/expected-value-vs-heuristic.json
+node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
+  --agent-a expected-value --agent-b random --pairs 100 --deck-start 30000 \
+  --agent-seed 20261110 --output benchmark-results/expected-value-vs-random.json
+```
+
+The Phase 2 plan records measured results and limitations. Raw reports are ignored
+artifacts containing the precise executed source/configuration and seeds.
+
 ## Verification and benchmark
 
 Focused policy/Core tests can run directly:
@@ -68,10 +126,12 @@ Focused policy/Core tests can run directly:
 node_modules/.bin/vitest run packages/game-core/tests packages/ai-agents/tests apps/web/tests
 ```
 
-These tests include direct Core-applied complete games and replay. The approved
-shared Core extraction is committed and pinned at
-b779f98101e95b9aff925c920e0021dda5cd6835. The existing strict guard checks this pin;
-it was not bypassed to permit dirty Core changes.
+These tests include direct Core-applied complete games and replay. The AI-3 shared
+Core extraction was committed and pinned at b779f98101e95b9aff925c920e0021dda5cd6835.
+The subsequent approved AI-4 Core-only projection commit and current pin are
+b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75. The existing strict guard checks Core/rules
+against this commit; no bypass was introduced. The remaining EV implementation,
+CLI, and documentation can be uncommitted and are captured in benchmark manifests.
 
 The controlled Heuristic-versus-Random comparison command is:
 
@@ -81,5 +141,6 @@ node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
   --agent-seed 20261110 --output benchmark-results/heuristic-vs-random.json
 ```
 
-Interpret strength only from the recorded benchmark and its uncertainty. No search, public outcome/chase
-engine, broad position/geometry features, UI, Worker, or backend is introduced.
+Interpret strength only from recorded benchmarks and their uncertainty. Public
+outcome/chase projection belongs to Core; no separate AI rule engine, search,
+broad position/geometry features, UI, Worker, or backend is introduced.

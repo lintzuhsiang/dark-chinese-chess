@@ -1,7 +1,7 @@
 # Phase 2 — AI Opponent Plan
 
-**Version:** 0.5 — AI-3 Heuristic baseline, 2026-11-10  
-**Status:** AI-0–AI-3 implemented and verified; owner authorized committing the remaining AI-3 changes on phase-2. AI-4 is not authorized.  
+**Version:** 0.8 — AI-4 projection, EV policy, and evaluation, 2026-11-10  
+**Status:** AI-0–AI-4 implemented and verified. Approved AI-4 Core extraction committed/pinned; remaining AI-4 changes uncommitted. AI-5 is not authorized.  
 **Authority:** This plan supersedes the earlier [phase-2-plan.md](phase-2-plan.md) draft.
 
 ## 1. Approved Architecture Decisions
@@ -52,7 +52,7 @@ interface GameAgent {
 
 ### Reproducible Core baseline
 
-The original AI-1/AI-2 pin was **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). For AI-3 the approved behavior-preserving public movement extraction is pinned to **b779f98101e95b9aff925c920e0021dda5cd6835**. Core/rules match that reviewed commit. Work proceeds on branch phase-2; both planning documents are preserved.
+The original AI-1/AI-2 pin was **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). AI-3 used **b779f98101e95b9aff925c920e0021dda5cd6835** for the approved public movement extraction. The subsequently approved AI-4 projection was separately committed and is now pinned at **b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75**. Core/rules match this exact reviewed Core-only commit. The guard remains strict. Remaining EV/CLI/documentation changes are uncommitted and archived in benchmark source manifests. Work proceeds on branch phase-2; both planning documents are preserved.
 
 Runner metadata records this pin, randomness versions, roots, and environment. Before a match, verify the checkout's Core/rules match the pin; unrelated Phase 2 changes do not invalidate the Core baseline. Never label a later modified Core with this revision.
 
@@ -155,6 +155,102 @@ Q(FLIP x) = sum over t of P(t at x) * V(public successor revealing t, fixed pers
 
 Assume uniform shuffling without remembered undone disclosures. Enumerate only positive-count outcomes; verify conservation, normalized probabilities, and zero-hidden handling. Use the same evaluator and units for MOVE and FLIP, including next turn, first-flip assignments, and approved terminal semantics. Probability weights outcomes rather than adding an arbitrary static feature.
 
+AI-3 was committed as 5aeaf3a on phase-2; its Core pin remains unchanged. The owner
+subsequently authorized starting AI-4. `getHiddenPieceDistribution` now computes
+the public marginal distribution, rejects impossible inventories, and returns no
+outcomes when no hidden squares remain. Historical FLIPs are not subtracted again.
+
+**Approved boundary:** the AI-3 public MOVE patch does not predict GameResult;
+ordinary movement queries cannot resolve chase-aware immobilization or terminal
+priority. The owner approved the shared Core projection and its tests. See the
+[approved projection boundary](ai-4-public-projection-proposal.md) for code evidence,
+alternatives, implementation details, and differential tests. It shares transition
+metadata, geometry/validation, chase logic, and outcome priority. Only the public
+quiet suffix is reconstructed after the last FLIP/capture reset; no hidden deck,
+private IDs, or fabricated GameState is supplied to policies.
+
+The EV policy enumerates each permitted action. MOVE uses exact successor V;
+FLIP sums public-outcome probability times the same V. Append the projected event,
+advance the turn, keep perspective fixed, and use projected GameResult for terminal
+scores. Default values/weights stay at AI-3 settings; exact ties use only the
+decision seed. Diagnostics include all candidate scores and each FLIP branch's
+probability, feature breakdown, and weighted contribution. Existing GameAgent,
+AgentInput, runner, Session, UI, rules, and AI-3 fallback behavior are preserved.
+
+At the inventory-only checkpoint, seven new tests passed, including count
+and probability conservation across actual Core-applied game prefixes, capture/
+reveal accounting, hidden permutations, frozen inputs, invalid inventories, and
+zero-hidden handling; all 626 then-existing tests and quality gates passed before
+the Core change. The current implementation adds differential Core tests and EV
+weighted-oracle, terminal-perspective, leakage, valid-action, fixed-seed full-game,
+and exact-replay tests. Targeted tactical snapshots explicitly use synthetic capture
+ledgers; real initial-deck prefixes and complete replay are tested separately.
+
+**Reproducible evaluation:** the owner approved the 11-file Core-only commit and
+pin update to b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75. All 650 tests across 28 files
+now pass, plus workspace typecheck, lint, format check, and build. Compare EV against
+Heuristic on 100 pairs (deck 20000–20099), and against Random on 100 pairs (deck
+30000–30099), Agent root 20261110, default configuration, max 4096 plies, paired
+95% Hoeffding intervals. Repeat to verify actions/outcomes and replay transcripts.
+Report failures/truncations and latency unchanged. Commands are in the Agent README.
+The comparison includes exact terminal projection as well as FLIP weighting, so it
+is not a FLIP-only ablation.
+
+Focused verification includes **397 Core tests** and **558 Core/Agent/Phase 1
+tests**. Before the approved pin update, the guard prevented runner/tournament
+startup; those blocked checks now pass in the full 650-test run. No bypass was
+added. The approved projection document lists the exact 11-file Core-only commit.
+No other commits, pushes, deployment, or AI-5 work occurred.
+
+### AI-4 verification and controlled comparisons
+
+Each comparison used 100 seat-swapped pairs / 200 games with defaults fixed before
+evaluation. Average score is win 1 / draw 0.5 / loss 0; the 95% Hoeffding interval
+uses 100 complete pairs. Repeats verify reproducibility and do not increase the
+statistical sample size.
+
+| EV opponent | Deck seeds  | EV W/D/L  | Average | Paired 95% interval  | EV p50/p95 ms | Opponent p50/p95 ms |
+| ----------- | ----------- | --------- | ------- | -------------------- | ------------- | ------------------- |
+| Heuristic   | 20000–20099 | 63/111/26 | 0.5925  | [0.456690, 0.728310] | 2.625/13.740  | 0.102/0.368         |
+| Random      | 30000–30099 | 200/0/0   | 1.0000  | [0.864190, 1]        | 3.239/7.432   | 0.001709/0.005125   |
+
+- Both primary runs and both full repeats completed every match: zero illegal
+  actions, Agent errors, runner failures, or truncations. Primary decision counts
+  were 36,644 versus Heuristic (18,319 EV / 18,325 Heuristic) and 12,936 versus
+  Random (6,518 EV / 6,418 Random). Mean lengths were 183.22 and 64.68 plies.
+- EV P1/P2 W/D/L versus Heuristic was 32/54/14 and 31/57/12; versus Random it won
+  all 100 games in each seat. The Heuristic interval includes 0.5: observed results
+  favor EV on this set but do not establish a reliable advantage under this bound.
+  Random results support strength against that opponent/seed set, not general strength.
+- Both repeats reproduced every accepted action, public event, full final state,
+  GameResult, and score. All **800** first/repeat transcripts replayed exactly.
+  An offline audit independently recomputed scores, pair denominators/intervals,
+  latency quantiles, pair seeds and seat swaps, and verified source/archive hashes.
+- All four source snapshots were stable and had digest
+  `85b0d6f9efb5ddb290cbf10cfe3fa406230c08231fa145848afd0fd6509d96be`.
+  Manifests identify Core b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75 plus the exact
+  uncommitted EV/CLI snapshot. Environment was Node 26.10.0, Darwin arm64, Apple M1.
+  Latencies above are first-run Node measurements, not browser/device guarantees;
+  synchronous bounded work still needs AI-5 responsiveness measurement.
+- Investigation: all 111 Heuristic draws reached 60 quiet plies; 83 retained hidden
+  pieces and 47 had positive EV material difference under the configured values
+  (not proof of a winning position). Both static policies can stagnate without
+  flipping. In the first EV loss (deck 20005, leg 0, EV P1), ply 177 scored safe
+  Advisor 10→9 and exposed Advisor 10→14 equally at -0.2368951613. The seeded tie
+  chose 10→14; the next capture 18→14 removed EV's last piece. One-step V does not
+  examine that reply; net threat scoring can offset immediate last-piece risk.
+  This is one concrete limitation, not a causal explanation of all 26 losses.
+  No weights, baseline behavior, rules, or benchmark samples were tuned afterward.
+- Ignored artifacts: `benchmark-results/expected-value-vs-heuristic.json`,
+  `expected-value-vs-random.json`, their `-repeat.json` files,
+  `expected-value-audit.json`, and `expected-value-investigation.json`.
+  The existing runner retains incomplete/failed matches; no incomplete results
+  were discarded here. No hard timing budget/timeout mechanism was introduced.
+
+AI-4 is complete at this scope. Browser Workers, cancellation/recovery, Human-vs-AI
+mode and its Undo restriction, and browser latency measurements belong to AI-5;
+they remain unimplemented and require separate authorization.
+
 ## 5. Evaluation Harness and Experiments
 
 - Reuse the AI-1 match runner; call Core directly without React. Retain one canonical accepted timeline and derive public history from successful transitions. Replay must reproduce states, events, and GameResult.
@@ -169,7 +265,7 @@ Assume uniform shuffling without remembered undone disclosures. Enumerate only p
 
 ## 6. Implementation Tasks and Dependencies
 
-**Authorization:** AI-0/AI-1 were committed as 24b7e1228b2095443794daf0ee4c5653f4dad056 and AI-2 as a7d0f181fce1a758da0a8001f3a1f6e275c2457d with owner approval. The separately approved five-file AI-3 Core-only commit is b779f98101e95b9aff925c920e0021dda5cd6835. The owner now authorizes committing the remaining verified AI-3 changes on phase-2. Do not begin AI-4, make further commits, push, or deploy without separate approval.
+**Authorization:** AI-0/AI-1 were committed as 24b7e1228b2095443794daf0ee4c5653f4dad056 and AI-2 as a7d0f181fce1a758da0a8001f3a1f6e275c2457d with owner approval. The separately approved five-file AI-3 Core-only commit is b779f98101e95b9aff925c920e0021dda5cd6835; the remaining AI-3 changes were committed as 5aeaf3a. AI-4, its shared Core projection/tests, and the Core-only commit/pin update were separately authorized; the 11-file Core commit is b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75. Remaining AI-4 changes are uncommitted. Further shared Core scope changes, commits, pushes, deployment, and AI-5 require separate approval.
 
 | Task                                   | Scope / dependency                                                                                                                                                                   | Acceptance and verification                                                                                                                                                                             |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -242,7 +338,8 @@ Phase 2 completion requires a usable browser opponent, public-only policies, rep
 
 - **AI-0:** Complete; contract, seed schedule, revision semantics, file scope, and Core pin are recorded above.
 - **AI-2:** Complete-case scoring, paired Hoeffding intervals, seed schedule, source manifest, and failure categories are defined above. A small Random baseline verifies the harness; broader sample sizes, held-out sets, and strength claims remain experiment-specific.
-- **AI-3:** Complete. Shared movement boundary, fixed initial feature/fallback configuration, approved Core pin, regression checks, and paired evaluation are recorded above. Further strategy tuning or AI-4 remains separately authorized work.
+- **AI-3:** Complete. Shared movement boundary, fixed initial feature/fallback configuration, approved Core pin, regression checks, and paired evaluation are recorded above.
+- **AI-4:** Complete. Approved Core-only commit/pin, all regressions, paired comparisons/repeats, exact replay/audit, and static-policy limitations are recorded above. Remaining EV/CLI/documentation changes are uncommitted; further commits or AI-5 remain separately authorized work.
 - **AI-5:** Worker cancellation, timeouts, failure recovery, human-seat UX, and evidence-based difficulty settings.
 
-Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Authorization covers AI-3 and its approved Core extraction; AI-4, new dependencies, commits, pushes, and deployment require separate approval.
+Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Authorization covers AI-4 policy work using existing approved boundaries; additional shared Core changes, new dependencies, commits, pushes, deployment, and AI-5 require separate approval.

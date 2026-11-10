@@ -2,12 +2,14 @@
 
 The [Phase 2 plan](../../docs/phase-2-ai-plan.md) records the approved boundaries.
 AI-2 extends the existing AI-1 runner; it adds no strategy or game rules.
-Core is pinned to b779f98101e95b9aff925c920e0021dda5cd6835. Execution and
+Core is pinned to b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75. Execution and
 replay verification require this Git checkout and reject a changed Core/rules.
 
 The AI-3 shared Core movement extraction was separately approved, committed, and
 pinned. The guard remains strict and rejects subsequent Core/rule changes.
-See [Heuristic verification](../../packages/ai-agents/README.md).
+The subsequent approved AI-4 public projection was committed separately and pinned
+at the revision above. The guard remains unchanged. See
+[Agent verification](../../packages/ai-agents/README.md).
 
 ## Benchmark command
 
@@ -19,9 +21,11 @@ node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
   --output benchmark-results/random-baseline.json
 ```
 
-The CLI defaults to two labeled instances of RandomAgent. AI-3 also adds
---agent-a heuristic and --agent-b heuristic as optional choices; Heuristic benchmarking
-uses the updated Core pin described above. JSON goes to the
+The CLI defaults to two labeled instances of RandomAgent. Both --agent-a and
+--agent-b accept random, heuristic, or expected-value. EV uses exact public Core
+projection and public-inventory FLIP probabilities with the unchanged default
+Heuristic weights. See the Agent documentation for planned comparison commands;
+The Phase 2 plan records AI-4 strength/latency results and limitations. JSON goes to the
 specified file and a compact summary goes to the terminal. Reports are ignored by
 Git. No package installation, browser, React rendering, or service is needed for
 this command; the small source resolver uses Node's built-in TypeScript support.
@@ -60,8 +64,9 @@ digest bytes 0–3 are unsigned little-endian (`hmac-sha256-pair-u32le-v1`).
 Both legs share this root, giving common seat-level randomness. Decision seeds
 retain AI-1's HMAC message
 `JSON.stringify(["dark-chess-agent-decision-v1", playerId, plyCount])`.
-Each policy decision uses a fresh Mulberry32 stream and
-`floor(sample * permittedActionCount)`. Shuffling uses a separate fresh Mulberry32
+Each policy decision uses a fresh Mulberry32 stream. Random selects
+`floor(sample * permittedActionCount)`; Heuristic and EV use the sample for their
+candidate/tie sets. Shuffling uses a separate fresh Mulberry32
 stream and the existing Fisher–Yates deck utility. Request/generation/revision
 counters never affect these streams. Neither root nor deck data enters AgentInput.
 
@@ -147,4 +152,5 @@ AI-2 added no heuristics, expected-value projection, search, Elo, UI, backend, d
 or dashboard. Hard CPU timeouts, Worker/process isolation, cancellation, and supervision
 are not implemented; only bounded policies are supported. A policy that never settles
 cannot be forcibly interrupted by this harness. AI-3's public Heuristic policy is
-implemented separately; AI-4 expected-value evaluation has not started.
+implemented separately. AI-4 EV policy/Core projection and focused tests are now
+implemented; verification and comparison evidence is recorded in the Phase 2 plan.
