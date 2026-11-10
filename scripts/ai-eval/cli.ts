@@ -1,7 +1,11 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { randomAgent } from '../../packages/ai-agents/src/index';
+import {
+  DEFAULT_HEURISTIC_CONFIGURATION,
+  heuristicAgent,
+  randomAgent,
+} from '../../packages/ai-agents/src/index';
 import { formatTournamentSummary, runTournament } from './tournament';
 import type { EvaluatedAgent } from './tournament-types';
 
@@ -17,6 +21,8 @@ async function main(): Promise<void> {
   const { values } = parseArgs({
     options: {
       pairs: { type: 'string' },
+      'agent-a': { type: 'string', default: 'random' },
+      'agent-b': { type: 'string', default: 'random' },
       'deck-start': { type: 'string', default: '0' },
       'deck-seeds': { type: 'string' },
       'agent-seed': { type: 'string', default: '20261110' },
@@ -30,6 +36,7 @@ async function main(): Promise<void> {
     console.log('Usage: node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts');
     console.log('  --pairs 20 --deck-start 0 --agent-seed 20261110 --max-plies 4096');
     console.log('  --confidence 0.95 --output benchmark-results/random-baseline.json');
+    console.log('  --agent-a random|heuristic --agent-b random|heuristic');
     console.log('  --deck-seeds 10,20,30 may replace --pairs/--deck-start.');
     return;
   }
@@ -44,18 +51,39 @@ async function main(): Promise<void> {
       throw new RangeError('Invalid deck seed range.');
     deckSeeds = Array.from({ length: count }, (_, index) => start + index);
   }
-  const descriptor = (id: string): EvaluatedAgent => ({
-    id,
-    implementation: 'random-agent-v1',
-    configuration: {},
-    sourcePaths: [
-      'packages/ai-agents/src/random-agent.ts',
-      'packages/ai-agents/src/seeded-random.ts',
-    ],
-    policy: randomAgent,
-  });
+  const descriptor = (kind: string, seat: string): EvaluatedAgent => {
+    if (kind !== 'random' && kind !== 'heuristic') {
+      throw new Error('Agent must be random or heuristic.');
+    }
+    return kind === 'random'
+      ? {
+          id: kind + '-' + seat,
+          implementation: 'random-agent-v1',
+          configuration: {},
+          sourcePaths: [
+            'packages/ai-agents/src/random-agent.ts',
+            'packages/ai-agents/src/seeded-random.ts',
+          ],
+          policy: randomAgent,
+        }
+      : {
+          id: kind + '-' + seat,
+          implementation: 'heuristic-agent-v1',
+          configuration: {
+            pieceValues: { ...DEFAULT_HEURISTIC_CONFIGURATION.pieceValues },
+            weights: { ...DEFAULT_HEURISTIC_CONFIGURATION.weights },
+            flipFallback: 'seeded-flip-unless-a-move-strictly-improves',
+          },
+          sourcePaths: [
+            'packages/ai-agents/src/heuristic-agent.ts',
+            'packages/ai-agents/src/heuristic-evaluation.ts',
+            'packages/ai-agents/src/seeded-random.ts',
+          ],
+          policy: heuristicAgent,
+        };
+  };
   const report = await runTournament({
-    agents: { A: descriptor('random-A'), B: descriptor('random-B') },
+    agents: { A: descriptor(values['agent-a'], 'A'), B: descriptor(values['agent-b'], 'B') },
     deckSeeds,
     agentSeed: uint32(values['agent-seed'], 'Agent seed'),
     maxPlies: uint32(values['max-plies'], 'Move limit'),

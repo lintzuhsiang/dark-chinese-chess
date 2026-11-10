@@ -1,7 +1,7 @@
 # Phase 2 — AI Opponent Plan
 
-**Version:** 0.4 — AI-2 Tournament Harness, 2026-11-10  
-**Status:** AI-0/AI-1 complete and committed. AI-2 implemented and verified; owner authorized its commit on phase-2. AI-3 remains unauthorized.  
+**Version:** 0.5 — AI-3 Heuristic baseline, 2026-11-10  
+**Status:** AI-0–AI-3 implemented and verified; owner authorized committing the remaining AI-3 changes on phase-2. AI-4 is not authorized.  
 **Authority:** This plan supersedes the earlier [phase-2-plan.md](phase-2-plan.md) draft.
 
 ## 1. Approved Architecture Decisions
@@ -52,7 +52,7 @@ interface GameAgent {
 
 ### Reproducible Core baseline
 
-Pin commit **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). Core and rules files match this commit; the existing Core/outcome integration checks passed before AI-1. No Core commit or worktree was required. Work proceeds on branch phase-2; both planning documents are preserved in the AI-1 commit.
+The original AI-1/AI-2 pin was **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). For AI-3 the approved behavior-preserving public movement extraction is pinned to **b779f98101e95b9aff925c920e0021dda5cd6835**. Core/rules match that reviewed commit. Work proceeds on branch phase-2; both planning documents are preserved.
 
 Runner metadata records this pin, randomness versions, roots, and environment. Before a match, verify the checkout's Core/rules match the pin; unrelated Phase 2 changes do not invalidate the Core baseline. Never label a later modified Core with this revision.
 
@@ -101,6 +101,47 @@ Use trusted test fixtures to compare public MOVE projections with applyAction/ge
 
 Do not build a second independent rule engine or a complete hidden-state simulation framework. Projection types, necessary public chase context, and extraction scope remain AI-3 decisions.
 
+### Approved AI-3 implementation
+
+The owner approved one shared public getPublicOrdinaryMoves(board, color) query and
+its differential tests. It enumerates ordinary revealed-piece MOVEs/captures using
+the same adjacency, rank, and Cannon predicates as private Core validation; it does
+not apply turn/chase restrictions, FLIPs, or terminal adjudication. Existing Core
+state/action/result shapes and chase behavior are preserved.
+
+The Heuristic baseline uses initial-minus-captures material, unique exposed victim
+values, and quiet-only mobility. Default values (General/Advisor/Elephant/Chariot/
+Horse/Cannon/Soldier) are 8/6/5/4/3/5/2; weights are 1/0.5/0.05. Feature contributions
+are normalized and configurable; actual GameResult scores are +2/-2/0 from fixed
+perspective. No extra capture bonus is added to already updated material.
+
+For each permitted MOVE, patch only public board/event information and recompute
+structural features. If no MOVE strictly improves the current position and a FLIP
+is available, choose a seeded FLIP; otherwise choose the best MOVE with seeded ties.
+Opening/no-MOVE positions also use seeded FLIP. No FLIP probability or EV is computed.
+Hypothetical chase/outcome detection remains outside this partial projection.
+
+Independent policy QA includes direct Core-applied complete games/replay, hidden
+permutations, both seats, rank/Cannon tactics, deduplication, and terminal perspective.
+See [Heuristic documentation](../packages/ai-agents/README.md) for API and limitations.
+
+The owner separately approved a Core-only commit and pin update. The five approved
+Core/helper test files were committed as b779f98101e95b9aff925c920e0021dda5cd6835;
+CORE_REVISION now identifies that commit. The guard remains strict. No Heuristic,
+CLI, or documentation changes were included in the commit. The planned comparison
+uses 100 pairs, deck seeds 10000–10099, and Agent root 20261110.
+
+### AI-3 verification and evaluation
+
+- Shared Core movement and pre-extraction oracle/differential tests passed: 384 Core tests. The public API reproduces 16 frozen board/color move sets captured before extraction.
+- Focused Core, policy, and existing web/Phase 1 tests passed: 527 tests across 18 files. Independent QA covers both-seat complete games and exact replay, without presenting these as pinned tournament benchmarks.
+- After the separately approved Core commit/pin update, workspace typecheck, lint, format check, production build, and the full suite passed: **619 tests across 25 files**. The guard remains strict; no test/benchmark bypass was introduced.
+- Controlled benchmark: 100 pairs / 200 completed games, deck seeds 10000–10099, Agent root 20261110, default configuration fixed before evaluation. Heuristic A recorded **199 wins / 1 draw / 0 losses**, mean **0.9975**, and paired 95% Hoeffding interval **[0.8616898484, 1]**. It won all 100 games as P1 and 99 as P2, drawing once.
+- All 14,022 decisions were accepted: 7,061 Heuristic and 6,961 Random. First-run Heuristic latency p50/p95 was **0.346625 / 0.897166 ms**; Random was **0.000416 / 0.000958 ms** on the recorded Node 26.10.0 environment. There were zero illegal actions, Agent errors, invariant failures, or truncations.
+- A repeat run reproduced every action, final outcome, and score. All 200 first-run transcripts replayed exactly. Both source snapshots were stable and shared the same digest. Independent QA recomputed seed derivation, seat scoring, pair denominators/intervals, latency percentiles, and source/archive hashes.
+- The single draw (deck 10048, Heuristic P2/BLACK, 136 plies) followed 60 quiet plies despite a 13-piece lead against one Advisor. Conversion is not guaranteed by these static features. The benchmark supports performance against this Random opponent/seed set, not general playing strength; CI sampling and complete-case caveats remain applicable.
+- Reports are ignored artifacts at benchmark-results/heuristic-vs-random.json and heuristic-vs-random-repeat.json. Their manifest identifies the committed Core and exact then-uncommitted Heuristic/runner source snapshot. The owner subsequently authorized committing the remaining verified AI-3 changes. No AI-4, push, or deployment occurred.
+
 ### AI-4 FLIP expected value
 
 For color/rank type t:
@@ -128,7 +169,7 @@ Assume uniform shuffling without remembered undone disclosures. Enumerate only p
 
 ## 6. Implementation Tasks and Dependencies
 
-**Authorization:** AI-0/AI-1 were committed as 24b7e1228b2095443794daf0ee4c5653f4dad056 under explicit owner approval. The owner subsequently authorized committing the verified AI-2 implementation on phase-2. Do not begin AI-3, commit further work, push, or deploy without approval.
+**Authorization:** AI-0/AI-1 were committed as 24b7e1228b2095443794daf0ee4c5653f4dad056 and AI-2 as a7d0f181fce1a758da0a8001f3a1f6e275c2457d with owner approval. The separately approved five-file AI-3 Core-only commit is b779f98101e95b9aff925c920e0021dda5cd6835. The owner now authorizes committing the remaining verified AI-3 changes on phase-2. Do not begin AI-4, make further commits, push, or deploy without separate approval.
 
 | Task                                   | Scope / dependency                                                                                                                                                                   | Acceptance and verification                                                                                                                                                                             |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -201,7 +242,7 @@ Phase 2 completion requires a usable browser opponent, public-only policies, rep
 
 - **AI-0:** Complete; contract, seed schedule, revision semantics, file scope, and Core pin are recorded above.
 - **AI-2:** Complete-case scoring, paired Hoeffding intervals, seed schedule, source manifest, and failure categories are defined above. A small Random baseline verifies the harness; broader sample sizes, held-out sets, and strength claims remain experiment-specific.
-- **AI-3:** Concrete missing public capabilities, minimal shared boundary, public continuity/chase context if required, differential-test cases, feature scales/weights, and complete Heuristic FLIP fallback.
+- **AI-3:** Complete. Shared movement boundary, fixed initial feature/fallback configuration, approved Core pin, regression checks, and paired evaluation are recorded above. Further strategy tuning or AI-4 remains separately authorized work.
 - **AI-5:** Worker cancellation, timeouts, failure recovery, human-seat UX, and evidence-based difficulty settings.
 
-Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Authorization covers AI-2 implementation only; AI-3, new dependencies, further commits, pushes, and deployment require separate approval.
+Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Authorization covers AI-3 and its approved Core extraction; AI-4, new dependencies, commits, pushes, and deployment require separate approval.

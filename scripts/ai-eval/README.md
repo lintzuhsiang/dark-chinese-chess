@@ -2,8 +2,12 @@
 
 The [Phase 2 plan](../../docs/phase-2-ai-plan.md) records the approved boundaries.
 AI-2 extends the existing AI-1 runner; it adds no strategy or game rules.
-Core remains pinned to 34452df2bc198d382e36399218d2cfcb9e95f3f3. Execution and
+Core is pinned to b779f98101e95b9aff925c920e0021dda5cd6835. Execution and
 replay verification require this Git checkout and reject a changed Core/rules.
+
+The AI-3 shared Core movement extraction was separately approved, committed, and
+pinned. The guard remains strict and rejects subsequent Core/rule changes.
+See [Heuristic verification](../../packages/ai-agents/README.md).
 
 ## Benchmark command
 
@@ -15,7 +19,9 @@ node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
   --output benchmark-results/random-baseline.json
 ```
 
-The CLI currently compares two labeled instances of RandomAgent. JSON goes to the
+The CLI defaults to two labeled instances of RandomAgent. AI-3 also adds
+--agent-a heuristic and --agent-b heuristic as optional choices; Heuristic benchmarking
+uses the updated Core pin described above. JSON goes to the
 specified file and a compact summary goes to the terminal. Reports are ignored by
 Git. No package installation, browser, React rendering, or service is needed for
 this command; the small source resolver uses Node's built-in TypeScript support.
@@ -137,7 +143,8 @@ or mismatched proposals cannot commit.
 node_modules/.bin/vitest run packages/ai-agents/tests scripts/ai-eval/tests
 ```
 
-AI-2 adds no heuristics, expected-value projection, search, Elo, UI, backend, database,
+AI-2 added no heuristics, expected-value projection, search, Elo, UI, backend, database,
 or dashboard. Hard CPU timeouts, Worker/process isolation, cancellation, and supervision
 are not implemented; only bounded policies are supported. A policy that never settles
-cannot be forcibly interrupted by this harness. AI-3 has not started.
+cannot be forcibly interrupted by this harness. AI-3's public Heuristic policy is
+implemented separately; AI-4 expected-value evaluation has not started.
