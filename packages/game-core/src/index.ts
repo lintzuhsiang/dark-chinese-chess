@@ -14,20 +14,14 @@ import type {
 import { evaluateOutcome } from './outcomes';
 import { getChaseUpdate } from './chase';
 import { getActionError } from './validation';
+import { actionMetadata } from './transition';
+import { PIECE_DISTRIBUTION } from './piece-distribution';
 
 export type * from './types';
 export { getPublicOrdinaryMoves } from './validation';
 
-// Shared domain data: the session builds a deck; the core independently validates it.
-export const PIECE_DISTRIBUTION: Readonly<Record<PieceRank, number>> = Object.freeze({
-  GENERAL: 1,
-  ADVISOR: 2,
-  ELEPHANT: 2,
-  CHARIOT: 2,
-  HORSE: 2,
-  CANNON: 2,
-  SOLDIER: 5,
-});
+export { PIECE_DISTRIBUTION } from './piece-distribution';
+export { projectPermittedPublicAction } from './public-projection';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -85,69 +79,26 @@ function publicPiece({ color, rank }: Piece): PublicPiece {
   return { color, rank };
 }
 
-// This helper is called only after ordinary action validation.
+// Board storage remains private; public branches share action metadata and rules.
 function transitionAction(
   state: GameState,
-  playerId: PlayerId,
   action: GameAction,
 ): Extract<ActionResult, { readonly ok: true }> {
+  const board = [...state.board];
+  let metadata;
   if (action.type === 'MOVE') {
     const source = state.board[action.from]!;
     const target = state.board[action.to];
-    const board = [...state.board];
     board[action.from] = null;
     board[action.to] = source;
-    const nextState: GameState = {
-      ...state,
-      board,
-      currentPlayer: playerId === 'P1' ? 'P2' : 'P1',
-      plyCount: state.plyCount + 1,
-      noProgressCount: target === null ? state.noProgressCount + 1 : 0,
-    };
-    return {
-      ok: true,
-      state: nextState,
-      event: {
-        ply: nextState.plyCount,
-        playerId,
-        type: 'MOVE',
-        from: action.from,
-        to: action.to,
-        piece: publicPiece(source.piece),
-        captured: target ? publicPiece(target.piece) : null,
-      },
-    };
+    metadata = actionMetadata(state, action, source.piece, target?.piece ?? null);
+  } else {
+    const square = state.board[action.position]!;
+    board[action.position] = { piece: square.piece, revealed: true };
+    metadata = actionMetadata(state, action, square.piece, null);
   }
-  const position = action.position;
-  const square = state.board[position]!;
-  const board = [...state.board];
-  board[position] = { piece: square.piece, revealed: true };
-  const colors =
-    state.playerColors.P1 === null
-      ? {
-          P1: square.piece.color,
-          P2: square.piece.color === 'RED' ? ('BLACK' as const) : ('RED' as const),
-        }
-      : state.playerColors;
-  const nextState: GameState = {
-    ...state,
-    board,
-    playerColors: colors,
-    currentPlayer: playerId === 'P1' ? 'P2' : 'P1',
-    plyCount: state.plyCount + 1,
-    noProgressCount: 0,
-  };
-  return {
-    ok: true,
-    state: nextState,
-    event: {
-      ply: nextState.plyCount,
-      playerId,
-      type: 'FLIP',
-      position,
-      piece: publicPiece(square.piece),
-    },
-  };
+  const { event, ...updates } = metadata;
+  return { ok: true, state: { ...state, ...updates, board }, event };
 }
 
 // Submission and enumeration share both ordinary validation and chase screening.
@@ -158,7 +109,7 @@ function permittedTransition(
 ): ActionResult {
   const error = getActionError(state, playerId, action);
   if (error !== null) return { ok: false, error };
-  const result = transitionAction(state, playerId, action);
+  const result = transitionAction(state, action);
   const update = getChaseUpdate(state, result.state, action);
   if (update.prohibited) return { ok: false, error: { code: 'PERPETUAL_CHASE' } };
   return { ...result, state: { ...result.state, chase: update.chase } };

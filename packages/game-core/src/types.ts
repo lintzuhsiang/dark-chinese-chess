@@ -83,6 +83,19 @@ export type ActionEvent =
       readonly captured: PublicPiece | null;
     };
 
+export interface PublicProjectionInput {
+  readonly observation: PlayerObservation;
+  readonly publicHistory: readonly ActionEvent[];
+}
+
+export type PublicProjectionResult =
+  | {
+      readonly ok: true;
+      readonly observation: PlayerObservation;
+      readonly event: ActionEvent;
+    }
+  | { readonly ok: false; readonly error: ActionError };
+
 export interface ActionError {
   readonly code:
     | 'NOT_YOUR_TURN'

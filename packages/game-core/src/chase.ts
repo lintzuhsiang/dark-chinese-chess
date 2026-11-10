@@ -1,10 +1,19 @@
-import type { Board, ChaseState, GameAction, GameState } from './types';
+import type { ChaseState, GameAction, PlayerColors, PlayerId } from './types';
 import { isCaptureThreat } from './validation';
+import { readReference, readSquare, type MovementBoard } from './rule-position';
 
-function positionKey(state: GameState): string {
-  const squares = state.board.map((square) =>
-    !square ? 'EMPTY' : !square.revealed ? 'HIDDEN' : [square.piece.color, square.piece.rank],
-  );
+interface ChasePosition {
+  readonly board: MovementBoard;
+  readonly currentPlayer: PlayerId;
+  readonly playerColors: PlayerColors;
+  readonly chase: ChaseState | null;
+}
+
+function positionKey(state: ChasePosition): string {
+  const squares = state.board.map((_, position) => {
+    const square = readSquare(state.board, position)!;
+    return square.kind === 'REVEALED' ? [square.piece.color, square.piece.rank] : square.kind;
+  });
   return JSON.stringify([
     state.currentPlayer,
     state.playerColors.P1,
@@ -13,22 +22,22 @@ function positionKey(state: GameState): string {
   ]);
 }
 
-function revealedPosition(board: Board, id: string): number {
-  return board.findIndex((square) => square?.revealed && square.piece.id === id);
+function revealedPosition(board: MovementBoard, id: string): number {
+  return board.findIndex((_, position) => readReference(board, position) === id);
 }
 
 function newlyThreatenedTarget(
-  before: GameState,
-  after: GameState,
+  before: ChasePosition,
+  after: ChasePosition,
   from: number,
   to: number,
 ): string | null {
-  const targets = after.board.flatMap((square, position) =>
-    square?.revealed &&
+  const targets = after.board.flatMap((_, position) =>
+    readSquare(after.board, position)?.kind === 'REVEALED' &&
     isCaptureThreat(after.board, to, position) &&
     !isCaptureThreat(before.board, from, position) &&
     !isCaptureThreat(after.board, position, to)
-      ? [square.piece.id]
+      ? [readReference(after.board, position)!]
       : [],
   );
   return targets.length === 1 ? targets[0]! : null;
@@ -36,23 +45,23 @@ function newlyThreatenedTarget(
 
 // Called only for an otherwise legal action and its tentative, next-player state.
 export function getChaseUpdate(
-  before: GameState,
-  after: GameState,
+  before: ChasePosition,
+  after: ChasePosition,
   action: GameAction,
 ): {
   readonly prohibited: boolean;
   readonly chase: ChaseState | null;
 } {
-  if (action.type === 'FLIP' || before.board[action.to] !== null) {
+  if (action.type === 'FLIP' || readSquare(before.board, action.to)?.kind !== 'EMPTY') {
     return { prohibited: false, chase: null };
   }
 
   const previous = before.chase;
-  const mover = before.board[action.from]!;
+  const moverId = readReference(before.board, action.from)!;
   if (
     previous?.phase === 'ESCAPE' &&
     before.currentPlayer !== previous.attackerPlayer &&
-    mover.piece.id === previous.targetId
+    moverId === previous.targetId
   ) {
     const attackerBefore = revealedPosition(before.board, previous.attackerId);
     const attackerAfter = revealedPosition(after.board, previous.attackerId);
@@ -69,7 +78,7 @@ export function getChaseUpdate(
   if (
     previous?.phase === 'RENEW' &&
     before.currentPlayer === previous.attackerPlayer &&
-    mover.piece.id === previous.attackerId &&
+    moverId === previous.attackerId &&
     targetId === previous.targetId
   ) {
     const key = positionKey(after);
@@ -93,7 +102,7 @@ export function getChaseUpdate(
         ? null
         : {
             attackerPlayer: before.currentPlayer,
-            attackerId: mover.piece.id,
+            attackerId: moverId,
             targetId,
             phase: 'ESCAPE',
             positionCounts: { [positionKey(after)]: 1 },

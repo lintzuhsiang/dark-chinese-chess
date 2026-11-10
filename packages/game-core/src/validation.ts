@@ -1,26 +1,13 @@
 import type {
   ActionError,
-  Board,
   GameAction,
-  GameState,
   PieceColor,
   PieceRank,
   PlayerId,
+  PlayerColors,
   PublicSquare,
 } from './types';
-
-type MovementBoard = Board | readonly PublicSquare[];
-
-// Geometry reads only occupancy and revealed values, even on an authoritative board.
-function readSquare(board: MovementBoard, position: number): PublicSquare | undefined {
-  const square = board[position];
-  if (square === undefined) return undefined;
-  if (square === null) return { kind: 'EMPTY' };
-  if ('kind' in square) return square;
-  return square.revealed
-    ? { kind: 'REVEALED', piece: { color: square.piece.color, rank: square.piece.rank } }
-    : { kind: 'HIDDEN' };
-}
+import { readSquare, type MovementBoard } from './rule-position';
 
 const CAPTURE_STRENGTH: Readonly<Record<PieceRank, number>> = Object.freeze({
   GENERAL: 6,
@@ -77,7 +64,7 @@ function captureThreat(board: MovementBoard, from: number, to: number): boolean 
     : adjacent(from, to) && canCaptureRank(source.piece.rank, target.piece.rank);
 }
 
-export function isCaptureThreat(board: Board, from: number, to: number): boolean {
+export function isCaptureThreat(board: MovementBoard, from: number, to: number): boolean {
   return captureThreat(board, from, to);
 }
 
@@ -109,11 +96,14 @@ export function getPublicOrdinaryMoves(
 }
 
 // Ordinary validation, without chase policy. Outcomes use this same base path.
-export function getActionError(
-  state: GameState,
-  playerId: PlayerId,
-  action: GameAction,
-): ActionError | null {
+export function getActionError<
+  State extends {
+    readonly board: MovementBoard;
+    readonly currentPlayer: PlayerId;
+    readonly playerColors: PlayerColors;
+    readonly status: 'ACTIVE' | 'FINISHED';
+  },
+>(state: State, playerId: PlayerId, action: GameAction): ActionError | null {
   if (state.status === 'FINISHED') return { code: 'GAME_FINISHED' };
   if (playerId !== state.currentPlayer) return { code: 'NOT_YOUR_TURN' };
   if (typeof action !== 'object' || action === null || Array.isArray(action))
@@ -121,14 +111,15 @@ export function getActionError(
 
   if (action.type === 'FLIP') {
     if (!isPosition(action.position)) return { code: 'INVALID_DESTINATION' };
-    const square = state.board[action.position];
-    return !square || square.revealed ? { code: 'INVALID_FLIP' } : null;
+    return readSquare(state.board, action.position)?.kind === 'HIDDEN'
+      ? null
+      : { code: 'INVALID_FLIP' };
   }
   if (action.type !== 'MOVE') return { code: 'INVALID_ACTION' };
   if (!isPosition(action.from)) return { code: 'INVALID_SOURCE' };
   if (!isPosition(action.to)) return { code: 'INVALID_DESTINATION' };
-  const source = state.board[action.from];
-  if (!source || !source.revealed || source.piece.color !== state.playerColors[playerId]) {
+  const source = readSquare(state.board, action.from);
+  if (source?.kind !== 'REVEALED' || source.piece.color !== state.playerColors[playerId]) {
     return { code: 'INVALID_SOURCE' };
   }
   if (action.from === action.to) return { code: 'ILLEGAL_MOVE' };
