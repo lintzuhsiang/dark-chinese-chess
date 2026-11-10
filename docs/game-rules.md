@@ -1,10 +1,10 @@
 # Dark Chess — Game Rules
 
-**Version:** 0.7 — Task 3 house-rule clarification\
+**Version:** 0.8 — Approved chase-aware immobilization correction\
 **Ruleset:** Taiwanese Banqi — Project Ruleset  
 **Status:** Task 3 implemented; owner review pending
 
-Task 3 implements outcomes, counters, and the simplified chase house rule under the owner's 2026-11-09 authorization to choose a narrow deterministic interpretation. General repetition never causes a draw. Chase prohibits a third qualifying return without inducing a loss; the no-alternative limitation is stated below. Tasks 4–5 add session-level undo, history, restart, and read-only Progressive Review without changing these rules. This is a project-specific ruleset, not a universal tournament standard.
+Task 3 implements outcomes, counters, and the simplified chase house rule under the owner's 2026-11-09 authorization to choose a narrow deterministic interpretation. General repetition never causes a draw. Chase prohibits a third qualifying return. On 2026-11-10 the owner approved treating zero chase-permitted actions as NO_LEGAL_ACTION, superseding the earlier prohibition-only/no-alternative limitation. Tasks 4–5 add session-level undo, history, restart, and read-only Progressive Review without changing these rules. This is a project-specific ruleset, not a universal tournament standard.
 
 ## 1. Board and Pieces
 
@@ -190,7 +190,7 @@ Undo is a local session feature and can restore a previous position.
 
 After an accepted action, the next player loses if they have no remaining pieces, counting both revealed and hidden pieces. The acting player wins with reason `NO_PIECES`.
 
-Otherwise, the next player loses if they have no ordinary legal action, with reason `NO_LEGAL_ACTION`; the acting player wins. For this loss check, evaluate ordinary move/capture/flip legality before chase filtering: chase prohibitions must not themselves trigger a loss. Section 10 describes the limited case where ordinary actions exist but every one is chase-prohibited.
+Otherwise, the next player loses if they have no permitted action, with reason `NO_LEGAL_ACTION`; the acting player wins. Include chase filtering in this loss check. Evaluate the candidate next-player state after an accepted action, before marking it finished. A rejected attempt does not itself advance or adjudicate the game.
 
 While any face-down pieces remain, flipping one is a legal action, so lack of movable revealed pieces alone is not a loss.
 
@@ -214,7 +214,7 @@ For each submitted action, validate first and evaluate outcomes only after accep
 2. Apply the move or flip, including first-flip assignments and capture removal. Increment accepted-action count; increment no-progress count for a non-capturing MOVE, or reset it for a FLIP/capture. Update approved chase tracking atomically with the accepted action.
 3. Advance `currentPlayer` to the next player, regardless of whether a result follows.
 4. If the next player has no pieces, finish with the acting player as winner and reason `NO_PIECES`.
-5. Otherwise, if the next player has no ordinary legal action, finish with the acting player as winner and reason `NO_LEGAL_ACTION`. Do not infer this loss solely from an empty chase-filtered action list.
+5. Otherwise, if the next player has no permitted move/capture/flip after chase filtering, finish with the acting player as winner and reason `NO_LEGAL_ACTION`.
 6. Otherwise, if the no-progress counter is at least 60, finish with a draw and reason `NO_PROGRESS`.
 7. Otherwise, retain active status and a null result.
 
@@ -224,7 +224,7 @@ A win takes precedence over a no-progress draw triggered by the same accepted ac
 
 ### Approval record and limited scope
 
-The owner authorized this minimal single-pair interpretation in Task 3, including logical board-value comparison, physical-pair identity, and prohibition without a chase-induced loss. This is deliberately narrower than comprehensive pursuit or tournament adjudication.
+The owner authorized this minimal single-pair interpretation in Task 3, including logical board-value comparison and physical-pair identity. The 2026-11-10 owner amendment below supersedes the original ban on chase-induced immobilization loss. This is deliberately narrower than comprehensive pursuit or tournament adjudication.
 
 Use a minimal **single-attacker, single-target closed chase cycle**. It follows actual renewed capture threats and evasions by the same two revealed pieces. It does not classify ordinary shuffling, general position repetition, or strategic intent as chasing. Longer-term pursuit that never closes a cycle remains subject to the 60-ply no-progress rule.
 
@@ -264,13 +264,13 @@ If the attacker instead renews with `Chariot 0→4` after that rejection, the co
 - Rejected attempts do not advance or reset tracking, consume a turn, increment counters, or create history. Undo reconstructs tracking from the remaining accepted timeline. Restart clears it.
 - Chase tracking and the no-progress counter are different mechanisms. Quiet escapes/renewals still increment no-progress count; a tracker reset alone does not reset that counter.
 
-### Enforcement and no-alternative limitation
+### Enforcement and no-alternative adjudication
 
 Prohibit the candidate renewal with a typed `PERPETUAL_CHASE` rejection, preserve the prior state/timeline, and require the player to choose a different permitted action. A short message such as 「長捉，請改走其他步。」 is sufficient; do not suggest moves. An attempted chase violation does not produce a loss or a new result reason.
 
-`getLegalActions` must exclude the prohibited candidate, but this filtering must not itself trigger `NO_LEGAL_ACTION`. The owner's prohibition-only decision supersedes the previous recommendation to lose when all otherwise legal actions are chase-prohibited.
+`getLegalActions` must exclude prohibited candidates. Under the owner-approved 2026-11-10 amendment, outcome evaluation uses this same permitted-action list: if none remain, the next player loses with `NO_LEGAL_ACTION`. This supersedes the earlier instruction that chase filtering could never cause a loss.
 
-Under the owner's instruction to retain a narrow rule rather than invent adjudication, ordinary actions existing but all being chase-prohibited leaves the game ACTIVE with an empty permitted-action list. Attempts remain rejected; no loss, pass, draw, or exemption is invented. A separately triggered no-progress draw still applies after an accepted action. This rare position can therefore stall local play; it is a known house-rule limitation requiring a future owner decision, not an implicit forfeiture. Task 3 includes a Cannon-cycle regression for this case.
+A committed ACTIVE state must have at least one permitted action. In the Cannon-cycle no-alternative regression, the defender's accepted escape leaves the attacker with only a prohibited renewal; that escape therefore ends the game with the defender winning. The terminal currentPlayer is still the attacker. Do not wait for an invalid attempt, add a pass, exempt a prohibited move, or add a new result reason. `NO_PIECES` still precedes `NO_LEGAL_ACTION`, which precedes `NO_PROGRESS`, including at quiet ply 60. Rejected attempts in still-active positions preserve state and timeline.
 
 ### Required Task 3 tests
 
@@ -280,7 +280,7 @@ Under the owner's instruction to retain a narrow rule rather than invent adjudic
 - Each position starts at zero returns; first and second returns accepted; third-return candidate rejected with exact state/timeline unchanged. Exercise the example above, a different qualifying route, and a later loop on other squares after the first rejection.
 - A non-closing pursuit does not trigger this prohibition; the normal 60-ply draw still applies.
 - Every listed reset, fresh-chain seeding, and rejected-attempt behavior.
-- Legal-action enumeration excludes the prohibited candidate; alternatives remain playable; rejection and filtering never themselves cause a loss. When no permitted alternative exists, preserve ACTIVE/result-null and the previous state on rejection.
+- Legal-action enumeration excludes prohibited candidates; alternatives remain playable. After an accepted action, no permitted alternative for the next player means FINISHED with NO_LEGAL_ACTION. Rejection itself remains immutable.
 - Undo before/after cycle boundaries restores the exact tracker; undo followed by a different action cannot inherit discarded cycles; replay deterministically reproduces accepted positions and trackers.
 
 ## 11. Invalid Actions
@@ -309,36 +309,36 @@ Rejected actions:
 
 ## 12. Test Scenarios — Approved Baseline
 
-| Scenario                                                                                   | Expected Result                                                                      |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| First flip reveals Red Horse                                                               | Player 1 becomes Red                                                                 |
-| Player 2 flips a Red piece                                                                 | Legal                                                                                |
-| Chariot captures Horse                                                                     | Legal                                                                                |
-| Horse captures Chariot                                                                     | Illegal                                                                              |
-| General captures Soldier                                                                   | Illegal                                                                              |
-| Soldier captures General                                                                   | Legal                                                                                |
-| Soldier captures Cannon                                                                    | Illegal                                                                              |
-| Cannon captures adjacent piece                                                             | Illegal                                                                              |
-| Cannon jumps one screen to capture General                                                 | Legal                                                                                |
-| Cannon jumps one hidden screen to capture                                                  | Legal, if target is revealed                                                         |
-| Cannon jumps two screens                                                                   | Illegal                                                                              |
-| Cannon captures a face-down target                                                         | Illegal                                                                              |
-| Any piece moves diagonally                                                                 | Illegal                                                                              |
-| Flip an already revealed piece                                                             | Illegal                                                                              |
-| Ordinary move into empty adjacent square                                                   | Legal                                                                                |
-| Attempt to move when not current player                                                    | Illegal                                                                              |
-| 60 consecutive quiet moves                                                                 | Draw                                                                                 |
-| Same public position occurs three times without a chase violation or another end condition | Continue; no repetition draw                                                         |
-| All opponent pieces captured                                                               | Acting player wins with `NO_PIECES`; `currentPlayer` is the opponent                 |
-| Next player has no movable revealed pieces but a hidden piece remains                      | A flip is legal; no immobilization loss                                              |
-| Next player has pieces but no ordinary legal action                                        | Acting player wins with `NO_LEGAL_ACTION`; chase filtering alone cannot trigger this |
-| Winning move also reaches 60 quiet plies                                                   | Win takes priority over draw                                                         |
-| Move attempted after game end                                                              | Illegal                                                                              |
-| Invalid initial piece distribution or duplicate/missing ID                                 | Typed initialization failure; preserve any existing session                          |
-| Move from index 3 to 4 as if adjacent                                                      | Illegal                                                                              |
-| Position is negative, fractional, missing, or 32                                           | Illegal; unchanged state and timeline                                                |
+| Scenario                                                                                   | Expected Result                                                      |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| First flip reveals Red Horse                                                               | Player 1 becomes Red                                                 |
+| Player 2 flips a Red piece                                                                 | Legal                                                                |
+| Chariot captures Horse                                                                     | Legal                                                                |
+| Horse captures Chariot                                                                     | Illegal                                                              |
+| General captures Soldier                                                                   | Illegal                                                              |
+| Soldier captures General                                                                   | Legal                                                                |
+| Soldier captures Cannon                                                                    | Illegal                                                              |
+| Cannon captures adjacent piece                                                             | Illegal                                                              |
+| Cannon jumps one screen to capture General                                                 | Legal                                                                |
+| Cannon jumps one hidden screen to capture                                                  | Legal, if target is revealed                                         |
+| Cannon jumps two screens                                                                   | Illegal                                                              |
+| Cannon captures a face-down target                                                         | Illegal                                                              |
+| Any piece moves diagonally                                                                 | Illegal                                                              |
+| Flip an already revealed piece                                                             | Illegal                                                              |
+| Ordinary move into empty adjacent square                                                   | Legal                                                                |
+| Attempt to move when not current player                                                    | Illegal                                                              |
+| 60 consecutive quiet moves                                                                 | Draw                                                                 |
+| Same public position occurs three times without a chase violation or another end condition | Continue; no repetition draw                                         |
+| All opponent pieces captured                                                               | Acting player wins with `NO_PIECES`; `currentPlayer` is the opponent |
+| Next player has no movable revealed pieces but a hidden piece remains                      | A flip is legal; no immobilization loss                              |
+| Next player has pieces but no permitted action, including after chase filtering            | Acting player wins with `NO_LEGAL_ACTION`                            |
+| Winning move also reaches 60 quiet plies                                                   | Win takes priority over draw                                         |
+| Move attempted after game end                                                              | Illegal                                                              |
+| Invalid initial piece distribution or duplicate/missing ID                                 | Typed initialization failure; preserve any existing session          |
+| Move from index 3 to 4 as if adjacent                                                      | Illegal                                                              |
+| Position is negative, fractional, missing, or 32                                           | Illegal; unchanged state and timeline                                |
 
-Section 10's chase scenarios are Task 3 acceptance tests. The no-alternative case verifies the explicit limited behavior above; it does not authorize a new end condition.
+Section 10's chase scenarios remain regression tests. The no-alternative regression now verifies the 2026-11-10 owner-approved use of the existing NO_LEGAL_ACTION outcome, not a new result type.
 
 ## 13. Excluded Variants
 

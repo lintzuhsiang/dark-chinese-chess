@@ -230,49 +230,72 @@ describe('outcome/chase/session integration', () => {
     expect(rejected.selectedSquare).toBeNull();
   });
 
-  it('keeps the documented no-alternative chase position active rather than inventing a loss', () => {
-    const initialized = createInitialState(arrangedDeck());
-    if (!initialized.ok) throw new Error('Expected valid deck.');
-    const board: Square[] = Array.from({ length: 32 }, () => null);
-    for (const [position, rank, color] of [
-      [1, 'CANNON', 'RED'],
-      [12, 'HORSE', 'BLACK'],
-      [2, 'GENERAL', 'BLACK'],
-      [4, 'SOLDIER', 'BLACK'],
-      [5, 'SOLDIER', 'BLACK'],
-    ] as const)
-      board[position] = { revealed: true, piece: { id: `edge-${position}`, rank, color } };
-    let state: GameState = freeze({
-      ...initialized.state,
-      board,
-      playerColors: { P1: 'RED', P2: 'BLACK' },
-    });
-    function accept(action: GameAction) {
-      const result = applyAction(freeze(state), state.currentPlayer, action);
-      if (!result.ok) throw new Error(`Expected fixture action: ${result.error.code}`);
-      state = result.state;
-    }
-    accept({ type: 'MOVE', from: 1, to: 0 });
-    const cannonCycle = [
-      [12, 13],
-      [0, 1],
-      [13, 12],
-      [1, 0],
-    ] as const;
-    for (let returns = 0; returns < 2; returns += 1) {
-      for (const [from, to] of cannonCycle) accept({ type: 'MOVE', from, to });
-    }
-    for (const [from, to] of cannonCycle.slice(0, -1)) accept({ type: 'MOVE', from, to });
-    expect(state.status).toBe('ACTIVE');
-    expect(state.result).toBeNull();
-    const closing: GameAction = { type: 'MOVE', from: 1, to: 0 };
-    expect(getActionError(state, 'P1', closing)).toBeNull();
-    expect(getLegalActions(state, 'P1')).toEqual([]);
-    const snapshot = JSON.stringify(state);
-    expect(applyAction(state, 'P1', closing)).toEqual({
-      ok: false,
-      error: { code: 'PERPETUAL_CHASE' },
-    });
-    expect(JSON.stringify(state)).toBe(snapshot);
-  });
+  it.each([false, true])(
+    'finishes chase-only immobilization before the next turn (quiet boundary: %s)',
+    (atDrawBoundary) => {
+      const initialized = createInitialState(arrangedDeck());
+      if (!initialized.ok) throw new Error('Expected valid deck.');
+      const board: Square[] = Array.from({ length: 32 }, () => null);
+      for (const [position, rank, color] of [
+        [1, 'CANNON', 'RED'],
+        [12, 'HORSE', 'BLACK'],
+        [2, 'GENERAL', 'BLACK'],
+        [4, 'SOLDIER', 'BLACK'],
+        [5, 'SOLDIER', 'BLACK'],
+      ] as const)
+        board[position] = { revealed: true, piece: { id: `edge-${position}`, rank, color } };
+      let state: GameState = freeze({
+        ...initialized.state,
+        board,
+        playerColors: { P1: 'RED', P2: 'BLACK' },
+      });
+      function accept(action: GameAction) {
+        const result = applyAction(freeze(state), state.currentPlayer, action);
+        if (!result.ok) throw new Error(`Expected fixture action: ${result.error.code}`);
+        state = result.state;
+      }
+      accept({ type: 'MOVE', from: 1, to: 0 });
+      const cannonCycle = [
+        [12, 13],
+        [0, 1],
+        [13, 12],
+        [1, 0],
+      ] as const;
+      for (let returns = 0; returns < 2; returns += 1) {
+        for (const [from, to] of cannonCycle) accept({ type: 'MOVE', from, to });
+      }
+      for (const [from, to] of cannonCycle.slice(0, 2)) accept({ type: 'MOVE', from, to });
+      if (atDrawBoundary) state = freeze({ ...state, noProgressCount: 59 });
+      const before = state;
+      const beforeSnapshot = JSON.stringify(before);
+      expect(getLegalActions(before, before.currentPlayer)).toContainEqual({
+        type: 'MOVE',
+        from: 13,
+        to: 12,
+      });
+      accept({ type: 'MOVE', from: 13, to: 12 });
+      expect(state.status).toBe('FINISHED');
+      expect(state.currentPlayer).toBe('P1');
+      expect(state.result).toEqual({ type: 'WIN', winner: 'P2', reason: 'NO_LEGAL_ACTION' });
+      expect(JSON.stringify(before)).toBe(beforeSnapshot);
+      const repeated = applyAction(before, before.currentPlayer, {
+        type: 'MOVE',
+        from: 13,
+        to: 12,
+      });
+      expect(repeated.ok && repeated.state).toEqual(state);
+      if (atDrawBoundary) expect(state.noProgressCount).toBe(60);
+      const closing: GameAction = { type: 'MOVE', from: 1, to: 0 };
+      expect(
+        getActionError({ ...state, status: 'ACTIVE', result: null }, 'P1', closing),
+      ).toBeNull();
+      expect(getLegalActions(state, 'P1')).toEqual([]);
+      const snapshot = JSON.stringify(state);
+      expect(applyAction(state, 'P1', closing)).toEqual({
+        ok: false,
+        error: { code: 'GAME_FINISHED' },
+      });
+      expect(JSON.stringify(state)).toBe(snapshot);
+    },
+  );
 });

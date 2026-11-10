@@ -76,3 +76,11 @@ This is a Chinese Dark Chess application.
 - Preserve existing public interfaces.
 - Explain meaningful trade-offs.
 - Run relevant tests before completion.
+
+## Phase 1.5 Quality and Release Gates
+
+- Run `pnpm lint`, `pnpm format:check`, `pnpm typecheck`, `pnpm test`, and `pnpm build` after changes; use `pnpm test:e2e` for affected UI/integration flows and `pnpm verify:release` for release artifact checks.
+- ESLint is syntax-only with a Babel TypeScript parser; TypeScript 7 remains the type/name/unused-declaration checker. Do not change the production compiler/build to satisfy a linter.
+- Use the committed Prettier configuration. Keep mechanical formatting separate from tooling/behavioral changes and request owner approval before commits or pushes.
+- Release preparation may proceed without hosted CI/devices. Production publication requires a hosted CI pass for the release revision, device evidence or explicit owner acceptance of gaps, and explicit publication approval.
+- Do not create hosting resources, connect external accounts, deploy even previews, or begin Phase 2 without owner authorization.

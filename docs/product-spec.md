@@ -1,10 +1,10 @@
 # Dark Chess — Product Specification
 
-**Version:** 0.9 — Selectable completed-game Review history\
+**Version:** 0.10 — Phase 1.5 terminal-state correction\
 **Status:** Tasks 1–6 implemented; physical-device/hosted-CI acceptance and owner review pending\
 **Target:** Phase 1 — Functional MVP
 
-Task 5 implements Progressive Review; Task 6 implements usability/accessibility fixes, production-browser checks, CI configuration, and verification tooling under the owner's joint-testing authorization. Physical devices, hosted CI, and owner acceptance remain pending, including review of the documented no-alternative chase limitation. Phase 1 completion is not declared. The owner amended Review on 2026-11-10 to show the complete public completed-game history beside the board and allow direct step selection; FR-06 and its acceptance criterion reflect that amendment.
+Task 5 implements Progressive Review; Task 6 implements usability/accessibility fixes, production-browser checks, CI configuration, and verification tooling under the owner's joint-testing authorization. Physical devices, hosted CI, and owner acceptance remain pending, including verification of the owner-approved chase-only immobilization correction. Phase 1 completion is not declared. The owner amended Review on 2026-11-10 to show the complete public completed-game history beside the board and allow direct step selection; FR-06 and its acceptance criterion reflect that amendment.
 
 ## 1. Product Vision
 
@@ -112,7 +112,7 @@ Do not display legal-move indicators or animated transitions.
 - Show whose turn it is.
 - Display player colors after the first flip.
 - Detect win, loss, and draw according to `game-rules.md`.
-- Evaluate elimination, then absence of the next player's ordinary legal actions, then the 60-ply no-progress draw. Results identify the winner explicitly. Chase prohibitions do not themselves trigger a loss; the no-alternative edge case remains open for Task 3.
+- Evaluate elimination, then absence of the next player's permitted actions including chase filtering, then the 60-ply no-progress draw. Results identify the winner explicitly. The owner approved this NO_LEGAL_ACTION amendment on 2026-11-10; an accepted ACTIVE state must not have zero permitted actions.
 - Repeated board positions alone never cause a draw. Perpetual chasing uses the approved coverage/threshold and prohibition-only policy in `game-rules.md`, section 10; its implementation belongs to Task 3.
 - On completion, display the result rather than inviting the next player to act.
 
@@ -224,7 +224,7 @@ A selected piece may use a simple static border or contrast change to make selec
 - All accepted actions must satisfy game rules.
 - Game state must remain consistent after undo and replay.
 - Invalid interactions cannot corrupt the game.
-- No automatic draw may be triggered by general board repetition. Perpetual-chase behavior must match the approved definition and prohibition-only policy, not an inferred repetition substitute or a chase-induced loss.
+- No automatic draw may be triggered by general board repetition. Perpetual-chase behavior must match the approved definition and the 2026-11-10 chase-aware NO_LEGAL_ACTION amendment. Rejected attempts remain immutable; general repetition is not an outcome.
 
 ### Performance
 
@@ -277,7 +277,7 @@ Phase 1 is complete when:
 - The interface follows the minimalist design direction.
 - Automated rule tests and basic E2E tests pass.
 - Terminal turn/result behavior and removal of general repetition draws are verified.
-- The remaining no-alternative chase decision is resolved and all chase acceptance tests pass; an approved specification alone is not implemented behavior.
+- The owner-approved chase-only NO_LEGAL_ACTION correction is implemented and its terminal-priority, immutability, and deterministic reconstruction checks pass.
 - Progressive Review keeps the full completed public history selectable while board/turn/result/capture summary match the selected prefix.
 - The viewport, touch, keyboard, hidden-data, and lightweight performance checks above are recorded.
 

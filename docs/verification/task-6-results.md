@@ -2,6 +2,8 @@
 
 Initial session date: 2026-11-09; Review refinement checked on 2026-11-10. Tasks 5–6 are ready for joint review after the final checks below. Physical-device and hosted-CI acceptance remain pending; Phase 1 completion is not declared.
 
+> Historical Tasks 5–6 evidence: Phase 1.5 subsequently adds lint/format/release gates and the owner-approved chase-aware NO_LEGAL_ACTION correction. Its [release checklist](../release/checklist.md) supersedes this record's pending no-alternative policy references.
+
 ## Implemented changes
 
 - Relative text sizes and board minimums honor larger text settings; control groups and dialog headings can wrap.

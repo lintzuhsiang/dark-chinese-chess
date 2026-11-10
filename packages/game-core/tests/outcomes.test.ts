@@ -243,7 +243,11 @@ describe('terminal outcomes', () => {
 
   it('prioritizes elimination over all other candidate outcome conditions', () => {
     const candidate = positionState([piece(0, 'HORSE', 'RED')], 60, 'P2');
-    expect(evaluateOutcome(candidate)).toEqual({ type: 'WIN', winner: 'P1', reason: 'NO_PIECES' });
+    expect(
+      evaluateOutcome(candidate, () => {
+        throw new Error('Elimination must short-circuit legality.');
+      }),
+    ).toEqual({ type: 'WIN', winner: 'P1', reason: 'NO_PIECES' });
   });
 });
 
@@ -288,5 +292,24 @@ describe('deterministic outcomes without a general repetition rule', () => {
     expect(reconstructed).toEqual(state);
     expect(start.noProgressCount).toBe(0);
     expect(start.status).toBe('ACTIVE');
+  });
+});
+
+describe('active-state legal-action invariant', () => {
+  it('never leaves an accepted ACTIVE state without a permitted action in deterministic games', () => {
+    let seed = 0x51a5;
+    for (let game = 0; game < 8; game += 1) {
+      let state = initialState();
+      for (let ply = 0; ply < 160 && state.status === 'ACTIVE'; ply += 1) {
+        const legal = getLegalActions(state, state.currentPlayer);
+        expect(legal.length).toBeGreaterThan(0);
+        seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+        const next = accept(state, legal[seed % legal.length]!);
+        state = next.state;
+        if (state.status === 'ACTIVE')
+          expect(getLegalActions(state, state.currentPlayer).length).toBeGreaterThan(0);
+        else expect(getLegalActions(state, state.currentPlayer)).toEqual([]);
+      }
+    }
   });
 });

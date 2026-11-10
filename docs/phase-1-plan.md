@@ -25,7 +25,7 @@ Read [AGENTS.md](../AGENTS.md), [product specification](product-spec.md), [game 
 
 - Game Core owns rules, immutable deterministic transitions, validation, outcomes, and public observations. The session owns the original deck, one accepted timeline, and incremental current state; React owns selection/view state.
 - An accepted action always advances currentPlayer, even when terminal. GameResult identifies the winner. Elimination, absence of ordinary legal actions, and no-progress draw have that priority.
-- General threefold-repetition draws are removed. The approved narrow chase definition prohibits a third return to any qualifying threat position within the continuous same-pair chase, including later loops on other squares, without a chase-induced loss.
+- General threefold-repetition draws are removed. The approved narrow chase definition prohibits a third return to any qualifying threat position within the continuous same-pair chase, including later loops on other squares, with the owner-approved 2026-11-10 NO_LEGAL_ACTION outcome if chase filtering leaves no next-player action. Rejected attempts remain immutable.
 - A hidden-piece tap submits FLIP even with another piece selected. Success clears selection and advances the turn. Revealed friendly pieces select/deselect/switch; empty/revealed destinations attempt MOVE/capture.
 - Undo and Progressive Review use reconstruction from the original deck and active timeline. At Review cursor k, both board and history expose exactly that prefix, without future information or undone entries.
 - Keep the local Functional MVP free of AI, multiplayer, auth, persistence, saved-game libraries, hints, animation, sound, snapshot infrastructure, and speculative layers.
@@ -38,7 +38,7 @@ Task 3 implements outcomes/chase (`c1a9916`); Task 4 implements exact undo, hist
 
 The latest Task 3 authorization allows minimal additive tracking types and narrow interpretation of ambiguous chase cases. If all ordinary actions are chase-prohibited, preserve ACTIVE without inventing adjudication; this documented stalemate limitation remains for future owner policy review.
 
-The repository has typecheck/test/build scripts, production `test:e2e`, and opt-in `verify:performance`. ESLint/Prettier remain unconfigured. Actual iPhone Safari/Android Chrome, native device zoom/timing, hosted CI execution, and owner acceptance remain pending; Phase 1 completion is not declared.
+The repository has typecheck/test/build scripts, production `test:e2e`, and opt-in `verify:performance`. Phase 1.5 adds syntax-only ESLint/Prettier and release artifact checks; see its release checklist for current verification. Actual iPhone Safari/Android Chrome, native device zoom/timing, hosted CI execution, and owner acceptance remain pending; Phase 1 completion is not declared.
 
 ## Authorization and handoff
 

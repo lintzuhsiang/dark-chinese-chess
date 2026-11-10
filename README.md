@@ -4,7 +4,7 @@ Tasks 1–6 local-play implementation: randomized 8×4 hidden board, color assig
 
 ## Run locally
 
-Use Node.js 22.x (at least 22.12), 24.x, or 26+ and pnpm 12.18.0. Verification used Node 26.10.0. Run commands from this directory, which contains `pnpm-workspace.yaml`.
+Use Node.js 22.x (at least 22.18), 24.x (at least 24.11), or 26+ and pnpm 12.18.0. Verification used Node 26.10.0. Run commands from this directory, which contains `pnpm-workspace.yaml`.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -16,12 +16,14 @@ Open the Local URL printed by Vite, normally `http://127.0.0.1:5173/`. If pnpm i
 ## Verification
 
 ```sh
+pnpm lint
+pnpm format:check
 pnpm typecheck
 pnpm test
 pnpm build
 ```
 
-The production output is `apps/web/dist/`. Unit tests run in Node, including public-markup checks and UI/session integration. Browser tests run separately through Playwright. No DOM simulator or test-only production deck endpoint is added. ESLint/Prettier are not configured in this repository; no lint/format pass is claimed.
+The production output is `apps/web/dist/`. Unit tests run in Node, including public-markup checks and UI/session integration. Browser tests run separately through Playwright. No DOM simulator or test-only production deck endpoint is added. Phase 1.5 adds syntax-only ESLint and Prettier; historical records below retain the tooling available at their original dates. TypeScript 7 checks types, names and unused declarations; the ESLint Babel parser does not change the production build.
 
 Playwright checks the production build in Chromium and WebKit. Install the browsers once, then run:
 
@@ -46,8 +48,8 @@ It serves a production preview on port 5186 and writes ignored `performance-resu
 - Click a revealed piece of the current player's color to select it. Click it again to deselect, or another friendly revealed piece to switch selection. Selection uses a static border and consumes no turn.
 - With a piece selected, click an empty square or revealed enemy to attempt a move/capture. Game Core validates adjacency, ranks, and Cannon screens. Success clears selection and advances the turn; rejection preserves selection, board, timeline, and turn.
 - Tapping a hidden piece flips it immediately, even while another piece is selected. A successful flip clears the selection and advances the turn; no separate deselection is needed. No legal-move indicators or strategy overlays are shown.
-- Accepted actions evaluate elimination, ordinary immobilization, then a draw at 60 quiet plies. Flips/captures reset the quiet counter. Finished cells are disabled and the result identifies the winner independently of the next-player field.
-- Chase enforcement follows the single-pair house rule in `docs/game-rules.md`: two qualifying logical-position returns are allowed; the third renewal is rejected. If every ordinary action is chase-prohibited, the game stays active without inventing a loss/pass/draw; this documented limitation can stall play.
+- Accepted actions evaluate elimination, chase-aware immobilization, then a draw at 60 quiet plies. Flips/captures reset the quiet counter. Finished cells are disabled and the result identifies the winner independently of the next-player field.
+- Chase enforcement follows the single-pair house rule in `docs/game-rules.md`: two qualifying logical-position returns are allowed; the third renewal is rejected. If every otherwise legal action is chase-prohibited, the previous accepted action ends the game with NO_LEGAL_ACTION for the next player, under the owner-approved 2026-11-10 amendment. Rejected attempts still change nothing.
 - 「悔棋」 removes the most recent accepted action while active and reconstructs the exact previous state, including counters/chase tracking. Repeated undo reaches the original hidden deck; the button is disabled at zero actions and after completion. There is no redo.
 - 「棋譜」 opens read-only numbered actions, coordinates, and captured pieces derived from the current accepted timeline. Undo removes the corresponding entry/reveal/capture from this projection. Escape or 「返回棋盤」 closes it and restores focus.
 - 「重新開始」 asks for confirmation during active play, with Cancel initially focused. Cancel preserves the game/selection; confirmation validates a fresh shuffled deck before replacing the session. Completed-game restart is immediate. History, counters, colors, selection, errors, and chase tracking reset.
@@ -132,3 +134,9 @@ Tasks 5–6 are ready for joint owner review; the owner authorized committing th
 The owner requested a complete selectable history during completed-game Review. It is now an always-visible, independently scrollable sidebar on wider screens and a bounded list below the board on phones. Select any row, including step 1 then step 30, to render that action's resulting position. The current step is marked visually and with `aria-current="step"`; navigation scrolls the list to it without moving the page. Board/turn/result/capture summary remain selected-prefix projections, and no private IDs or never-revealed identities enter the list. Four equal navigation columns remove extra spacing beside 終局.
 
 Typecheck, 451 unit tests, production build, and all 22 Chromium/WebKit browser checks passed after the refinement, including direct row selection and sidebar/mobile geometry. Physical-phone and hosted-CI acceptance remain pending. The owner authorized a local commit; no push, deployment, or Phase 1.5/2 implementation is authorized by that commit request.
+
+## Phase 1.5 release preparation
+
+The owner approved chase-aware NO_LEGAL_ACTION on 2026-11-10: the next player loses after an accepted action if chase filtering leaves no permitted action. This supersedes the historical stalled-ACTIVE limitation in the Task 3–6 records above. The existing result priority and immutable rejection behavior remain unchanged.
+
+`pnpm verify:gates` runs isolated positive/negative lint, formatting, typecheck and Vitest probes, removing its own temporary test afterward. `pnpm verify:release` builds and inspects the static output and prints its asset hashes; neither command publishes anything. See [the release checklist](docs/release/checklist.md), [hosting comparison](docs/release/hosting-comparison.md), and [deployment plan](docs/release/deployment-plan.md). Formatting-only and behavioral/tooling changes are prepared separately and remain uncommitted pending approval. Hosted CI, physical-device evidence or explicit gap acceptance, hosting/account selection, and publication approval remain external gates.

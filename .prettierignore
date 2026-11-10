@@ -1,0 +1,9 @@
+node_modules/
+**/dist/
+coverage/
+test-results/
+playwright-report/
+performance-results/
+pnpm-lock.yaml
+docs/verification/*baseline.json
+docs/phase-2-plan.md

@@ -170,7 +170,10 @@ export function applyAction(
 ): ActionResult {
   const result = permittedTransition(state, playerId, action);
   if (!result.ok) return result;
-  const outcome = evaluateOutcome(result.state);
+  const outcome = evaluateOutcome(
+    result.state,
+    () => getLegalActions(result.state, result.state.currentPlayer).length > 0,
+  );
   return {
     ...result,
     state: { ...result.state, status: outcome === null ? 'ACTIVE' : 'FINISHED', result: outcome },

@@ -36,10 +36,12 @@ Product requirements, game rules, and public architecture contracts remain autho
 
 Task 1 recorded 62 passing tests at its completion. Task 2 and its owner-requested flip UX amendment recorded typecheck, 340 tests across five files, and production build passing. These are historical executed results, not new checks performed while organizing documentation.
 
-The repository exposes `pnpm typecheck`, `pnpm test` (451 tests), `pnpm build`, `pnpm test:e2e` (22 Chromium/WebKit checks), and opt-in `pnpm verify:performance`. Task 6's [evidence report](../verification/task-6-results.md) records geometry, contrast, keyboard, and five-sample host baselines. ESLint/Prettier are not configured.
+The repository exposes `pnpm typecheck`, `pnpm test` (453 tests), `pnpm build`, `pnpm test:e2e` (22 Chromium/WebKit checks), and opt-in `pnpm verify:performance`. Task 6's [evidence report](../verification/task-6-results.md) records geometry, contrast, keyboard, and five-sample host baselines. Phase 1.5 provides `pnpm lint`, `pnpm format:check`, `pnpm verify:gates`, and `pnpm verify:release`; its release checklist records the current local evidence.
 
 See the [Task 2 execution report](../task-2-report.md) for actual multi-agent ownership, independent QA, and verification evidence. Its original hidden-target rejection steps are historical; the later UX amendment supersedes them.
 
 ## Next gate
 
-The owner authorized joint Tasks 5–6 testing. Implementation and local automation are ready; stop for owner review and [physical-device checks](../verification/manual-checks.md). Hosted CI has been configured but not run. Task 3's documented ACTIVE/no-alternative chase limitation remains unchanged and part of owner acceptance; no extra adjudication is invented. Do not declare Phase 1 complete or start later phases without resolving/accepting the remaining gates.
+The owner authorized joint Tasks 5–6 testing. Implementation and local automation are ready; stop for owner review and [physical-device checks](../verification/manual-checks.md). Hosted CI has been configured but not run. Phase 1.5 applies the 2026-11-10 owner-approved chase-aware NO_LEGAL_ACTION amendment; an accepted ACTIVE state must retain a permitted action. Do not declare Phase 1 complete or start later phases without resolving/accepting the remaining gates.
+
+Phase 1.5 independent preparation is authorized in [the release plan](../phase-1.5-plan.md). Hosted CI and device evidence/gap acceptance still gate publication; commits, pushes, external resources and public deployments require explicit authorization.

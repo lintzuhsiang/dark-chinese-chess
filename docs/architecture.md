@@ -1,10 +1,10 @@
 # Dark Chess — Architecture
 
-**Version:** 0.11 — Selectable Review history\
+**Version:** 0.12 — Phase 1.5 shared legality/outcome correction\
 **Status:** Tasks 1–6 implemented; joint review and physical-device/hosted-CI acceptance pending\
 **Scope:** Phase 1 implementation with future AI and multiplayer compatibility
 
-Task 5 adds read-only Progressive Review; Task 6 adds relative text sizing, contrast/keyboard fixes, production-browser verification, CI configuration, and test-only long-game/tap measurement tooling. Game Core, GameAction, ActionResult, public events, observations, and the canonical session shape are unchanged. Task 3's chase prohibition/no-alternative limitation remains unchanged. Physical-device/hosted-CI acceptance and joint owner review are pending.
+Task 5 adds read-only Progressive Review; Task 6 adds relative text sizing, contrast/keyboard fixes, production-browser verification, CI configuration, and test-only long-game/tap measurement tooling. Game Core, GameAction, ActionResult, public events, observations, and the canonical session shape are unchanged. The owner-approved 2026-11-10 correction now applies NO_LEGAL_ACTION to chase-only immobilization; rejected attempts remain immutable. Physical-device/hosted-CI acceptance and joint owner review are pending.
 
 ## 1. Architecture Goals
 
@@ -227,12 +227,12 @@ State invariants:
 - Initially: `currentPlayer` is P1, both assignments are null, counts are zero, status is ACTIVE, and result is null. After the first flip, assignments are opposite and non-null.
 - `plyCount` is the accepted action count. Every accepted action advances `currentPlayer`, even when terminal. Read the winner from `result`, never from the current player.
 - ACTIVE implies a null result; FINISHED implies a non-null result. Only `applyAction` assigns outcomes. `getGameResult` only reads the stored result.
-- Ordinary movement increments `noProgressCount`; a flip or capture resets it. Elimination, next-player lack of ordinary legal actions, and no-progress are evaluated in that order after advancing the turn. An empty chase-filtered action list cannot itself cause a loss.
+- Ordinary movement increments `noProgressCount`; a flip or capture resets it. Elimination, next-player lack of permitted actions including chase filtering, and no-progress are evaluated in that order after advancing the turn. An accepted ACTIVE state must have a permitted action.
 - No general position-repetition state, hash, counter, or draw reason exists.
 
 **Chase state:** Initialize `chase` to null. A pure `getChaseUpdate(before, tentativeAfter, action)` returns `{ prohibited, chase }`. Logical position keys use EMPTY/HIDDEN/revealed color-rank squares, next player, and assignments; physical IDs are used only for pair continuity. `positionCounts` counts the first threat and qualifying renewals within the current continuous chase. A fourth appearance of any key is prohibited, including later loops elsewhere after an initial rejection. This replaces the original single-anchor tracker following the owner's UI bug report. The map resets on a broken chain/flip/capture, is bounded by 60 quiet plies, and never counts general repetition. Include this private state in deterministic reconstruction/equality for future undo/Review, never public projections or an independent session/UI tracker.
 
-Ordinary validation and the pure capture-threat helper are shared by chase and outcomes without calling the chase-aware engine recursively. One private permitted-transition path validates, tentatively moves/updates counters/turn, and rejects or records the chase update for both submission and enumeration. Only accepted `applyAction` then evaluates elimination, ordinary immobilization, and no-progress in priority order and stores the result atomically. A rejected tentative transition creates no event/timeline entry and mutates no state.
+Ordinary validation and the pure capture-threat helper are shared by chase and outcomes without calling the chase-aware engine recursively. One private permitted-transition path validates, tentatively moves/updates counters/turn, and rejects or records the chase update for both submission and enumeration. Only accepted `applyAction` then evaluates elimination, chase-aware immobilization, and no-progress in priority order and stores the result atomically. A rejected tentative transition creates no event/timeline entry and mutates no state.
 
 No UI-specific state belongs inside GameState.
 
@@ -319,7 +319,7 @@ getGameResult(
 
 `InitialStateResult` is `{ ok: true, state: GameState }` or `{ ok: false, error: { code: "INVALID_DECK" } }`. Initialization validates exact per-color composition, recognized colors/ranks, 32 entries, and unique nonempty IDs before producing a state. An invalid deck must not replace an existing session.
 
-`getLegalActions` uses the same permitted-transition path as submission and returns an empty list for a non-current player or finished game. Outcome evaluation uses ordinary legality before chase filtering for `NO_LEGAL_ACTION`; all-chase-prohibited states can therefore remain ACTIVE with no permitted actions, as the documented limitation requires. Evaluate the accepted next-player candidate before marking it finished; do not use an already-finished state's empty list to infer the original outcome.
+`getLegalActions` uses the same permitted-transition path as submission and returns an empty list for a non-current player or finished game. Outcome evaluation receives a lazy callback to the same chase-aware `getLegalActions` for NO_LEGAL_ACTION. Enumeration calls only permitted transitions, never outcome evaluation, so the dependency does not recurse. This is an internal helper change; GameAction, ActionResult, GameState, events, and observation contracts remain unchanged. Evaluate the accepted next-player candidate before marking it finished; do not use an already-finished state's empty list to infer the original outcome.
 
 ### Minimum public action event
 
@@ -534,7 +534,7 @@ Use table-driven cases for:
 - Terminal next-player convention and result-reason priority
 - Repeated positions continuing without an automatic repetition draw
 
-In Task 3, add the explicit chase classification, cycle threshold, reset, prohibition-only enforcement, and the eventual no-alternative case from `game-rules.md`, section 10. No general board hash/counter or chase-induced loss should be introduced.
+In Task 3, add the explicit chase classification, cycle threshold, reset, prohibition-only enforcement, and the eventual no-alternative case from `game-rules.md`, section 10. No general repetition draw/counter should be introduced. The owner approved chase-aware NO_LEGAL_ACTION on 2026-11-10.
 
 ### Property-based Tests
 
@@ -641,7 +641,7 @@ The architecture is acceptable when:
 - [ ] Unit and E2E tests cover critical flows.
 - [ ] No backend is required for the local MVP.
 - [ ] No general repetition-draw state or behavior exists.
-- [ ] Task 3 prohibition-only enforcement and tracker pass verification, including the documented ACTIVE/no-alternative limitation.
+- [ ] Task 3 prohibition-only enforcement and tracker pass verification, including terminal resolution of the formerly ACTIVE/no-alternative position.
 - [ ] Terminal next-player semantics and result priorities agree with `game-rules.md`.
 - [ ] Core observations exclude history; the session derives history/captures from its one active timeline.
 - [ ] Progressive Review projects the selected board/result/assignments/captures while its full public history supports direct step selection.
