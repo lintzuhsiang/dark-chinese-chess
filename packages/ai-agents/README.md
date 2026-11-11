@@ -120,6 +120,27 @@ artifacts containing the precise executed source/configuration and seeds.
 
 ## Verification and benchmark
 
+### SAFETY-TIE-1 experiment
+
+`createSafetyTieAgent(configuration?)` / `safetyTieAgent` preserve the original EV
+scorer and configuration. `explainSafetyTieDecision(input, { seed }, configuration?)`
+adds `safetyTie: { applied, checks }`; each check records a tied MOVE and the first
+legal opponent capture winning immediately, or null when none exists.
+
+Only two or more exactly top-scoring candidates, all MOVEs, qualify. Project each
+through Core, then project ordinary opponent captures through Core. If some tied
+choices avoid an immediate opponent capture win, remove the losing choices and
+use the original first seeded sample over the remaining order. Already terminal
+successors require no reply. All-safe/all-unsafe sets retain the original choice;
+unique best actions and mixed MOVE/FLIP ties are unchanged. Scores, FLIP probabilities,
+values, and weights are identical to EV. Null is a narrow check, not proof of safety.
+
+The original EV exports remain the comparison baseline. This variant does not
+detect quiet/FLIP winning replies, nonterminal losses, or a strictly higher-scored
+sacrifice. The recorded fatal 10→14 tie now selects 10→9. No strength improvement
+is claimed without a fresh paired comparison. Browser selection is opt-in under
+**期望值＋安全決勝**; the CLI name is `safety-tie-1`.
+
 Focused policy/Core tests can run directly:
 
 ```sh

@@ -6,6 +6,7 @@ import {
   heuristicAgent,
   expectedValueAgent,
   randomAgent,
+  safetyTieAgent,
 } from '../../packages/ai-agents/src/index';
 import { formatTournamentSummary, runTournament } from './tournament';
 import type { EvaluatedAgent } from './tournament-types';
@@ -38,7 +39,7 @@ async function main(): Promise<void> {
     console.log('  --pairs 20 --deck-start 0 --agent-seed 20261110 --max-plies 4096');
     console.log('  --confidence 0.95 --output benchmark-results/random-baseline.json');
     console.log(
-      '  --agent-a random|heuristic|expected-value --agent-b random|heuristic|expected-value',
+      '  --agent-a random|heuristic|expected-value|safety-tie-1 --agent-b random|heuristic|expected-value|safety-tie-1',
     );
     console.log('  --deck-seeds 10,20,30 may replace --pairs/--deck-start.');
     return;
@@ -55,19 +56,27 @@ async function main(): Promise<void> {
     deckSeeds = Array.from({ length: count }, (_, index) => start + index);
   }
   const descriptor = (kind: string, seat: string): EvaluatedAgent => {
-    if (kind !== 'random' && kind !== 'heuristic' && kind !== 'expected-value') {
-      throw new Error('Agent must be random, heuristic, or expected-value.');
+    if (
+      kind !== 'random' &&
+      kind !== 'heuristic' &&
+      kind !== 'expected-value' &&
+      kind !== 'safety-tie-1'
+    ) {
+      throw new Error('Agent must be random, heuristic, expected-value, or safety-tie-1.');
     }
-    if (kind === 'expected-value') {
+    if (kind === 'expected-value' || kind === 'safety-tie-1') {
+      const safetyTie = kind === 'safety-tie-1';
       return {
         id: kind + '-' + seat,
-        implementation: 'expected-value-agent-v1',
+        implementation: safetyTie
+          ? 'expected-value-agent-safety-tie-1-v1'
+          : 'expected-value-agent-v1',
         configuration: {
           pieceValues: { ...DEFAULT_HEURISTIC_CONFIGURATION.pieceValues },
           weights: { ...DEFAULT_HEURISTIC_CONFIGURATION.weights },
           flipModel: 'uniform-public-inventory-v1',
           projection: 'core-public-one-step-v1',
-          tieBreaking: 'seeded-exact-score-ties',
+          tieBreaking: safetyTie ? 'SAFETY-TIE-1-all-MOVE-top-ties' : 'seeded-exact-score-ties',
         },
         sourcePaths: [
           'packages/ai-agents/src/expected-value-agent.ts',
@@ -76,7 +85,7 @@ async function main(): Promise<void> {
           'packages/ai-agents/src/seeded-random.ts',
           'packages/game-core/src/public-projection.ts',
         ],
-        policy: expectedValueAgent,
+        policy: safetyTie ? safetyTieAgent : expectedValueAgent,
       };
     }
     return kind === 'random'

@@ -22,7 +22,7 @@ node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
 ```
 
 The CLI defaults to two labeled instances of RandomAgent. Both --agent-a and
---agent-b accept random, heuristic, or expected-value. EV uses exact public Core
+--agent-b accept random, heuristic, expected-value, or safety-tie-1. EV uses exact public Core
 projection and public-inventory FLIP probabilities with the unchanged default
 Heuristic weights. See the Agent documentation for planned comparison commands;
 The Phase 2 plan records AI-4 strength/latency results and limitations. JSON goes to the
@@ -34,6 +34,17 @@ Use `--deck-seeds 10,20,30` instead of `--pairs`/`--deck-start` for explicit see
 Other options: `--max-plies 4096`, `--confidence 0.95`, and `--help`.
 Exit status is 0 for complete, source-stable runs, 2 for retained unfinished games
 or source changes, and 1 for an invalid experiment/setup error.
+
+The approved `safety-tie-1` variant only filters immediate capture-win losses from
+all-MOVE exact top ties when a safe tied alternative exists. Original EV remains
+available and the manifest distinguishes both implementation/configuration IDs.
+For a future controlled comparison (not yet executed or evidence of improvement):
+
+```sh
+node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
+  --agent-a safety-tie-1 --agent-b expected-value --pairs 100 --deck-start 40000 \
+  --agent-seed 20261111 --output benchmark-results/safety-tie-1-vs-expected-value.json
+```
 
 ## Entry points
 

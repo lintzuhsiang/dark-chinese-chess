@@ -19,6 +19,7 @@ import {
   expectedValueAgent,
   explainExpectedValueDecision,
   randomAgent,
+  safetyTieAgent,
   type AgentInput,
 } from '../src/index';
 
@@ -287,14 +288,19 @@ describe('one-step Expected Value Agent', () => {
     ).rejects.toThrow('rejected by Core projection');
   });
 
-  it.each(['P1', 'P2'] as const)(
-    'finishes reproducible direct-Core games against Random as %s and replays exactly',
-    async (seat) => {
+  it.each([
+    ['EV', 'P1', expectedValueAgent],
+    ['EV', 'P2', expectedValueAgent],
+    ['SAFETY-TIE-1', 'P1', safetyTieAgent],
+    ['SAFETY-TIE-1', 'P2', safetyTieAgent],
+  ] as const)(
+    '%s finishes reproducible direct-Core games against Random as %s and replays exactly',
+    async (_name, seat, agent) => {
       async function play() {
         const fixture = arrangedInitial([]);
         const actions: GameAction[] = [];
         for (let ply = 0; ply < 600 && fixture.state.status === 'ACTIVE'; ply += 1) {
-          const policy = fixture.state.currentPlayer === seat ? expectedValueAgent : randomAgent;
+          const policy = fixture.state.currentPlayer === seat ? agent : randomAgent;
           const request = input(fixture);
           const action = await policy.chooseAction(request, { seed: (ply * 17 + 923) >>> 0 });
           expect(request.legalActions).toContainEqual(action);

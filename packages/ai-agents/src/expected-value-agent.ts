@@ -1,4 +1,5 @@
 import {
+  getPublicOrdinaryMoves,
   projectPermittedPublicAction,
   type GameAction,
   type PublicPiece,
@@ -41,6 +42,21 @@ export interface ExpectedValueDecision {
   readonly currentEvaluation: EvaluationBreakdown;
   readonly distribution: HiddenPieceDistribution;
   readonly actionEvaluations: readonly ExpectedValueActionEvaluation[];
+}
+
+type MoveAction = Extract<GameAction, { type: 'MOVE' }>;
+
+export interface SafetyTieCheck {
+  readonly action: MoveAction;
+  /** One legal opponent capture winning immediately, not a general reply search. */
+  readonly winningReply: MoveAction | null;
+}
+
+export interface SafetyTieDecision extends ExpectedValueDecision {
+  readonly safetyTie: {
+    readonly applied: boolean;
+    readonly checks: readonly SafetyTieCheck[];
+  };
 }
 
 function copyAction(action: GameAction): GameAction {
@@ -130,3 +146,77 @@ export function createExpectedValueAgent(configuration: HeuristicConfiguration =
 }
 
 export const expectedValueAgent: GameAgent = createExpectedValueAgent();
+
+function immediateWinningCapture(input: AgentInput, action: MoveAction): MoveAction | null {
+  const projected = projectPermittedPublicAction(input, action);
+  if (!projected.ok) throw new RangeError(`Core rejected a tied MOVE: ${projected.error.code}`);
+  if (projected.observation.status === 'FINISHED') return null;
+  const opponent = projected.observation.currentPlayer;
+  const color = projected.observation.playerColors[opponent];
+  if (color === null) return null;
+  const successor = {
+    observation: projected.observation,
+    publicHistory: [...input.publicHistory, projected.event],
+  };
+  for (const reply of getPublicOrdinaryMoves(successor.observation.board, color)) {
+    if (successor.observation.board[reply.to]?.kind !== 'REVEALED') continue;
+    // Ordinary capture geometry is shared with Core. Captures reset chase, but
+    // still go through Core projection for legality and exact terminal priority.
+    const response = projectPermittedPublicAction(successor, reply);
+    if (!response.ok) throw new RangeError(`Core rejected a capture reply: ${response.error.code}`);
+    const result = response.observation.result;
+    if (result?.type === 'WIN' && result.winner === opponent) {
+      return { type: 'MOVE', from: reply.from, to: reply.to };
+    }
+  }
+  return null;
+}
+
+/** SAFETY-TIE-1 preserves the legacy scorer and changes only all-MOVE top ties. */
+export function explainSafetyTieDecision(
+  input: AgentInput,
+  options: { readonly seed: number },
+  configuration: HeuristicConfiguration = {},
+): SafetyTieDecision {
+  const baseline = explainExpectedValueDecision(input, options, configuration);
+  const bestScore = Math.max(
+    ...baseline.actionEvaluations.map((candidate) => candidate.expectedScore),
+  );
+  const tied = baseline.actionEvaluations.filter(
+    (candidate) => candidate.expectedScore === bestScore,
+  );
+  // A mixed tie keeps FLIP selection/probabilities exactly as in the baseline.
+  if (tied.length < 2 || tied.some((candidate) => candidate.action.type !== 'MOVE')) {
+    return { ...baseline, safetyTie: { applied: false, checks: [] } };
+  }
+  const checks = tied.map((candidate): SafetyTieCheck => {
+    const action = candidate.action as MoveAction;
+    return {
+      action: { type: 'MOVE', from: action.from, to: action.to },
+      winningReply: immediateWinningCapture(input, action),
+    };
+  });
+  const remaining = checks.filter((check) => check.winningReply === null);
+  if (remaining.length === 0 || remaining.length === checks.length) {
+    return { ...baseline, safetyTie: { applied: false, checks } };
+  }
+  // Reuse the baseline's first seeded sample and original candidate order.
+  // No presentation/deck RNG is read, and unsafe sets never become empty.
+  const random = createSeededRandom(options.seed);
+  return {
+    ...baseline,
+    selectedAction: copyAction(remaining[Math.floor(random() * remaining.length)]!.action),
+    safetyTie: { applied: true, checks },
+  };
+}
+
+export function createSafetyTieAgent(configuration: HeuristicConfiguration = {}): GameAgent {
+  const resolved = resolveHeuristicConfiguration(configuration);
+  return {
+    async chooseAction(input, options) {
+      return explainSafetyTieDecision(input, options, resolved).selectedAction;
+    },
+  };
+}
+
+export const safetyTieAgent: GameAgent = createSafetyTieAgent();

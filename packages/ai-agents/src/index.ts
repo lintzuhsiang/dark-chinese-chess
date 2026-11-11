@@ -22,9 +22,14 @@ export {
   createExpectedValueAgent,
   expectedValueAgent,
   explainExpectedValueDecision,
+  createSafetyTieAgent,
+  safetyTieAgent,
+  explainSafetyTieDecision,
 } from './expected-value-agent';
 export type {
   ExpectedValueActionEvaluation,
   ExpectedValueDecision,
   FlipOutcomeEvaluation,
+  SafetyTieCheck,
+  SafetyTieDecision,
 } from './expected-value-agent';
