@@ -591,6 +591,17 @@ More advanced agents may use simulations, heuristics, or separate model-serving 
 
 The initial engine should not require such services.
 
+**Authorized AI-5 browser implementation:** the existing Session remains the
+canonical timeline owner. A trusted play reducer adds seat guards, pending
+request/generation/revision checks, AI-only Undo restriction, and commit-time Core
+validation. The browser and headless harness share one copied/frozen public-input
+adapter; its GameState argument stays host-only. A module Worker receives only the
+public envelope and a derived decision seed, calls the unchanged GameAgent contract,
+and returns a proposal. Restart/mode change/unmount terminate pending work; failures
+or a 10-second host timeout pause for explicit retry. Rendering receives only public
+session views. No Core/rule, Session/replay-shape, backend, or dependency change is
+introduced. See [AI-5 details](ai-5-browser-integration.md) and the current Phase 2 plan.
+
 ## 13. Future Multiplayer Integration
 
 In Phase 3:

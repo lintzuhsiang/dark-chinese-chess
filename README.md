@@ -2,6 +2,11 @@
 
 Tasks 1–6 local-play implementation: randomized 8×4 hidden board, color assignment, selection/movement/capture, terminal outcomes, no-progress draw, chase prohibition, exact undo, history/captured pieces, confirmed restart, and read-only Progressive Review. Automated usability/browser verification is complete; physical-device checks, hosted CI, and joint owner review remain pending.
 
+Phase 2 now also provides a playable Human-vs-AI mode with Random, Heuristic, and
+Expected Value policies running in browser Workers, plus the opt-in SAFETY-TIE-1 variant. AI-4 is committed; AI-5 browser
+implementation, AI-5.1 pacing/diagnostics, and SAFETY-TIE-1 are complete and committed
+with owner approval.
+
 ## Run locally
 
 Use Node.js 22.x (at least 22.18), 24.x (at least 24.11), or 26+ and pnpm 12.18.0. Verification used Node 26.10.0. Run commands from this directory, which contains `pnpm-workspace.yaml`.
@@ -12,6 +17,17 @@ pnpm dev
 ```
 
 Open the Local URL printed by Vite, normally `http://127.0.0.1:5173/`. If pnpm is unavailable, use `npx --yes pnpm@12.18.0` in place of `pnpm`; no global installation is required.
+
+Choose **開始人機對弈** to play the AI. You can choose either seat and Expected Value
+(default), **期望值＋安全決勝** (SAFETY-TIE-1), Heuristic, or Random strategy. The first FLIP determines colors. AI moves
+run in a browser Worker; a paused AI turn offers explicit retry or restart. AI-mode
+Undo is disabled, while **本機雙人** retains Undo and completed-game Review.
+Use **選單** to change modes or strategies. See the
+[AI-5 implementation and verification](docs/ai-5-browser-integration.md).
+AI-5.1 now gives your move a visible, variable dwell before presenting the AI reply.
+Its [gameplay investigation and proposed rule changes](docs/ai-5-1-gameplay-investigation.md)
+are available for review. The approved SAFETY-TIE-1 experiment is selectable; proposed
+chase-rule changes remain unimplemented.
 
 ## Verification
 
@@ -50,11 +66,11 @@ It serves a production preview on port 5186 and writes ignored `performance-resu
 - Tapping a hidden piece flips it immediately, even while another piece is selected. A successful flip clears the selection and advances the turn; no separate deselection is needed. No legal-move indicators or strategy overlays are shown.
 - Accepted actions evaluate elimination, chase-aware immobilization, then a draw at 60 quiet plies. Flips/captures reset the quiet counter. Finished cells are disabled and the result identifies the winner independently of the next-player field.
 - Chase enforcement follows the single-pair house rule in `docs/game-rules.md`: two qualifying logical-position returns are allowed; the third renewal is rejected. If every otherwise legal action is chase-prohibited, the previous accepted action ends the game with NO_LEGAL_ACTION for the next player, under the owner-approved 2026-11-10 amendment. Rejected attempts still change nothing.
-- 「悔棋」 removes the most recent accepted action while active and reconstructs the exact previous state, including counters/chase tracking. Repeated undo reaches the original hidden deck; the button is disabled at zero actions and after completion. There is no redo.
+- In local two-player mode, 「悔棋」 removes the most recent accepted action while active and reconstructs the exact previous state, including counters/chase tracking. Repeated undo reaches the original hidden deck; the button is disabled at zero actions and after completion. AI mode disables Undo. There is no redo.
 - 「棋譜」 opens read-only numbered actions, coordinates, and captured pieces derived from the current accepted timeline. Undo removes the corresponding entry/reveal/capture from this projection. Escape or 「返回棋盤」 closes it and restores focus.
 - 「重新開始」 asks for confirmation during active play, with Cancel initially focused. Cancel preserves the game/selection; confirmation validates a fresh shuffled deck before replacing the session. Completed-game restart is immediate. History, counters, colors, selection, errors, and chase tracking reset.
 - After completion, 「覆盤」 starts at the original hidden board. 「開局／上步／下步／終局」 navigates the retained timeline. The status shows the current action number. The full public history stays beside the board on wider screens (below it on phones); select any action to view its resulting position. The selected step is highlighted, and the captured-piece summary follows that step. Historical boards stay read-only even before the terminal action. 「結束覆盤」 restores the unchanged completed screen, where restart remains available.
-- AI and multiplayer remain unimplemented. Refresh returns to the entry screen; there is no persistence or saved-game library.
+- Multiplayer remains unimplemented. Refresh returns to the entry screen; there is no persistence or saved-game library.
 - The full randomized deck exists in the trusted browser session. Rendered components receive only observations with generic hidden squares; this prevents application-level disclosure, not inspection of local browser memory.
 
 ## Review map
@@ -66,6 +82,9 @@ It serves a production preview on port 5186 and writes ignored `performance-resu
 - `apps/web/src/game/reconstruct.ts`: one deterministic fold regenerating domain state and public events; undo truncates and rebuilds from the original deck.
 - `apps/web/src/game/review.ts`: public board/history/capture projection of one prefix; the hook separately memoizes completed public history for direct Review seeking.
 - `apps/web/src/game/interaction.ts`: React-owned selection reducer; routes destinations through the existing session without implementing game rules.
+- `apps/web/src/game/play.ts`: trusted mode/seat and request/generation/revision guards around the existing Session.
+- `apps/web/src/game/agent-input.ts`: shared Node/browser copied/frozen public-input adapter.
+- `apps/web/src/ai/`: public transport, WebCrypto decision seeds, module Worker execution, cancellation, and paused retry recovery.
 - `apps/web/src/hooks/useLocalGame.ts`: trusted-state boundary; memoizes public observations and exposes no full session to rendering components.
 - `apps/web/src/components/Board.tsx`, `GameControls.tsx`, `ReviewControls.tsx`, `ReviewHistory.tsx`, `History.tsx`, and `App.tsx`: public-only board/history, native buttons/dialogs, turn/result text, undo/restart, and completed-game Review navigation.
 - `e2e/`, `playwright.config.ts`, and `.github/workflows/verify.yml`: production-browser gameplay/accessibility checks and CI configuration.

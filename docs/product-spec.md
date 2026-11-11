@@ -118,6 +118,9 @@ Do not display legal-move indicators or animated transitions.
 
 ### FR-04: Undo
 
+This is the local two-player behavior. In the separately authorized Phase 2
+Human-vs-AI mode, Undo is disabled; see [AI-5](ai-5-browser-integration.md).
+
 - Support undoing the most recent accepted action during local play.
 - Undo must restore the exact previous board, turn, captured pieces, counters, player assignments, and all approved rule-tracking state, including perpetual-chase tracking once its semantics are approved.
 - Undo may reverse a flip, move, or capture.

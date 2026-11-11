@@ -1,7 +1,7 @@
 # Phase 2 — AI Opponent Plan
 
-**Version:** 0.8 — AI-4 projection, EV policy, and evaluation, 2026-11-10  
-**Status:** AI-0–AI-4 implemented and verified. Approved AI-4 Core extraction committed/pinned; remaining AI-4 changes uncommitted. AI-5 is not authorized.  
+**Version:** 0.11 — AI-5.1 approved SAFETY-TIE-1 experiment, 2026-11-11  
+**Status:** AI-0–AI-4 committed; AI-5 browser work, AI-5.1, and SAFETY-TIE-1 committed with owner approval. AI-5.1 diagnostics and pacing implemented; approved SAFETY-TIE-1 implemented; chase amendments and other policy experiments await approval.  
 **Authority:** This plan supersedes the earlier [phase-2-plan.md](phase-2-plan.md) draft.
 
 ## 1. Approved Architecture Decisions
@@ -52,7 +52,7 @@ interface GameAgent {
 
 ### Reproducible Core baseline
 
-The original AI-1/AI-2 pin was **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). AI-3 used **b779f98101e95b9aff925c920e0021dda5cd6835** for the approved public movement extraction. The subsequently approved AI-4 projection was separately committed and is now pinned at **b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75**. Core/rules match this exact reviewed Core-only commit. The guard remains strict. Remaining EV/CLI/documentation changes are uncommitted and archived in benchmark source manifests. Work proceeds on branch phase-2; both planning documents are preserved.
+The original AI-1/AI-2 pin was **34452df2bc198d382e36399218d2cfcb9e95f3f3** (release quality gates and chase-only immobilization correction). AI-3 used **b779f98101e95b9aff925c920e0021dda5cd6835** for the approved public movement extraction. The subsequently approved AI-4 projection was separately committed and is now pinned at **b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75**. Core/rules match this exact reviewed Core-only commit. The guard remains strict. Remaining AI-4 EV/CLI/documentation changes were subsequently committed as **9073bc0** with owner approval; their benchmark manifests retain the precise then-uncommitted snapshots. AI-5 browser/host changes and AI-5.1/SAFETY-TIE-1 were subsequently committed with owner approval. Work proceeds on branch phase-2; both planning documents are preserved.
 
 Runner metadata records this pin, randomness versions, roots, and environment. Before a match, verify the checkout's Core/rules match the pin; unrelated Phase 2 changes do not invalidate the Core baseline. Never label a later modified Core with this revision.
 
@@ -249,7 +249,92 @@ statistical sample size.
 
 AI-4 is complete at this scope. Browser Workers, cancellation/recovery, Human-vs-AI
 mode and its Undo restriction, and browser latency measurements belong to AI-5;
-they remain unimplemented and require separate authorization.
+the owner subsequently authorized their implementation below.
+
+### AI-5 browser integration
+
+The owner authorized committing AI-4 and starting AI-5, followed by an AI-6 options
+review. AI-4 was committed as 9073bc0. The playable browser mode now offers both
+human seats and named Random/Heuristic/EV strategies, defaulting to EV. First-FLIP
+color assignment, results, history, and completed Review reuse existing Core/Session
+behavior. Undo is disabled/rejected only in AI mode; local two-player play is preserved.
+
+The trusted play reducer owns mode and request/generation/revision guards around
+the unchanged Session. A shared copied/frozen public-input adapter serves browser
+and Node; its new host path is included in benchmark manifests. Independent crypto
+Agent roots and WebCrypto HMAC decision seeds reproduce the Node schedule. One
+module Worker per decision receives public data and the derived seed only; policies
+retain the approved GameAgent signature. Responses must match live tokens/offered
+actions and pass Core validation at the Session commit boundary.
+
+Restart, mode change, unmount, completion, and failures terminate pending work.
+A 10-second host timer, Worker/Agent/malformed-response errors, or invalid proposals
+pause the current turn for explicit retry/restart/Menu. Retry uses a new request ID
+with the unchanged public prefix/configuration/decision seed; no automatic fallback
+strategy or main-thread policy is substituted. This recovery policy is implemented
+and tested within the authorized AI-5 scope, without adding policy time budgets.
+
+Verification passes: **682 tests across 31 files**, workspace typecheck, lint,
+format check, build, release artifact inspection, and **44 Chromium/WebKit browser
+checks**. Tests include real Worker policies/public-only transport, both seats,
+duplicate/stale replies across restart/mode change, failures/timeouts/retry, full-game
+Review, local Undo, accessibility/layout, and usable controls during a busy Worker.
+WebKit's native select sizing issue was fixed; setup targets are at least 44 px.
+Development-mode real AI turns were also verified without page errors.
+
+Two opening EV decisions per engine measured 7.6–10.5 ms policy / 11.9–20.1 ms
+postMessage round trip in Chromium and 11 ms policy / 19–28 ms round trip in WebKit.
+These are smoke ranges, not p95/full-game/physical-phone guarantees. Device and
+hosted-CI acceptance remain unclaimed. Core, rules, Session shape, dependencies, and
+policy behavior are unchanged. The owner subsequently approved committing AI-5 and AI-5.1/SAFETY-TIE-1; no push or deployment.
+See [AI-5 details and play instructions](ai-5-browser-integration.md).
+
+### AI-6 options review
+
+The requested [improvement-options review](ai-6-improvement-options.md) recommends
+a terminal-safety tie-break first, then bounded opponent-reply evaluation. It also
+retains advantage conversion/relative position, Cannon/hidden-blocker geometry,
+feature/weight calibration, and later information-set search as separate experiments.
+Each requires fresh paired held-out evaluation and browser compute measurements.
+The subsequently approved SAFETY-TIE-1 exception is implemented below; other
+optimization and advanced-search options remain unimplemented.
+
+### AI-5.1 investigation and approved UX pacing
+
+The owner requested gameplay diagnosis before further optimization. Actual
+benchmark prefixes reproduce a fatal equal-score sacrifice and a quiet58→59→60
+stall while ahead; a real-deck fixture reproduces pursuit through distinct boards.
+The fork-reset case also confirms ESCAPE→RENEW→null when two eligible targets appear.
+These are documented one-step/feature and rule-definition limits, not a demonstrated
+terminal-score priority error. Existing values, weights, policies, Core/rules and
+pin are unchanged. Small standalone regressions preserve reproducible evidence;
+no tuning or large tournament was run.
+
+Approved pacing uses a per-revision visible paint barrier plus independent variable
+minimum dwell (FLIP500–900, MOVE350–700, CAPTURE450–850 ms). Computation starts
+immediately. Only remaining visible dwell is awaited; hidden time is paused and
+same-revision retry reuses the anchor. Restart/mode/revision/unmount cancel work and
+presentation; commit guards still reject duplicates/stale replies. Local play is unchanged.
+
+See the [AI-5.1 report](ai-5-1-gameplay-investigation.md),
+[exact decision tables](ai-5-1-decision-evidence.md), and
+[unapproved chase amendment](ai-5-1-chase-rule-proposal.md). The proposal separates
+third-appearance rejection, a continuous same-pair budget, and fork-continuity
+semantics; no numeric budget or broader rule is inferred as approved. The report
+ranks safety, progress, reply, relative-position and geometry experiments. Further
+policy/rule implementation, except the separately approved SAFETY-TIE-1 below,
+and any commit/push/deployment require approval.
+
+SAFETY-TIE-1 is an opt-in variant of unchanged EV scoring. Only exact top ties
+containing MOVEs exclusively are checked for immediate legal opponent capture wins
+through existing Core projection. Filter unsafe choices only when safe tied choices
+exist; preserve baseline behavior for mixed FLIP ties, unique best choices, and
+all-safe/all-unsafe sets. Preserve the original first seeded sample and candidate
+order. Browser label: **期望值＋安全決勝**; CLI: `safety-tie-1`. Original EV remains
+the default/baseline. Diagnostics expose checked actions and winning capture replies.
+The recorded sacrifice changes 10→14 to 10→9 without changing any scores. No Core,
+weight, FLIP model, or chase changes; no large benchmark or strength claim. Other
+research experiments remain unapproved.
 
 ## 5. Evaluation Harness and Experiments
 
@@ -265,7 +350,7 @@ they remain unimplemented and require separate authorization.
 
 ## 6. Implementation Tasks and Dependencies
 
-**Authorization:** AI-0/AI-1 were committed as 24b7e1228b2095443794daf0ee4c5653f4dad056 and AI-2 as a7d0f181fce1a758da0a8001f3a1f6e275c2457d with owner approval. The separately approved five-file AI-3 Core-only commit is b779f98101e95b9aff925c920e0021dda5cd6835; the remaining AI-3 changes were committed as 5aeaf3a. AI-4, its shared Core projection/tests, and the Core-only commit/pin update were separately authorized; the 11-file Core commit is b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75. Remaining AI-4 changes are uncommitted. Further shared Core scope changes, commits, pushes, deployment, and AI-5 require separate approval.
+**Authorization:** AI-0/AI-1 were committed as 24b7e1228b2095443794daf0ee4c5653f4dad056 and AI-2 as a7d0f181fce1a758da0a8001f3a1f6e275c2457d. AI-3 Core-only commit is b779f98101e95b9aff925c920e0021dda5cd6835; the remaining AI-3 changes are 5aeaf3a. AI-4 Core-only commit is b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75; remaining AI-4 changes were committed as 9073bc0. All commits had owner approval. The owner authorized AI-5 implementation and an AI-6 options review; the owner subsequently approved committing AI-5, AI-5.1, and SAFETY-TIE-1. Further Core scope changes, commits, pushes, deployment, and optimization implementation require separate approval.
 
 | Task                                   | Scope / dependency                                                                                                                                                                   | Acceptance and verification                                                                                                                                                                             |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -339,7 +424,9 @@ Phase 2 completion requires a usable browser opponent, public-only policies, rep
 - **AI-0:** Complete; contract, seed schedule, revision semantics, file scope, and Core pin are recorded above.
 - **AI-2:** Complete-case scoring, paired Hoeffding intervals, seed schedule, source manifest, and failure categories are defined above. A small Random baseline verifies the harness; broader sample sizes, held-out sets, and strength claims remain experiment-specific.
 - **AI-3:** Complete. Shared movement boundary, fixed initial feature/fallback configuration, approved Core pin, regression checks, and paired evaluation are recorded above.
-- **AI-4:** Complete. Approved Core-only commit/pin, all regressions, paired comparisons/repeats, exact replay/audit, and static-policy limitations are recorded above. Remaining EV/CLI/documentation changes are uncommitted; further commits or AI-5 remain separately authorized work.
-- **AI-5:** Worker cancellation, timeouts, failure recovery, human-seat UX, and evidence-based difficulty settings.
+- **AI-4:** Complete and committed. Approved Core pin, comparisons/repeats, exact replay/audit, and static-policy limitations are recorded above.
+- **AI-5:** Implemented, automatically verified, and committed with owner approval. Physical-device/full-game responsiveness measurements and evidence-based difficulty labels remain open. No public deployment is claimed.
+- **AI-6:** Options review delivered. Select the next experiment and compute/sample budget before changing strategy behavior; preserve frozen EV and all public-information/reproducibility constraints.
+- **AI-5.1:** Pacing/diagnostics authorized and implemented; approved SAFETY-TIE-1 implemented as an opt-in variant; chase definitions and other policy experiments still require approval. Existing AI-5 work and historical benchmarks are preserved.
 
-Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Authorization covers AI-4 policy work using existing approved boundaries; additional shared Core changes, new dependencies, commits, pushes, deployment, and AI-5 require separate approval.
+Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Current authorization covers AI-5, the AI-6 options review, and the subsequently approved SAFETY-TIE-1 experiment; additional shared Core changes, new dependencies, commits, pushes, deployment, and other optimization implementation require separate approval.
