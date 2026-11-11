@@ -14,6 +14,7 @@ const SOURCE_ROOTS = [
   'packages/ai-agents',
   'scripts/ai-eval',
   'apps/web/src/game/deck.ts',
+  'apps/web/src/game/agent-input.ts',
   'apps/web/src/game/reconstruct.ts',
   'docs/game-rules.md',
   'package.json',

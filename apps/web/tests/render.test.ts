@@ -14,10 +14,12 @@ function initial() {
 }
 
 describe('player-facing render boundary', () => {
-  it('offers the local two-player entry without deferred controls', () => {
+  it('offers local two-player and AI entry without in-game controls or private data', () => {
     const html = renderToStaticMarkup(createElement(App));
     expect(html).toContain('本機雙人');
-    expect(html).not.toMatch(/悔棋|覆盤|重新開始|登入|AI/);
+    expect(html).toContain('開始人機對弈');
+    expect(html).toContain('期望值');
+    expect(html).not.toMatch(/覆盤|重新開始|登入|initialDeck|positionCounts|RED-GENERAL|BLACK-/);
   });
 
   it('renders exactly 32 generic, keyboard-activatable hidden cells with coordinate labels', () => {
