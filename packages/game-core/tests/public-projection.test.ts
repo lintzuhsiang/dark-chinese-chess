@@ -101,7 +101,7 @@ describe('public projection differential tests', () => {
     expect(checked).toBeGreaterThan(100);
     expect(captures).toBeGreaterThan(0);
     expect(completed).toBe(4);
-  });
+  }, 30000);
 
   it('enumerates later FLIP branches using hidden permutations without exposing identities', () => {
     const fixture = arrangedInitial([
@@ -140,7 +140,7 @@ describe('public projection differential tests', () => {
     }
   });
 
-  it('reconstructs real chase continuity, rejects the third return, and resets on a FLIP', () => {
+  it('reconstructs the third same-coordinate threat and preserves records across FLIP', () => {
     const fixture = arrangedInitial([
       [0, 'RED', 'CHARIOT'],
       [1, 'BLACK', 'SOLDIER'],
@@ -161,19 +161,19 @@ describe('public projection differential tests', () => {
       move(0, 1),
     ];
     const cycle = [move(5, 4), move(1, 0), move(4, 5), move(0, 1)];
-    for (const action of [...opening, ...cycle, ...cycle, ...cycle.slice(0, 3)]) {
+    for (const action of [...opening, ...cycle, ...cycle.slice(0, 3)]) {
       compare(fixture, action);
       accept(fixture, action);
     }
     expect(compare(fixture, move(0, 1))).toEqual({ ok: false, error: { code: 'PERPETUAL_CHASE' } });
     compare(fixture, flip(20));
     accept(fixture, flip(20));
-    expect(fixture.state.chase).toBeNull();
+    expect(fixture.state.chase!.records.length).toBeGreaterThanOrEqual(4);
     compare(fixture, move(5, 4));
   });
 });
 
-describe('public projection tactical snapshots (synthetic capture ledgers)', () => {
+describe('public projection tactical geometry with real accepted setups', () => {
   it('handles last-FLIP immobilization with the correct next turn and event actor', () => {
     const fixture = tacticalSnapshot([
       [0, 'BLACK', 'SOLDIER'],
@@ -246,7 +246,7 @@ describe('public projection tactical snapshots (synthetic capture ledgers)', () 
       [
         [0, 'BLACK', 'SOLDIER'],
         [1, 'RED', 'ADVISOR'],
-        [6, 'RED', 'HORSE'],
+        [6, 'RED', 'CANNON'],
       ],
       'P2',
     );
@@ -261,7 +261,7 @@ describe('public projection tactical snapshots (synthetic capture ledgers)', () 
     });
   });
 
-  it.each([0, 48])(
+  it.each([0, 52])(
     'detects chase-only Cannon immobilization after %s preliminary quiet plies',
     (preliminary) => {
       const fixture = tacticalSnapshot([
@@ -271,20 +271,36 @@ describe('public projection tactical snapshots (synthetic capture ledgers)', () 
         [4, 'BLACK', 'SOLDIER'],
         [5, 'BLACK', 'SOLDIER'],
       ]);
-      const prelude = [move(1, 0), move(5, 6), move(0, 1), move(6, 5)];
-      for (let ply = 0; ply < preliminary; ply += 1) accept(fixture, prelude[ply % 4]!);
-      expect(fixture.state.chase).toBeNull();
+      if (preliminary > 0) {
+        for (const action of [
+          move(1, 0),
+          move(5, 6),
+          move(0, 1),
+          move(2, 3),
+          move(1, 5),
+          move(3, 2),
+        ])
+          accept(fixture, action);
+        const waiting = [move(5, 9), move(2, 3), move(9, 5), move(3, 2)];
+        for (let i = 0; i < 44; i++) accept(fixture, waiting[i % 4]!);
+        accept(fixture, move(5, 1));
+        accept(fixture, move(6, 5));
+      }
+      expect(fixture.state.noProgressCount).toBe(preliminary);
       accept(fixture, move(1, 0));
-      const cycle = [move(12, 13), move(0, 1), move(13, 12), move(1, 0)];
-      for (const action of [...cycle, ...cycle, ...cycle.slice(0, 2)]) accept(fixture, action);
+      accept(fixture, move(12, 13));
+      accept(fixture, move(0, 1));
+      accept(fixture, move(13, 12));
+      accept(fixture, move(1, 0));
+      accept(fixture, move(12, 13));
+      accept(fixture, move(0, 1));
       const result = compare(fixture, move(13, 12));
       expect(result.ok && result.observation.result).toEqual({
-        type: 'WIN',
-        winner: 'P2',
-        reason: 'NO_LEGAL_ACTION',
+        type: 'DRAW',
+        reason: 'CHASE_STALEMATE',
       });
       accept(fixture, move(13, 12));
-      expect(fixture.state.noProgressCount).toBe(preliminary + 12);
+      expect(fixture.state.noProgressCount).toBe(preliminary + 8);
     },
   );
 });

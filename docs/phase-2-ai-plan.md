@@ -1,7 +1,7 @@
 # Phase 2 — AI Opponent Plan
 
-**Version:** 0.11 — AI-5.1 approved SAFETY-TIE-1 experiment, 2026-11-11  
-**Status:** AI-0–AI-4 committed; AI-5 browser work, AI-5.1, and SAFETY-TIE-1 committed with owner approval. AI-5.1 diagnostics and pacing implemented; approved SAFETY-TIE-1 implemented; chase amendments and other policy experiments await approval.  
+**Version:** 0.13 — Approved AI-6A implementation and controlled evaluation, 2026-11-11  
+**Status:** AI-0–AI-5, AI-5.1 and SAFETY-TIE-1 committed with owner approval. AI-6A implemented and verified as an opt-in selective baseline; uncommitted. AI-6B/6C features and chase amendments remain deferred.  
 **Authority:** This plan supersedes the earlier [phase-2-plan.md](phase-2-plan.md) draft.
 
 ## 1. Approved Architecture Decisions
@@ -336,6 +336,32 @@ The recorded sacrifice changes 10→14 to 10→9 without changing any scores. No
 weight, FLIP model, or chase changes; no large benchmark or strength claim. Other
 research experiments remain unapproved.
 
+### AI-6A/6B/6C requested implementation and current gate
+
+The owner subsequently supplied the AI-6A six-ply tactical-search brief and
+AI-6B progress/FLIP and AI-6C strategic-feature briefs. Implement in that dependency
+order, freezing and verifying each baseline before the next comparison. No AI-6A
+search policy exists at starting revision `76fed95`; AI-6B/6C are not yet runnable.
+The latest briefs supersede the earlier options-review-only scope, subject to their
+explicit approval gates and unchanged no-commit/push/deployment restriction.
+
+The owner approved the [AI-6A selective design](ai-6a-search-proposal.md), with
+additional tactical-ordering and root-coverage safeguards. Implementation and verification are
+complete; the [AI-6A report](ai-6a-evaluation.md) records all749 tests,56 browser
+checks and a16-pair held-out comparison:22/10/0 W/D/L, mean0.84375, paired95%
+interval[0.5042246211,1], no errors/illegal actions/truncations and32 exact replays.
+Only15.8% of decisions completed horizon6;51.3% completed one/two plies. Max depth6, projection budget8,192, widths8/4, all positive FLIP
+outcomes, terminal exceptions, best-EV/best-FLIP root reserves and completed-iteration
+fallback are explicit. Existing Core contracts suffice and rules/pin are unchanged.
+Original EV remains frozen/default; `tactical-6a` is a separate selectable strategy.
+Diagnostics report actual depth, budget exhaustion and root/interior omissions.
+
+Latest authorization excludes AI-6B/6C feature implementation in this experiment;
+progress, relative-position, blocker and Cannon features remain deferred. Historical
+111 EV/Heuristic draws are not claimed as measurements of this search baseline.
+No commit, push or deployment is authorized. The initial read-only opening probe
+and exact search proposal are retained as the approval/evidence record.
+
 ## 5. Evaluation Harness and Experiments
 
 - Reuse the AI-1 match runner; call Core directly without React. Retain one canonical accepted timeline and derive public history from successful transitions. Replay must reproduce states, events, and GameResult.
@@ -426,7 +452,7 @@ Phase 2 completion requires a usable browser opponent, public-only policies, rep
 - **AI-3:** Complete. Shared movement boundary, fixed initial feature/fallback configuration, approved Core pin, regression checks, and paired evaluation are recorded above.
 - **AI-4:** Complete and committed. Approved Core pin, comparisons/repeats, exact replay/audit, and static-policy limitations are recorded above.
 - **AI-5:** Implemented, automatically verified, and committed with owner approval. Physical-device/full-game responsiveness measurements and evidence-based difficulty labels remain open. No public deployment is claimed.
-- **AI-6:** Options review delivered. Select the next experiment and compute/sample budget before changing strategy behavior; preserve frozen EV and all public-information/reproducibility constraints.
+- **AI-6A:** Approved selective tactical search implemented and verified, uncommitted. Fixed controls, source archive, coverage, latency, limits and evidence are in the AI-6A report. Keep EV as the browser default; physical-phone evidence and broader strength measurement remain open. AI-6B/6C feature implementation is deferred under the latest experiment scope.
 - **AI-5.1:** Pacing/diagnostics authorized and implemented; approved SAFETY-TIE-1 implemented as an opt-in variant; chase definitions and other policy experiments still require approval. Existing AI-5 work and historical benchmarks are preserved.
 
-Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Current authorization covers AI-5, the AI-6 options review, and the subsequently approved SAFETY-TIE-1 experiment; additional shared Core changes, new dependencies, commits, pushes, deployment, and other optimization implementation require separate approval.
+Revisit backend or advanced search only when measured limitations justify a separately approved proposal. Current authorization covers AI-5, the AI-6 options review, SAFETY-TIE-1, and the subsequently approved AI-6A selective-search experiment; additional shared Core changes, new dependencies, commits, pushes, deployment, and other optimization implementation require separate approval.

@@ -12,7 +12,9 @@ seat and AI strategy, then **開始人機對弈**. Expected Value is the default
 and Random remain available under their algorithm names, without difficulty claims.
 The separately approved SAFETY-TIE-1 experiment is selectable as **期望值＋安全決勝**;
 it changes only all-MOVE exact top ties with an immediate losing capture reply and
-a safe tied alternative. Legacy Expected Value remains the default. See the
+a safe tied alternative. Legacy Expected Value remains the default. AI-6A subsequently adds the opt-in
+**戰術搜尋（上限6手）** strategy using the same Worker protocol; see its
+[measured coverage and limitations](ai-6a-evaluation.md). See the
 [policy boundary and diagnostics](../packages/ai-agents/README.md#safety-tie-1-experiment).
 
 - P1 always opens. The first FLIP assigns P1 its revealed color, including when

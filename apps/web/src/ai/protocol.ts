@@ -2,6 +2,7 @@ import type { GameAction, PlayerId } from '@dark-chess/game-core';
 import type { AgentInput } from '../../../../packages/ai-agents/src/types';
 
 export const AGENT_LABELS = {
+  'tactical-6a': '戰術搜尋（上限6手）',
   'expected-value': '期望值',
   'safety-tie-1': '期望值＋安全決勝',
   heuristic: '啟發式',

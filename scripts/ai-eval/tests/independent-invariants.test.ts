@@ -118,7 +118,7 @@ describe('independent match integrity and information boundary', () => {
   it.each([
     ['after a capture', opening.slice(0, 5)],
     ['during a chase', opening],
-    ['before the prohibited third return', [...opening, ...cycle, ...cycle, ...cycle.slice(0, -1)]],
+    ['before the prohibited third return', [...opening, ...cycle.slice(0, 3)]],
   ] as const)('is hidden-permutation independent %s', async (_name, actions) => {
     const entries = actions.map((action, index) => ({
       playerId: index % 2 === 0 ? ('P1' as const) : ('P2' as const),

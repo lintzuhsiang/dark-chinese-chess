@@ -19,7 +19,7 @@ import {
   safetyTieAgent,
   type AgentInput,
 } from '../src/index';
-import { replay, sacrifice, stall } from './ai51-fixtures';
+import { rebasedLegacy, sacrifice, stall } from './ai51-fixtures';
 
 const move = (from: number, to: number): Extract<GameAction, { type: 'MOVE' }> => ({
   type: 'MOVE',
@@ -65,7 +65,7 @@ function verifyWinningWitness(request: AgentInput, action: GameAction, reply: Ga
 
 describe('SAFETY-TIE-1 independent policy QA', () => {
   it('filters the real fatal tie while preserving every baseline candidate score and outcome', async () => {
-    const request = deepFreeze(input(replay(sacrifice)));
+    const request = deepFreeze(input(rebasedLegacy(sacrifice)));
     const options = { seed: sacrifice.seed };
     const baseline = explainExpectedValueDecision(request, options);
     const decision = explainSafetyTieDecision(request, options);
@@ -93,8 +93,7 @@ describe('SAFETY-TIE-1 independent policy QA', () => {
   ] as const)(
     'preserves fixed perspective for evaluating %s assigned %s',
     (perspective: PlayerId, color: PieceColor) => {
-      // Synthetic capture ledger for the same tactical shape; the real accepted
-      // benchmark prefix is independently covered above.
+      // Same tactical shape, compiled into a real accepted v3 public prefix.
       const enemy = color === 'RED' ? 'BLACK' : 'RED';
       const fixture = tacticalSnapshot(
         [
@@ -109,6 +108,7 @@ describe('SAFETY-TIE-1 independent policy QA', () => {
           [31, enemy, 'SOLDIER'],
         ],
         perspective,
+        perspective === 'P1' ? { P1: color, P2: enemy } : { P1: enemy, P2: color },
       );
       fixture.state = {
         ...fixture.state,
@@ -180,7 +180,7 @@ describe('SAFETY-TIE-1 independent policy QA', () => {
   });
 
   it('skips the guard if any highest-scoring candidate is FLIP', () => {
-    const request = input(replay(sacrifice));
+    const request = input(rebasedLegacy(sacrifice));
     const options = { seed: sacrifice.seed };
     const baseline = explainExpectedValueDecision(request, options, zero);
     const result = explainSafetyTieDecision(request, options, zero);
@@ -192,7 +192,7 @@ describe('SAFETY-TIE-1 independent policy QA', () => {
   });
 
   it('does not override a uniquely highest action even when its immediate reply wins', () => {
-    const request = input(replay(sacrifice), [move(10, 6), move(10, 14)]);
+    const request = input(rebasedLegacy(sacrifice), [move(10, 6), move(10, 14)]);
     const result = explainSafetyTieDecision(request, { seed: 0 });
     expect(result.actionEvaluations[1]!.expectedScore).toBeGreaterThan(
       result.actionEvaluations[0]!.expectedScore,
@@ -252,7 +252,7 @@ describe('SAFETY-TIE-1 independent policy QA', () => {
   });
 
   it('is deterministic, immutable and independent of hidden identities and internal IDs', async () => {
-    const fixture = replay(stall);
+    const fixture = rebasedLegacy(stall);
     const hidden = fixture.state.board.filter((square) => square && !square.revealed).reverse();
     let next = 0;
     const variant: ProjectionFixture = {

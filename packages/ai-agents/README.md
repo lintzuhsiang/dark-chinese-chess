@@ -165,3 +165,35 @@ node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
 Interpret strength only from recorded benchmarks and their uncertainty. Public
 outcome/chase projection belongs to Core; no separate AI rule engine, search,
 broad position/geometry features, UI, Worker, or backend is introduced.
+
+## AI-6A selective tactical search
+
+`createTacticalAgent({ search?, evaluation? })` captures immutable limits/evaluator
+configuration; `tacticalAgent` uses defaults. `explainTacticalDecision(input,
+{ seed }, configuration?)` returns the selected action, unchanged full-root EV
+baseline, every root's coverage/score, completed iterations, public tree rows and
+budget/branching diagnostics. The callable GameAgent contract is unchanged.
+
+Default limits: maximum6 action plies,8,192 Core projection attempts, root width8,
+interior width4. Tactical ordering prioritizes actor wins, recaptures, defense,
+captures and threats using existing public information. Best-EV and best-FLIP root
+reserves protect alternatives; every terminal action is retained even beyond width.
+These are ordering/coverage choices, not evaluation bonuses or weight changes.
+
+All positive public reveal outcomes are evaluated for each retained FLIP. The
+opponent minimizes the original player's value among retained choices. A completed
+common-horizon iteration replaces the previous choice; budget interruption never
+publishes partial chance averages or a partial root iteration. If depth2 cannot
+complete, the original EV callable's exact choice is returned. Its preliminary
+projections are counted too. Alpha-beta never averages cutoff bounds at chance nodes.
+
+Only public inputs enter `searchPublicPosition`; the optional bounded/pure leaf
+callable permits later evaluation research without a general search framework.
+Terminal GameResult always overrides the callable. No hidden identities, private
+states, deck seeds, MCTS, progress or geometry feature is introduced.
+
+Read completed depth and branch coverage, not just the maximum6 setting. Search
+is selective and can omit important replies; it does not prove a forced win
+against omitted actions. The opening can remain one-ply EV. Browser/CLI identity:
+`tactical-6a`. Original EV remains the browser default and frozen control. See
+[AI-6A results and limitations](../../docs/ai-6a-evaluation.md).

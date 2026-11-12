@@ -152,6 +152,7 @@ describe('one-step Expected Value Agent', () => {
           [31, 'RED', 'HORSE', false],
         ],
         perspective,
+        perspective === 'P1' ? { P1: 'RED', P2: 'BLACK' } : { P1: 'BLACK', P2: 'RED' },
       );
       fixture.state = {
         ...fixture.state,

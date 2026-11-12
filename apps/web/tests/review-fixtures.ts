@@ -39,7 +39,7 @@ export function finishedBranchGame() {
 
 export function finishedChaseGame() {
   const deck = pairDeck();
-  const actions: GameAction[] = [...opening, ...cycle, ...cycle, ...cycle.slice(0, -1), flip(31)];
+  const actions: GameAction[] = [...opening, ...cycle.slice(0, 3), flip(31)];
   let state = recordedGame(deck, actions).final.session!.currentState;
   // Deterministic test-only continuation; it adds no game controller or UI hints.
   for (let step = 0; state.status === 'ACTIVE' && step < 1000; step += 1) {

@@ -28,16 +28,20 @@ export type GameResult =
       readonly winner: PlayerId;
       readonly reason: 'NO_PIECES' | 'NO_LEGAL_ACTION';
     }
-  | { readonly type: 'DRAW'; readonly reason: 'NO_PROGRESS' };
+  | { readonly type: 'DRAW'; readonly reason: 'NO_PROGRESS' | 'CHASE_STALEMATE' };
 
-// Authoritative rule state only; never included in PlayerObservation or events.
+// Authoritative v4 history-derived rule state; never exposed in observations/events.
+export interface ChaseRecord {
+  readonly attacker: string;
+  readonly target: string;
+  readonly attackerPosition: number;
+  readonly targetPosition: number;
+  readonly ply: number;
+}
+
 export interface ChaseState {
-  readonly attackerPlayer: PlayerId;
-  readonly attackerId: string;
-  readonly targetId: string;
-  readonly phase: 'ESCAPE' | 'RENEW';
-  // Qualified threat-position appearances within this continuous chase only.
-  readonly positionCounts: Readonly<Record<string, number>>;
+  // Qualifying physical pair/coordinate appearances in the last 20 accepted plies.
+  readonly records: readonly ChaseRecord[];
 }
 
 export interface GameState {

@@ -26,6 +26,20 @@ export {
   safetyTieAgent,
   explainSafetyTieDecision,
 } from './expected-value-agent';
+export { createTacticalAgent, explainTacticalDecision, tacticalAgent } from './tactical-agent';
+export type { TacticalAgentConfiguration } from './tactical-agent';
+export {
+  DEFAULT_SEARCH_LIMITS,
+  resolveSearchLimits,
+  searchPublicPosition,
+} from './tactical-search';
+export type {
+  SearchLimits,
+  TacticalDecision,
+  TacticalTag,
+  PublicLeafEvaluator,
+  SearchNodeReport,
+} from './tactical-search';
 export type {
   ExpectedValueActionEvaluation,
   ExpectedValueDecision,

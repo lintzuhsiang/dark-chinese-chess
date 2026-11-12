@@ -86,10 +86,10 @@ describe('history and session controls', () => {
   it('preserves selection on failed replacement and clears all game/UI data after a valid restart', () => {
     let ui: BoardUiState = {
       ...initialBoardUi,
-      local: recordedGame(pairDeck(), [...opening, ...cycle]).final,
+      local: recordedGame(pairDeck(), [...opening, ...cycle.slice(0, 2)]).final,
     };
-    ui = click(click(ui, 4), 32); // P2 selects its Horse, then submits an invalid destination.
-    expect(ui.selectedSquare).toBe(4);
+    ui = click(click(ui, 5), 32); // P2 selects its Horse, then submits an invalid destination.
+    expect(ui.selectedSquare).toBe(5);
     const before = freeze(ui);
     const unconfirmed = boardUiReducer(before, {
       type: 'RESTART',
@@ -97,11 +97,11 @@ describe('history and session controls', () => {
       confirmed: false,
     });
     expect(unconfirmed.local.session).toBe(before.local.session);
-    expect(unconfirmed.selectedSquare).toBe(4);
+    expect(unconfirmed.selectedSquare).toBe(5);
     const invalid = boardUiReducer(before, { type: 'RESTART', deck: [], confirmed: true });
     expect(invalid.local.error?.code).toBe('INVALID_DECK');
     expect(invalid.local.session).toBe(before.local.session);
-    expect(invalid.selectedSquare).toBe(4);
+    expect(invalid.selectedSquare).toBe(5);
     ui = boardUiReducer(before, { type: 'RESTART', deck: pairDeck(), confirmed: true });
     expect(ui.selectedSquare).toBeNull();
     expect(ui.local.error).toBeNull();

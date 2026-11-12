@@ -79,6 +79,7 @@ describe('player-facing render boundary', () => {
     [{ type: 'WIN', winner: 'P1', reason: 'NO_PIECES' }, 'P2', '玩家一獲勝：對手已無棋子。'],
     [{ type: 'WIN', winner: 'P2', reason: 'NO_LEGAL_ACTION' }, 'P1', '玩家二獲勝：對手無法行動。'],
     [{ type: 'DRAW', reason: 'NO_PROGRESS' }, 'P2', '和棋：連續 60 手沒有翻棋或吃子。'],
+    [{ type: 'DRAW', reason: 'CHASE_STALEMATE' }, 'P1', '和棋：所有可走步皆因長捉而受限。'],
   ] as const)(
     'uses the stored result rather than terminal currentPlayer: %j',
     (result, currentPlayer, expected) => {

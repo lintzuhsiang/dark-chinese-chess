@@ -24,10 +24,15 @@ run in a browser Worker; a paused AI turn offers explicit retry or restart. AI-m
 Undo is disabled, while **本機雙人** retains Undo and completed-game Review.
 Use **選單** to change modes or strategies. See the
 [AI-5 implementation and verification](docs/ai-5-browser-integration.md).
+AI-6A adds the opt-in **戰術搜尋（上限6手）** policy. It uses selective public
+expectiminimax with an 8,192-projection budget; actual completed depth varies and
+may fall back to one-ply EV. Original EV remains the default. See the
+[AI-6A evaluation and limitations](docs/ai-6a-evaluation.md).
+
 AI-5.1 now gives your move a visible, variable dwell before presenting the AI reply.
 Its [gameplay investigation and proposed rule changes](docs/ai-5-1-gameplay-investigation.md)
-are available for review. The approved SAFETY-TIE-1 experiment is selectable; proposed
-chase-rule changes remain unimplemented.
+are available for review. The approved SAFETY-TIE-1 experiment is selectable.
+Chase v4 is specified in [chase-v4-spec.md](docs/chase-v4-spec.md); the older Core pin remains unchanged.
 
 ## Verification
 
@@ -64,8 +69,8 @@ It serves a production preview on port 5186 and writes ignored `performance-resu
 - Click a revealed piece of the current player's color to select it. Click it again to deselect, or another friendly revealed piece to switch selection. Selection uses a static border and consumes no turn.
 - With a piece selected, click an empty square or revealed enemy to attempt a move/capture. Game Core validates adjacency, ranks, and Cannon screens. Success clears selection and advances the turn; rejection preserves selection, board, timeline, and turn.
 - Tapping a hidden piece flips it immediately, even while another piece is selected. A successful flip clears the selection and advances the turn; no separate deselection is needed. No legal-move indicators or strategy overlays are shown.
-- Accepted actions evaluate elimination, chase-aware immobilization, then a draw at 60 quiet plies. Flips/captures reset the quiet counter. Finished cells are disabled and the result identifies the winner independently of the next-player field.
-- Chase enforcement follows the single-pair house rule in `docs/game-rules.md`: two qualifying logical-position returns are allowed; the third renewal is rejected. If every otherwise legal action is chase-prohibited, the previous accepted action ends the game with NO_LEGAL_ACTION for the next player, under the owner-approved 2026-11-10 amendment. Rejected attempts still change nothing.
+- Accepted actions evaluate elimination, ordinary immobilization, chase-only stalemate, then a draw at 60 quiet plies. Flips/captures reset the quiet counter. Finished cells are disabled and the result identifies the winner independently of the next-player field.
+- Chase v4 counts each physical attacker/target and both post-move coordinates in the last 20 plies, including the candidate. The third qualifying appearance is prohibited; forks count each target independently. Chase-only immobilization draws with `CHASE_STALEMATE`; rejected attempts change nothing. See [the current specification](docs/chase-v4-spec.md).
 - In local two-player mode, 「悔棋」 removes the most recent accepted action while active and reconstructs the exact previous state, including counters/chase tracking. Repeated undo reaches the original hidden deck; the button is disabled at zero actions and after completion. AI mode disables Undo. There is no redo.
 - 「棋譜」 opens read-only numbered actions, coordinates, and captured pieces derived from the current accepted timeline. Undo removes the corresponding entry/reveal/capture from this projection. Escape or 「返回棋盤」 closes it and restores focus.
 - 「重新開始」 asks for confirmation during active play, with Cancel initially focused. Cancel preserves the game/selection; confirmation validates a fresh shuffled deck before replacing the session. Completed-game restart is immediate. History, counters, colors, selection, errors, and chase tracking reset.

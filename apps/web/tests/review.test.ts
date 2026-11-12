@@ -54,8 +54,10 @@ describe('Progressive Review projection', () => {
 
   it('exercises actual chase tracking before a completed game rather than only null trackers', () => {
     expect(chase.states.some((local) => local.session!.currentState.chase !== null)).toBe(true);
-    expect(chase.states[18]!.session!.currentState.chase?.phase).toBe('RENEW');
-    expect(chase.states[19]!.session!.currentState.chase).toBeNull();
+    expect(chase.states[10]!.session!.currentState.chase!.records).toHaveLength(2);
+    expect(chase.states[11]!.session!.currentState.chase!.records).toEqual(
+      chase.states[10]!.session!.currentState.chase!.records,
+    );
   });
 
   it('keeps unflipped identities hidden even at the final Review cursor', () => {

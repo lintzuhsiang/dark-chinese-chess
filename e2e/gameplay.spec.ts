@@ -60,31 +60,30 @@ test('selection, rejected capture, direct hidden flip, capture/move undo, and re
   expect(await page.locator('main').innerHTML()).not.toMatch(/RED-|BLACK-|data-id|initialDeck/);
 });
 
-test('chase rejection recurs on a later pattern and survives undo of a reset', async ({ page }) => {
+test('v4 same-coordinate rejection survives flips and undo while another route remains legal', async ({
+  page,
+}) => {
   await startGame(page, pairDeck('CHARIOT'));
-  await playActions(page, [...opening, ...cycle, ...cycle, ...cycle.slice(0, -1)]);
+  await playActions(page, [...opening, ...cycle, ...cycle.slice(0, 3)]);
   const cells = cellsFor(page);
   await cells.nth(1).click();
   const before = await page.locator('.board').innerHTML();
   await cells.nth(0).click();
   await expect(page.getByRole('status')).toContainText('長捉，請改走其他步。');
   await expect(page.locator('.board')).toHaveJSProperty('innerHTML', before);
-  await expect(page.getByRole('button', { name: '棋譜 · 18', exact: true })).toBeVisible();
-  await cells.nth(4).click(); // A different invalid attempt must not clear rule tracking.
-  await expect(page.getByRole('status')).toContainText('這一步無法移動或吃子。');
+  await expect(page.getByRole('button', { name: '棋譜 · 14', exact: true })).toBeVisible();
+  await cells.nth(31).click();
+  await expect(page.getByRole('button', { name: '棋譜 · 15', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '悔棋', exact: true }).click();
+  await cells.nth(1).click();
   await cells.nth(0).click();
   await expect(page.getByRole('status')).toContainText('長捉，請改走其他步。');
-  await cells.nth(5).click(); // A permitted renewal on another route.
-  const later = [move(4, 0), move(5, 1), move(0, 4), move(1, 5)];
-  await playActions(page, [...later, ...later, ...later.slice(0, -1)]);
+  await playActions(page, [flip(31), flip(30)]);
   await cells.nth(1).click();
+  await cells.nth(0).click();
+  await expect(page.getByRole('status')).toContainText('長捉，請改走其他步。');
+  await expect(page.getByRole('button', { name: '棋譜 · 16', exact: true })).toBeVisible();
   await cells.nth(5).click();
-  await expect(page.getByRole('status')).toContainText('長捉，請改走其他步。');
-  await expect(page.getByRole('button', { name: '棋譜 · 30', exact: true })).toBeVisible();
-  await cells.nth(31).click();
-  await expect(page.getByRole('button', { name: '棋譜 · 31', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: '悔棋', exact: true }).click();
-  await playActions(page, [move(1, 5)]);
-  await expect(page.getByRole('status')).toContainText('長捉，請改走其他步。');
-  await expect(page.getByRole('button', { name: '棋譜 · 30', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '棋譜 · 17', exact: true })).toBeVisible();
+  await expect(page.getByRole('status')).not.toContainText('長捉');
 });

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { initialState } from '../../../packages/game-core/tests/fixtures';
-import { replay, sacrifice } from '../../../packages/ai-agents/tests/ai51-fixtures';
+import { rebasedLegacy, sacrifice } from '../../../packages/ai-agents/tests/ai51-fixtures';
 import { createAgentInput } from '../src/game/agent-input';
 import { executeAgentDecision } from '../src/ai/worker-decision';
 import { readWorkerResponse, type WorkerDecisionRequest } from '../src/ai/protocol';
@@ -42,7 +42,7 @@ function workerFixture() {
 }
 
 describe('browser decision seeds and Worker contract', () => {
-  it.each(['random', 'heuristic', 'expected-value', 'safety-tie-1'] as const)(
+  it.each(['random', 'heuristic', 'expected-value', 'safety-tie-1', 'tactical-6a'] as const)(
     'runs the real %s policy from public input in the Worker handler',
     async (agent) => {
       const request: WorkerDecisionRequest = {
@@ -63,7 +63,7 @@ describe('browser decision seeds and Worker contract', () => {
   );
 
   it('routes the real sacrifice input to the new variant while preserving baseline EV', async () => {
-    const fixture = replay(sacrifice);
+    const fixture = rebasedLegacy(sacrifice);
     const publicInput = createAgentInput(fixture.state, fixture.history, 'P1');
     const request: WorkerDecisionRequest = {
       type: 'CHOOSE_ACTION',
@@ -73,8 +73,14 @@ describe('browser decision seeds and Worker contract', () => {
       seed: sacrifice.seed,
     };
     const safe = await executeAgentDecision(request);
+    const tactical = await executeAgentDecision({ ...request, agent: 'tactical-6a' });
     const baseline = await executeAgentDecision({ ...request, agent: 'expected-value' });
     expect(safe.type === 'ACTION' && safe.action).toEqual({ type: 'MOVE', from: 10, to: 9 });
+    expect(tactical.type === 'ACTION' && tactical.action).toEqual({
+      type: 'MOVE',
+      from: 10,
+      to: 9,
+    });
     expect(baseline.type === 'ACTION' && baseline.action).toEqual({
       type: 'MOVE',
       from: 10,

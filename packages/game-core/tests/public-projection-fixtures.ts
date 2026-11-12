@@ -3,16 +3,20 @@ import {
   type ActionEvent,
   type GameAction,
   type GameState,
+  type Piece,
   type PieceColor,
   type PieceRank,
   type PlayerId,
+  type PlayerColors,
   type Square,
 } from '../src/index';
 import { initialState, makeDeck } from './fixtures';
+import { compilePosition } from './compile-position';
 
 export interface ProjectionFixture {
   state: GameState;
   history: ActionEvent[];
+  readonly initialDeck?: readonly Piece[];
 }
 
 export function accept(fixture: ProjectionFixture, action: GameAction): void {
@@ -40,15 +44,11 @@ export function arrangedInitial(
   };
 }
 
-/**
- * Unit-test tactical snapshot and synthetic capture ledger, not an initial-deck
- * replay fixture. Inventory, turn, and counters match the snapshot. Subsequent
- * actions/suffix are actual Core-accepted events. Real complete prefixes are
- * tested separately via arrangedInitial and deterministic complete games.
- */
+/** Tactical geometry with a real, cooperative, Core-replayed initial-deck setup. */
 export function tacticalSnapshot(
   entries: readonly (readonly [number, PieceColor, PieceRank, boolean?])[],
   currentPlayer: PlayerId = 'P1',
+  playerColors: PlayerColors = { P1: 'RED', P2: 'BLACK' },
 ): ProjectionFixture {
   const captured = makeDeck();
   const board: Square[] = Array.from({ length: 32 }, () => null);
@@ -57,39 +57,5 @@ export function tacticalSnapshot(
     if (index < 0) throw new Error('Unavailable fixture piece.');
     board[position] = { revealed, piece: captured.splice(index, 1)[0]! };
   }
-  const history: ActionEvent[] = captured.map((piece, index) => ({
-    type: 'MOVE',
-    ply: index + 1,
-    playerId: index % 2 === 0 ? 'P1' : 'P2',
-    from: 0,
-    to: 1,
-    piece: { color: piece.color === 'RED' ? 'BLACK' : 'RED', rank: 'CANNON' },
-    captured: { color: piece.color, rank: piece.rank },
-  }));
-  if ((history.length % 2 === 0 ? 'P1' : 'P2') !== currentPlayer) {
-    history.unshift({
-      type: 'FLIP',
-      ply: 1,
-      playerId: 'P1',
-      position: 0,
-      piece: { color: 'RED', rank: 'GENERAL' },
-    });
-    for (let index = 0; index < history.length; index += 1) {
-      history[index] = {
-        ...history[index]!,
-        ply: index + 1,
-        playerId: index % 2 === 0 ? 'P1' : 'P2',
-      };
-    }
-  }
-  return {
-    state: {
-      ...initialState(),
-      board,
-      currentPlayer,
-      playerColors: { P1: 'RED', P2: 'BLACK' },
-      plyCount: history.length,
-    },
-    history,
-  };
+  return compilePosition(board, captured, currentPlayer, playerColors);
 }

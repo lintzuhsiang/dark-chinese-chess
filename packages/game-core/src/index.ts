@@ -13,7 +13,7 @@ import type {
 } from './types';
 import { evaluateOutcome } from './outcomes';
 import { getChaseUpdate } from './chase';
-import { getActionError } from './validation';
+import { getActionError, getPublicOrdinaryMoves } from './validation';
 import { actionMetadata } from './transition';
 import { PIECE_DISTRIBUTION } from './piece-distribution';
 
@@ -21,7 +21,12 @@ export type * from './types';
 export { getPublicOrdinaryMoves } from './validation';
 
 export { PIECE_DISTRIBUTION } from './piece-distribution';
-export { projectPermittedPublicAction } from './public-projection';
+export {
+  projectPermittedPublicAction,
+  createPublicProjectionContext,
+  projectPublicAction,
+} from './public-projection';
+export type { PublicProjectionContext, PublicContextProjectionResult } from './public-projection';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -125,6 +130,14 @@ export function applyAction(
   const outcome = evaluateOutcome(
     result.state,
     () => getLegalActions(result.state, result.state.currentPlayer).length > 0,
+    () => {
+      if (result.state.board.some((square) => square !== null && !square.revealed)) return true;
+      const color = result.state.playerColors[result.state.currentPlayer];
+      return (
+        color !== null &&
+        getPublicOrdinaryMoves(getObservation(result.state).board, color).length > 0
+      );
+    },
   );
   return {
     ...result,

@@ -1,6 +1,8 @@
+import legacyPositions from './ai51-legacy-positions';
 import type { PieceRank } from '../../game-core/src/index';
 import {
   accept,
+  tacticalSnapshot,
   arrangedInitial,
   type ProjectionFixture,
 } from '../../game-core/tests/public-projection-fixtures';
@@ -55,4 +57,20 @@ export function replay(example: {
     );
   }
   return fixture;
+}
+
+// Frozen geometry is rebased through a different, genuinely accepted v3 setup.
+// Historical transcripts remain strict and can be tested for their new rejection.
+export function rebasedLegacy(example: typeof sacrifice | typeof stall): ProjectionFixture {
+  const data = legacyPositions.positions[example === sacrifice ? 'sacrifice' : 'stall']!;
+  return tacticalSnapshot(
+    data.entries as readonly (readonly [
+      number,
+      import('../../game-core/src/types').PieceColor,
+      PieceRank,
+      boolean,
+    ])[],
+    data.currentPlayer as import('../../game-core/src/types').PlayerId,
+    data.playerColors as import('../../game-core/src/types').PlayerColors,
+  );
 }

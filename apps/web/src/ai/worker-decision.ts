@@ -3,11 +3,13 @@ import {
   heuristicAgent,
   randomAgent,
   safetyTieAgent,
+  tacticalAgent,
 } from '../../../../packages/ai-agents/src/index';
 import type { GameAgent } from '../../../../packages/ai-agents/src/types';
 import { readAction, type WorkerDecisionRequest, type WorkerDecisionResponse } from './protocol';
 
 const agents = {
+  'tactical-6a': tacticalAgent,
   'expected-value': expectedValueAgent,
   'safety-tie-1': safetyTieAgent,
   heuristic: heuristicAgent,

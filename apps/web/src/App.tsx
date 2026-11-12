@@ -30,7 +30,10 @@ export function gameStatusText(
     const reason = result.reason === 'NO_PIECES' ? '對手已無棋子。' : '對手無法行動。';
     return `${names[result.winner]}獲勝：${reason}`;
   }
-  if (result?.type === 'DRAW') return '和棋：連續 60 手沒有翻棋或吃子。';
+  if (result?.type === 'DRAW')
+    return result.reason === 'CHASE_STALEMATE'
+      ? '和棋：所有可走步皆因長捉而受限。'
+      : '和棋：連續 60 手沒有翻棋或吃子。';
   return `輪到${names[observation.currentPlayer]}`;
 }
 

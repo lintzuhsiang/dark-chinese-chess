@@ -22,7 +22,7 @@ node --import ./scripts/ai-eval/register.mjs ./scripts/ai-eval/cli.ts \
 ```
 
 The CLI defaults to two labeled instances of RandomAgent. Both --agent-a and
---agent-b accept random, heuristic, expected-value, or safety-tie-1. EV uses exact public Core
+--agent-b accept random, heuristic, expected-value, safety-tie-1, or tactical-6a. EV uses exact public Core
 projection and public-inventory FLIP probabilities with the unchanged default
 Heuristic weights. See the Agent documentation for planned comparison commands;
 The Phase 2 plan records AI-4 strength/latency results and limitations. JSON goes to the
@@ -165,3 +165,12 @@ are not implemented; only bounded policies are supported. A policy that never se
 cannot be forcibly interrupted by this harness. AI-3's public Heuristic policy is
 implemented separately. AI-4 EV policy/Core projection and focused tests are now
 implemented; verification and comparison evidence is recorded in the Phase 2 plan.
+
+## AI-6A selective tactical search
+
+Use `--agent-a tactical-6a --agent-b expected-value` with the existing CLI. The
+source/configuration descriptor records max depth6, widths8/4, budget8,192 and
+ordering/fallback versions; no existing Agent configuration changes. For the fixed
+pilot/held-out runs with replay, coverage and p99 analysis, use
+`tactical-benchmark.ts --phase pilot` or `--phase heldout` through the same Node
+loader. See [experiment protocol and results](../../docs/ai-6a-evaluation.md).

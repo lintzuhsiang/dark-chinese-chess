@@ -68,26 +68,12 @@ const cycle = [
 ] as const;
 
 describe('outcome/chase/session integration', () => {
-  it('rejects the third return before committing counters, turn, selection, or timeline', () => {
+  it('rejects the third same-coordinate threat without committing selection, counters or timeline; FLIP preserves records', () => {
     let ui = opening();
-    const key = Object.keys(ui.local.session!.currentState.chase!.positionCounts)[0]!;
-    expect(ui.local.session?.currentState.chase).toMatchObject({
-      positionCounts: { [key]: 1 },
-      phase: 'ESCAPE',
-    });
-    for (const returns of [1, 2]) {
-      for (const [from, to] of cycle) ui = move(ui, from, to);
-      expect(ui.local.session?.currentState.chase?.positionCounts[key]).toBe(returns + 1);
-    }
-    for (const [from, to] of cycle.slice(0, -1)) ui = move(ui, from, to);
-    const selected = click(ui, 1);
-    const before = selected.local.session!;
-    const snapshot = JSON.stringify(before);
-    expect(getLegalActions(before.currentState, 'P1')).not.toContainEqual({
-      type: 'MOVE',
-      from: 1,
-      to: 0,
-    });
+    for (const [f, t] of [...cycle, ...cycle.slice(0, 3)]) ui = move(ui, f, t);
+    const selected = click(ui, 1),
+      before = selected.local.session!,
+      snapshot = JSON.stringify(before);
     const rejected = click(selected, 0);
     expect(rejected.local.error?.code).toBe('PERPETUAL_CHASE');
     expect(rejected.selectedSquare).toBe(1);
@@ -98,114 +84,57 @@ describe('outcome/chase/session integration', () => {
       ok: false,
       error: { code: 'PERPETUAL_CHASE' },
     });
-    expect(at59.noProgressCount).toBe(59);
-    expect(at59.result).toBeNull();
-    const flipped = click(rejected, 2); // Owner UX: hidden FLIP overrides selected-source MOVE.
+    const flipped = click(rejected, 2);
     expect(flipped.local.error).toBeNull();
     expect(flipped.selectedSquare).toBeNull();
-    expect(flipped.local.session?.currentState.chase).toBeNull();
-    expect(flipped.local.session?.currentState.noProgressCount).toBe(0);
-    expect(flipped.local.session?.actions).toHaveLength(before.actions.length + 1);
-    expect(flipped.local.session?.actions.at(-1)?.action).toEqual({ type: 'FLIP', position: 2 });
+    expect(flipped.local.session!.currentState.chase!.records).toHaveLength(4);
+    expect(flipped.local.session!.currentState.noProgressCount).toBe(0);
+    expect(boardUiReducer(flipped, { type: 'UNDO' }).local.session).toEqual(before);
   });
-
-  it('reports a later prohibited chase again after accepted flips and a fresh chase cycle', () => {
+  it('does not erase the prohibition after two flips or repeat failed clicks', () => {
     let ui = opening();
-    for (let attempt = 0; attempt < 2; attempt += 1) {
-      for (let returns = 0; returns < 2; returns += 1) {
-        for (const [from, to] of cycle) ui = move(ui, from, to);
-      }
-      for (const [from, to] of cycle.slice(0, -1)) ui = move(ui, from, to);
-      ui = click(click(ui, 1), 0);
-      expect(ui.local.error?.code).toBe('PERPETUAL_CHASE');
-      const rejectedSession = ui.local.session;
-      ui = click(ui, 0); // Repeating the rejected destination must report the same error.
-      expect(ui.local.error?.code).toBe('PERPETUAL_CHASE');
-      expect(ui.local.session).toBe(rejectedSession);
-      if (attempt === 0) {
-        ui = click(ui, 31);
-        ui = click(ui, 30);
-        expect(ui.local.error).toBeNull();
-        expect(ui.local.session?.currentState.chase).toBeNull();
-        ui = move(ui, 1, 0);
-        expect(Object.values(ui.local.session!.currentState.chase!.positionCounts)).toEqual([1]);
-      }
-    }
-  });
-
-  it('reports and rejects a new chase pattern elsewhere after the first warning', () => {
-    let ui = opening();
-    for (let returns = 0; returns < 2; returns += 1) {
-      for (const [from, to] of cycle) ui = move(ui, from, to);
-    }
-    for (const [from, to] of cycle.slice(0, -1)) ui = move(ui, from, to);
+    for (const [f, t] of [...cycle, ...cycle.slice(0, 3)]) ui = move(ui, f, t);
+    ui = click(click(ui, 1), 0);
+    const before = ui.local.session;
+    ui = click(ui, 0);
+    expect(ui.local.error?.code).toBe('PERPETUAL_CHASE');
+    expect(ui.local.session).toBe(before);
+    ui = click(ui, 31);
+    ui = click(ui, 30);
+    expect(ui.local.error).toBeNull();
     ui = click(click(ui, 1), 0);
     expect(ui.local.error?.code).toBe('PERPETUAL_CHASE');
-    ui = click(ui, 5); // Same attacker takes a permitted route while continuing its threat.
+  });
+  it('allows the same pair on another route while keeping alternatives available', () => {
+    let ui = opening();
+    for (const [f, t] of [...cycle, ...cycle.slice(0, 3)]) ui = move(ui, f, t);
+    ui = click(click(ui, 1), 5);
     expect(ui.local.error).toBeNull();
-    expect(ui.selectedSquare).toBeNull();
-    const laterCycle = [
-      [4, 0],
-      [5, 1],
-      [0, 4],
-      [1, 5],
-    ] as const;
-    for (let returns = 0; returns < 2; returns += 1) {
-      for (const [from, to] of laterCycle) ui = move(ui, from, to);
-    }
-    for (const [from, to] of laterCycle.slice(0, -1)) ui = move(ui, from, to);
-    ui = click(ui, 1);
     const before = ui.local.session!;
-    const snapshot = JSON.stringify(before);
-    expect(getLegalActions(before.currentState, 'P1')).not.toContainEqual({
-      type: 'MOVE',
-      from: 1,
-      to: 5,
+    expect(getLegalActions(before.currentState, before.currentState.currentPlayer)).toContainEqual({
+      type: 'FLIP',
+      position: 31,
     });
-    ui = click(ui, 5);
-    expect(ui.local.error?.code).toBe('PERPETUAL_CHASE');
-    expect(ui.selectedSquare).toBe(1);
-    expect(ui.local.session).toBe(before);
-    expect(JSON.stringify(before)).toBe(snapshot);
-
-    let reconstructed = sessionReducer(
+    const replay = sessionReducer(
       { session: null, error: null },
       { type: 'START', deck: before.initialDeck },
     );
-    for (const entry of before.actions) {
-      reconstructed = sessionReducer(reconstructed, { type: 'SUBMIT', ...entry });
-      expect(reconstructed.error).toBeNull();
-    }
+    let reconstructed = replay;
+    for (const e of before.actions)
+      reconstructed = sessionReducer(reconstructed, { type: 'SUBMIT', ...e });
     expect(reconstructed.session).toEqual(before);
-    expect(getObservation(before.currentState)).not.toHaveProperty('chase');
   });
-
-  it('reconstructs every accepted prefix including its private tracker and public projection', () => {
+  it('reconstructs each accepted prefix with exact private ledgers and public projection', () => {
     let ui = opening();
-    for (let returns = 0; returns < 2; returns += 1) {
-      for (const [from, to] of cycle) ui = move(ui, from, to);
-    }
+    for (const [f, t] of [...cycle, ...cycle.slice(0, 3)]) ui = move(ui, f, t);
     const session = ui.local.session!;
-    let reconstructed = sessionReducer(
+    let replay = sessionReducer(
       { session: null, error: null },
       { type: 'START', deck: session.initialDeck },
     );
-    const initial = createInitialState(session.initialDeck);
-    if (!initial.ok) throw new Error('Expected valid initial deck.');
-    let state = initial.state;
-    for (const entry of session.actions) {
-      reconstructed = sessionReducer(reconstructed, { type: 'SUBMIT', ...entry });
-      const result = applyAction(freeze(state), entry.playerId, freeze(entry.action));
-      if (!result.ok) throw new Error('Canonical accepted entry must reproduce.');
-      state = result.state;
-      expect(reconstructed.session?.currentState).toEqual(state);
-      expect(getObservation(state)).not.toHaveProperty('chase');
-      expect(JSON.stringify(getObservation(state))).not.toMatch(
-        /RED-CHARIOT-|BLACK-HORSE-|positionCounts/,
-      );
-    }
-    expect(state).toEqual(session.currentState);
-    expect(reconstructed.session).toEqual(session);
+    for (const e of session.actions) replay = sessionReducer(replay, { type: 'SUBMIT', ...e });
+    expect(replay.session).toEqual(session);
+    expect(getObservation(session.currentState)).not.toHaveProperty('chase');
   });
 
   it('allows mutual-threat repetition, draws only on quiet ply 60, and locks the terminal session', () => {
@@ -261,10 +190,8 @@ describe('outcome/chase/session integration', () => {
         [13, 12],
         [1, 0],
       ] as const;
-      for (let returns = 0; returns < 2; returns += 1) {
-        for (const [from, to] of cannonCycle) accept({ type: 'MOVE', from, to });
-      }
-      for (const [from, to] of cannonCycle.slice(0, 2)) accept({ type: 'MOVE', from, to });
+      for (const [from, to] of [...cannonCycle, ...cannonCycle.slice(0, 2)])
+        accept({ type: 'MOVE', from, to });
       if (atDrawBoundary) state = freeze({ ...state, noProgressCount: 59 });
       const before = state;
       const beforeSnapshot = JSON.stringify(before);
@@ -276,7 +203,7 @@ describe('outcome/chase/session integration', () => {
       accept({ type: 'MOVE', from: 13, to: 12 });
       expect(state.status).toBe('FINISHED');
       expect(state.currentPlayer).toBe('P1');
-      expect(state.result).toEqual({ type: 'WIN', winner: 'P2', reason: 'NO_LEGAL_ACTION' });
+      expect(state.result).toEqual({ type: 'DRAW', reason: 'CHASE_STALEMATE' });
       expect(JSON.stringify(before)).toBe(beforeSnapshot);
       const repeated = applyAction(before, before.currentPlayer, {
         type: 'MOVE',

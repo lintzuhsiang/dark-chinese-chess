@@ -142,7 +142,7 @@ test('setup remains readable on a narrow screen with both seats and all strategi
   await page.goto('/');
   await expect(page.getByLabel('你的順序')).toHaveValue('P1');
   await expect(page.getByLabel('AI 策略')).toHaveValue('expected-value');
-  await expect(page.getByLabel('AI 策略').locator('option')).toHaveCount(4);
+  await expect(page.getByLabel('AI 策略').locator('option')).toHaveCount(5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
   for (const label of ['你的順序', 'AI 策略']) {
     const box = await page.getByLabel(label).boundingBox();
@@ -151,7 +151,7 @@ test('setup remains readable on a narrow screen with both seats and all strategi
   await page.screenshot({ path: testInfo.outputPath('setup.png'), fullPage: true });
 });
 
-for (const agent of ['expected-value', 'heuristic', 'random', 'safety-tie-1']) {
+for (const agent of ['expected-value', 'heuristic', 'random', 'safety-tie-1', 'tactical-6a']) {
   test(`real ${agent} Worker responds to human actions with only public inputs`, async ({
     page,
   }, testInfo) => {

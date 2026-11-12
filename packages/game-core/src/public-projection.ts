@@ -1,10 +1,11 @@
 import { getChaseUpdate } from './chase';
 import { evaluateOutcomeFacts } from './outcomes';
 import { PIECE_DISTRIBUTION } from './piece-distribution';
-import type { ReferencedSquare, RulePosition } from './rule-position';
+import type { RulePosition } from './rule-position';
 import { actionMetadata } from './transition';
 import type {
   GameAction,
+  PieceColor,
   PieceRank,
   PublicPiece,
   PublicProjectionInput,
@@ -84,61 +85,77 @@ function publicInventory({ observation, publicHistory }: PublicProjectionInput) 
 }
 
 function reconstructPosition({ observation, publicHistory }: PublicProjectionInput): RulePosition {
-  // FLIPs and captures reset chase and the quiet counter. Only the quiet suffix
-  // needs reconstruction. No initial deck, private IDs, or hidden types are built.
-  let start = publicHistory.length;
-  while (start > 0) {
-    const event = publicHistory[start - 1]!;
-    if (event.type !== 'MOVE' || event.captured !== null) break;
-    start -= 1;
-  }
-  const board: ReferencedSquare[] = observation.board.map((square, index) =>
-    square.kind === 'REVEALED'
-      ? {
-          kind: 'REVEALED',
-          piece: { color: square.piece.color, rank: square.piece.rank },
-          reference: `visible-${index}`,
-        }
-      : { kind: square.kind },
-  );
-  for (let index = publicHistory.length - 1; index >= start; index -= 1) {
-    const event = publicHistory[index]!;
-    if (event.type !== 'MOVE') throw new RangeError('Expected a quiet MOVE suffix.');
-    const target = board[event.to];
-    if (
-      target?.kind !== 'REVEALED' ||
-      board[event.from]?.kind !== 'EMPTY' ||
-      !samePiece(target.piece, event.piece)
-    ) {
-      throw new RangeError('Public board does not match the accepted quiet suffix.');
-    }
-    board[event.from] = target;
-    board[event.to] = { kind: 'EMPTY' };
-  }
+  // Validate every accepted ply; progress actions do not reset the v4 rolling ledger.
   let position: RulePosition = {
-    board,
-    currentPlayer: start % 2 === 0 ? 'P1' : 'P2',
-    playerColors: { ...observation.playerColors },
-    status: observation.status,
-    plyCount: start,
+    board: Array.from({ length: 32 }, () => ({ kind: 'HIDDEN' as const })),
+    currentPlayer: 'P1',
+    playerColors: { P1: null, P2: null },
+    status: 'ACTIVE',
+    plyCount: 0,
     noProgressCount: 0,
     chase: null,
   };
-  for (const event of publicHistory.slice(start)) {
-    if (event.type !== 'MOVE') throw new RangeError('Expected a quiet MOVE suffix.');
-    const action: GameAction = { type: 'MOVE', from: event.from, to: event.to };
-    if (getActionError(position, position.currentPlayer, action) !== null) {
-      throw new RangeError('Public history contains an invalid quiet MOVE.');
+  const revealedInventory = { RED: { ...PIECE_DISTRIBUTION }, BLACK: { ...PIECE_DISTRIBUTION } };
+  const remaining = { RED: 16, BLACK: 16 };
+  for (const event of publicHistory) {
+    if (event.type === 'FLIP' && --revealedInventory[event.piece.color][event.piece.rank] < 0)
+      throw new RangeError('Public reveal inventory exhausted.');
+    const action: GameAction =
+      event.type === 'FLIP'
+        ? { type: 'FLIP', position: event.position }
+        : { type: 'MOVE', from: event.from, to: event.to };
+    if (getActionError(position, event.playerId, action) !== null)
+      throw new RangeError(`Public history ply ${event.ply}: invalid action.`);
+    const next = transition(position, action, event.type === 'FLIP' ? event.piece : undefined);
+    if (next.prohibited)
+      throw new RangeError(`Public history ply ${event.ply}: PERPETUAL_CHASE (v4).`);
+    if (JSON.stringify(next.event) !== JSON.stringify(event)) {
+      // Compare fields independently of caller property ordering.
+      const actual = next.event;
+      if (
+        actual.type !== event.type ||
+        actual.ply !== event.ply ||
+        actual.playerId !== event.playerId ||
+        !samePiece(actual.piece, event.piece) ||
+        (actual.type === 'FLIP' && event.type === 'FLIP' && actual.position !== event.position) ||
+        (actual.type === 'MOVE' &&
+          event.type === 'MOVE' &&
+          (actual.from !== event.from ||
+            actual.to !== event.to ||
+            (actual.captured === null
+              ? event.captured !== null
+              : event.captured === null || !samePiece(actual.captured, event.captured))))
+      )
+        throw new RangeError('Public event metadata does not match replay.');
     }
-    const next = transition(position, action);
-    if (next.prohibited) throw new RangeError('Public history contains a prohibited chase return.');
+    if (next.event.type === 'MOVE' && next.event.captured !== null)
+      remaining[next.event.captured.color] -= 1;
+    const result = outcomeFor(next.position, remaining);
+    if (result !== null) throw new RangeError('Active public history reaches a terminal outcome.');
     position = next.position;
   }
+  const board = position.board.map((square) =>
+    square.kind === 'REVEALED' ? { kind: square.kind, piece: square.piece } : { kind: square.kind },
+  );
+  if (
+    board.some((square, i) => {
+      const other = observation.board[i]!;
+      return (
+        square.kind !== other.kind ||
+        (square.kind === 'REVEALED' &&
+          (other.kind !== 'REVEALED' || !samePiece(square.piece, other.piece)))
+      );
+    }) ||
+    position.currentPlayer !== observation.currentPlayer ||
+    position.playerColors.P1 !== observation.playerColors.P1 ||
+    position.playerColors.P2 !== observation.playerColors.P2
+  )
+    throw new RangeError('Public observation does not match complete history.');
   return position;
 }
 
 function hasPermittedAction(position: RulePosition): boolean {
-  // Any remaining hidden square permits a FLIP; revealing always resets chase.
+  // Any remaining hidden square permits a FLIP, regardless of chase records.
   if (position.board.some((square) => square.kind === 'HIDDEN')) return true;
   const color = position.playerColors[position.currentPlayer];
   return (
@@ -149,22 +166,66 @@ function hasPermittedAction(position: RulePosition): boolean {
   );
 }
 
-/**
- * One public branch of a permitted action. Input must describe the same complete
- * accepted prefix. FLIP requires a positive-inventory public reveal outcome.
- * The authoritative host must still validate any eventual action submission.
- */
-export function projectPermittedPublicAction(
+function outcomeFor(position: RulePosition, remaining: Readonly<Record<'RED' | 'BLACK', number>>) {
+  const color = position.playerColors[position.currentPlayer];
+  return evaluateOutcomeFacts(
+    {
+      currentPlayer: position.currentPlayer,
+      noProgressCount: position.noProgressCount,
+      nextPlayerHasPieces: color === null || remaining[color] > 0,
+    },
+    () => hasPermittedAction(position),
+    () =>
+      position.board.some((s) => s.kind === 'HIDDEN') ||
+      (color !== null && getPublicOrdinaryMoves(position.board, color).length > 0),
+  );
+}
+
+// Opaque, caller-owned public-derived state. No serializable ledger or private identity.
+declare const contextBrand: unique symbol;
+export interface PublicProjectionContext {
+  readonly [contextBrand]: true;
+}
+type Inventory = Readonly<Record<PieceColor, Readonly<Record<PieceRank, number>>>>;
+interface ContextData {
+  readonly position: RulePosition;
+  readonly counts: Inventory;
+  readonly remaining: Readonly<Record<PieceColor, number>>;
+}
+const contexts = new WeakMap<PublicProjectionContext, ContextData>();
+function contextFor(data: ContextData): PublicProjectionContext {
+  const handle = Object.freeze({}) as PublicProjectionContext;
+  contexts.set(handle, data);
+  return handle;
+}
+export type PublicContextProjectionResult =
+  | Extract<PublicProjectionResult, { readonly ok: false }>
+  | (Extract<PublicProjectionResult, { readonly ok: true }> & {
+      readonly nextContext: PublicProjectionContext;
+    });
+
+/** Validate the complete active public prefix once. The context owns its derived copies. */
+export function createPublicProjectionContext(
   input: PublicProjectionInput,
+): PublicProjectionContext {
+  if (input.observation.status !== 'ACTIVE' || input.observation.result !== null)
+    throw new RangeError('Projection context requires an active, nonterminal public prefix.');
+  const { counts, remaining } = publicInventory(input);
+  return contextFor({ position: reconstructPosition(input), counts, remaining });
+}
+
+/** Advance exactly one public branch through the same authoritative rules. */
+export function projectPublicAction(
+  context: PublicProjectionContext,
   action: GameAction,
   reveal?: PublicPiece,
-): PublicProjectionResult {
-  if (input.observation.status === 'FINISHED')
-    return { ok: false, error: { code: 'GAME_FINISHED' } };
-  const { counts, remaining } = publicInventory(input);
-  const position = reconstructPosition(input);
+): PublicContextProjectionResult {
+  const data = contexts.get(context);
+  if (data === undefined) throw new RangeError('Unknown public projection context.');
+  const { position } = data;
   const error = getActionError(position, position.currentPlayer, action);
   if (error !== null) return { ok: false, error };
+  let counts = data.counts;
   if (action.type === 'FLIP') {
     if (
       typeof reveal !== 'object' ||
@@ -172,26 +233,23 @@ export function projectPermittedPublicAction(
       (reveal.color !== 'RED' && reveal.color !== 'BLACK') ||
       !Object.hasOwn(PIECE_DISTRIBUTION, reveal.rank) ||
       counts[reveal.color][reveal.rank] <= 0
-    ) {
+    )
       return { ok: false, error: { code: 'INVALID_FLIP' } };
-    }
-  } else if (reveal !== undefined) {
-    return { ok: false, error: { code: 'INVALID_ACTION' } };
-  }
+    counts = {
+      ...counts,
+      [reveal.color]: {
+        ...counts[reveal.color],
+        [reveal.rank]: counts[reveal.color][reveal.rank] - 1,
+      },
+    };
+  } else if (reveal !== undefined) return { ok: false, error: { code: 'INVALID_ACTION' } };
   const next = transition(position, action, reveal);
   if (next.prohibited) return { ok: false, error: { code: 'PERPETUAL_CHASE' } };
-  if (next.event.type === 'MOVE' && next.event.captured !== null) {
+  const remaining = { ...data.remaining };
+  if (next.event.type === 'MOVE' && next.event.captured !== null)
     remaining[next.event.captured.color] -= 1;
-  }
-  const nextColor = next.position.playerColors[next.position.currentPlayer];
-  const result = evaluateOutcomeFacts(
-    {
-      currentPlayer: next.position.currentPlayer,
-      noProgressCount: next.position.noProgressCount,
-      nextPlayerHasPieces: nextColor === null || remaining[nextColor] > 0,
-    },
-    () => hasPermittedAction(next.position),
-  );
+  const result = outcomeFor(next.position, remaining);
+  const status = result === null ? 'ACTIVE' : 'FINISHED';
   const board: PublicSquare[] = next.position.board.map((square) =>
     square.kind === 'REVEALED'
       ? { kind: 'REVEALED', piece: { color: square.piece.color, rank: square.piece.rank } }
@@ -203,9 +261,22 @@ export function projectPermittedPublicAction(
       board,
       currentPlayer: next.position.currentPlayer,
       playerColors: { ...next.position.playerColors },
-      status: result === null ? 'ACTIVE' : 'FINISHED',
+      status,
       result,
     },
     event: next.event,
+    nextContext: contextFor({ position: { ...next.position, status }, counts, remaining }),
   };
+}
+
+/** Compatibility wrapper: fully validate the complete prefix for each call. */
+export function projectPermittedPublicAction(
+  input: PublicProjectionInput,
+  action: GameAction,
+  reveal?: PublicPiece,
+): PublicProjectionResult {
+  if (input.observation.status === 'FINISHED')
+    return { ok: false, error: { code: 'GAME_FINISHED' } };
+  const result = projectPublicAction(createPublicProjectionContext(input), action, reveal);
+  return result.ok ? { ok: true, observation: result.observation, event: result.event } : result;
 }

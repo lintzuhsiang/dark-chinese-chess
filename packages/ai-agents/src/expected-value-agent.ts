@@ -1,6 +1,8 @@
 import {
   getPublicOrdinaryMoves,
-  projectPermittedPublicAction,
+  createPublicProjectionContext,
+  projectPublicAction,
+  type PublicProjectionContext,
   type GameAction,
   type PublicPiece,
 } from '../../game-core/src/index';
@@ -65,24 +67,44 @@ function copyAction(action: GameAction): GameAction {
     : { type: 'FLIP', position: action.position };
 }
 
-/** Enumerate one-step public outcomes; no sampling, replies, search, or information bonus. */
-export function explainExpectedValueDecision(
-  input: AgentInput,
-  { seed }: { readonly seed: number },
-  configuration: HeuristicConfiguration = {},
-): ExpectedValueDecision {
-  const random = createSeededRandom(seed);
+function validateExpectedValueInput(input: AgentInput): void {
   if (input.observation.status !== 'ACTIVE')
     throw new RangeError('Expected Value Agent requires an active game.');
   if (input.observation.currentPlayer !== input.perspective)
     throw new RangeError('Expected Value Agent requires its assigned turn.');
   if (input.legalActions.length === 0)
     throw new RangeError('Expected Value Agent requires at least one permitted action.');
+}
+
+/** Enumerate one-step public outcomes; no sampling, replies, search, or information bonus. */
+export function explainExpectedValueDecision(
+  input: AgentInput,
+  options: { readonly seed: number },
+  configuration: HeuristicConfiguration = {},
+): ExpectedValueDecision {
+  validateExpectedValueInput(input);
+  return evaluateExpectedValueInContext(
+    input,
+    options,
+    configuration,
+    createPublicProjectionContext(input),
+  );
+}
+
+// Internal reuse by Tactical's EV fallback; the caller owns this decision's root context.
+export function evaluateExpectedValueInContext(
+  input: AgentInput,
+  { seed }: { readonly seed: number },
+  configuration: HeuristicConfiguration,
+  context: PublicProjectionContext,
+): ExpectedValueDecision {
+  const random = createSeededRandom(seed);
+  validateExpectedValueInput(input);
   const resolved = resolveHeuristicConfiguration(configuration);
   const distribution = getHiddenPieceDistribution(input);
   const currentEvaluation = evaluatePosition(input, resolved);
   const evaluate = (action: GameAction, reveal?: PublicPiece): EvaluationBreakdown => {
-    const projected = projectPermittedPublicAction(input, action, reveal);
+    const projected = projectPublicAction(context, action, reveal);
     if (!projected.ok)
       throw new RangeError(
         `Supplied permitted action rejected by Core projection: ${projected.error.code}`,
@@ -147,22 +169,21 @@ export function createExpectedValueAgent(configuration: HeuristicConfiguration =
 
 export const expectedValueAgent: GameAgent = createExpectedValueAgent();
 
-function immediateWinningCapture(input: AgentInput, action: MoveAction): MoveAction | null {
-  const projected = projectPermittedPublicAction(input, action);
+function immediateWinningCapture(
+  context: PublicProjectionContext,
+  action: MoveAction,
+): MoveAction | null {
+  const projected = projectPublicAction(context, action);
   if (!projected.ok) throw new RangeError(`Core rejected a tied MOVE: ${projected.error.code}`);
   if (projected.observation.status === 'FINISHED') return null;
   const opponent = projected.observation.currentPlayer;
   const color = projected.observation.playerColors[opponent];
   if (color === null) return null;
-  const successor = {
-    observation: projected.observation,
-    publicHistory: [...input.publicHistory, projected.event],
-  };
-  for (const reply of getPublicOrdinaryMoves(successor.observation.board, color)) {
-    if (successor.observation.board[reply.to]?.kind !== 'REVEALED') continue;
-    // Ordinary capture geometry is shared with Core. Captures reset chase, but
+  for (const reply of getPublicOrdinaryMoves(projected.observation.board, color)) {
+    if (projected.observation.board[reply.to]?.kind !== 'REVEALED') continue;
+    // Ordinary capture geometry is shared with Core. Captures preserve unrelated chase history and
     // still go through Core projection for legality and exact terminal priority.
-    const response = projectPermittedPublicAction(successor, reply);
+    const response = projectPublicAction(projected.nextContext, reply);
     if (!response.ok) throw new RangeError(`Core rejected a capture reply: ${response.error.code}`);
     const result = response.observation.result;
     if (result?.type === 'WIN' && result.winner === opponent) {
@@ -189,11 +210,12 @@ export function explainSafetyTieDecision(
   if (tied.length < 2 || tied.some((candidate) => candidate.action.type !== 'MOVE')) {
     return { ...baseline, safetyTie: { applied: false, checks: [] } };
   }
+  const context = createPublicProjectionContext(input);
   const checks = tied.map((candidate): SafetyTieCheck => {
     const action = candidate.action as MoveAction;
     return {
       action: { type: 'MOVE', from: action.from, to: action.to },
-      winningReply: immediateWinningCapture(input, action),
+      winningReply: immediateWinningCapture(context, action),
     };
   });
   const remaining = checks.filter((check) => check.winningReply === null);

@@ -4,6 +4,7 @@ import type { GameResult, GameState, PlayerId } from './types';
 export function evaluateOutcome(
   state: GameState,
   hasLegalAction: () => boolean,
+  hasOrdinaryAction: () => boolean = hasLegalAction,
 ): GameResult | null {
   const nextColor = state.playerColors[state.currentPlayer];
   return evaluateOutcomeFacts(
@@ -14,6 +15,7 @@ export function evaluateOutcome(
         nextColor === null || state.board.some((square) => square?.piece.color === nextColor),
     },
     hasLegalAction,
+    hasOrdinaryAction,
   );
 }
 
@@ -25,12 +27,14 @@ export function evaluateOutcomeFacts(
     readonly nextPlayerHasPieces: boolean;
   },
   hasLegalAction: () => boolean,
+  hasOrdinaryAction: () => boolean = hasLegalAction,
 ): GameResult | null {
   const winner = facts.currentPlayer === 'P1' ? 'P2' : 'P1';
   if (!facts.nextPlayerHasPieces) {
     return { type: 'WIN', winner, reason: 'NO_PIECES' };
   }
-  if (!hasLegalAction()) return { type: 'WIN', winner, reason: 'NO_LEGAL_ACTION' };
+  if (!hasOrdinaryAction()) return { type: 'WIN', winner, reason: 'NO_LEGAL_ACTION' };
+  if (!hasLegalAction()) return { type: 'DRAW', reason: 'CHASE_STALEMATE' };
   if (facts.noProgressCount >= 60) return { type: 'DRAW', reason: 'NO_PROGRESS' };
   return null;
 }

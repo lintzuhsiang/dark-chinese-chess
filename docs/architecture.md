@@ -4,7 +4,7 @@
 **Status:** Tasks 1–6 implemented; joint review and physical-device/hosted-CI acceptance pending\
 **Scope:** Phase 1 implementation with future AI and multiplayer compatibility
 
-Task 5 adds read-only Progressive Review; Task 6 adds relative text sizing, contrast/keyboard fixes, production-browser verification, CI configuration, and test-only long-game/tap measurement tooling. Game Core, GameAction, ActionResult, public events, observations, and the canonical session shape are unchanged. The owner-approved 2026-11-10 correction now applies NO_LEGAL_ACTION to chase-only immobilization; rejected attempts remain immutable. Physical-device/hosted-CI acceptance and joint owner review are pending.
+Task 5 adds read-only Progressive Review; Task 6 adds relative text sizing, contrast/keyboard fixes, production-browser verification, CI configuration, and test-only long-game/tap measurement tooling. Game Core, GameAction, ActionResult, public events, observations, and the canonical session shape are unchanged. The 2026-11-12 Chase v4 amendment now applies CHASE_STALEMATE to chase-only immobilization; rejected attempts remain immutable. Physical-device/hosted-CI acceptance and joint owner review are pending.
 
 ## 1. Architecture Goals
 
@@ -201,11 +201,13 @@ interface GameState {
 }
 
 interface ChaseState {
-  attackerPlayer: PlayerId;
-  attackerId: string;
-  targetId: string;
-  phase: 'ESCAPE' | 'RENEW';
-  positionCounts: Readonly<Record<string, number>>;
+  records: readonly {
+    attacker: string;
+    target: string;
+    attackerPosition: number;
+    targetPosition: number;
+    ply: number;
+  }[];
 }
 ```
 
@@ -218,7 +220,7 @@ type GameResult =
     }
   | {
       type: 'DRAW';
-      reason: 'NO_PROGRESS';
+      reason: 'NO_PROGRESS' | 'CHASE_STALEMATE';
     };
 ```
 
@@ -227,12 +229,12 @@ State invariants:
 - Initially: `currentPlayer` is P1, both assignments are null, counts are zero, status is ACTIVE, and result is null. After the first flip, assignments are opposite and non-null.
 - `plyCount` is the accepted action count. Every accepted action advances `currentPlayer`, even when terminal. Read the winner from `result`, never from the current player.
 - ACTIVE implies a null result; FINISHED implies a non-null result. Only `applyAction` assigns outcomes. `getGameResult` only reads the stored result.
-- Ordinary movement increments `noProgressCount`; a flip or capture resets it. Elimination, next-player lack of permitted actions including chase filtering, and no-progress are evaluated in that order after advancing the turn. An accepted ACTIVE state must have a permitted action.
+- Ordinary movement increments `noProgressCount`; a flip or capture resets it. Elimination, ordinary immobilization, chase-only stalemate, and no-progress are evaluated in that order after advancing the turn. An accepted ACTIVE state must have a permitted action.
 - No general position-repetition state, hash, counter, or draw reason exists.
 
-**Chase state:** Initialize `chase` to null. A pure `getChaseUpdate(before, tentativeAfter, action)` returns `{ prohibited, chase }`. Logical position keys use EMPTY/HIDDEN/revealed color-rank squares, next player, and assignments; physical IDs are used only for pair continuity. `positionCounts` counts the first threat and qualifying renewals within the current continuous chase. A fourth appearance of any key is prohibited, including later loops elsewhere after an initial rejection. This replaces the original single-anchor tracker following the owner's UI bug report. The map resets on a broken chain/flip/capture, is bounded by 60 quiet plies, and never counts general repetition. Include this private state in deterministic reconstruction/equality for future undo/Review, never public projections or an independent session/UI tracker.
+**Chase state (v4):** `chase` is null or an immutable `{ records }` ledger of qualifying physical attacker/target references, their post-move coordinates and accepted ply. A pure `getChaseUpdate` rejects the third identical key within `[p-19, p]`, including candidate p. All accepted actions age the window. There are no escape/renewal phases, exhausted pairs, support witnesses or board-wide keys. See [Chase v4](chase-v4-spec.md). Public observations/events exclude the ledger and private identities; complete-prefix replay reconstructs public reveal references. EV and Tactical rebuild once per decision and advance children from parent contexts, with no cross-turn delta.
 
-Ordinary validation and the pure capture-threat helper are shared by chase and outcomes without calling the chase-aware engine recursively. One private permitted-transition path validates, tentatively moves/updates counters/turn, and rejects or records the chase update for both submission and enumeration. Only accepted `applyAction` then evaluates elimination, chase-aware immobilization, and no-progress in priority order and stores the result atomically. A rejected tentative transition creates no event/timeline entry and mutates no state.
+Ordinary validation and the pure capture-threat helper are shared by chase and outcomes without calling the chase-aware engine recursively. One private permitted-transition path validates, tentatively moves/updates counters/turn, and rejects or records the chase update for both submission and enumeration. Only accepted `applyAction` then evaluates NO_PIECES, ordinary NO_LEGAL_ACTION, CHASE_STALEMATE, and NO_PROGRESS in priority order and stores the result atomically. A rejected tentative transition creates no event/timeline entry and mutates no state.
 
 No UI-specific state belongs inside GameState.
 
@@ -319,7 +321,7 @@ getGameResult(
 
 `InitialStateResult` is `{ ok: true, state: GameState }` or `{ ok: false, error: { code: "INVALID_DECK" } }`. Initialization validates exact per-color composition, recognized colors/ranks, 32 entries, and unique nonempty IDs before producing a state. An invalid deck must not replace an existing session.
 
-`getLegalActions` uses the same permitted-transition path as submission and returns an empty list for a non-current player or finished game. Outcome evaluation receives a lazy callback to the same chase-aware `getLegalActions` for NO_LEGAL_ACTION. Enumeration calls only permitted transitions, never outcome evaluation, so the dependency does not recurse. This is an internal helper change; GameAction, ActionResult, GameState, events, and observation contracts remain unchanged. Evaluate the accepted next-player candidate before marking it finished; do not use an already-finished state's empty list to infer the original outcome.
+`getLegalActions` uses the same permitted-transition path as submission and returns an empty list for a non-current player or finished game. Outcome evaluation receives lazy callbacks for ordinary actions and chase-aware `getLegalActions`, separating NO_LEGAL_ACTION from CHASE_STALEMATE. Enumeration calls only permitted transitions, never outcome evaluation, so the dependency does not recurse. This is an internal helper change; GameAction, ActionResult, GameState, events, and observation contracts remain unchanged. Evaluate the accepted next-player candidate before marking it finished; do not use an already-finished state's empty list to infer the original outcome.
 
 ### Minimum public action event
 

@@ -1,3 +1,4 @@
+import { supportOpening, supportPrefix } from '../../../packages/game-core/tests/chase-v3-fixtures';
 import { describe, expect, it } from 'vitest';
 import { getObservation } from '@dark-chess/game-core';
 import type { GameAction } from '@dark-chess/game-core';
@@ -20,29 +21,18 @@ const cannonDeck = () =>
     [8, 'BLACK', 'GENERAL'],
     [4, 'RED', 'SOLDIER'],
   ]);
+const support = supportOpening();
 const fixtures = [
   [
-    'flips, ordinary captures/movement and chase returns/reset',
+    'rolling records then FLIP persistence',
     pairDeck(),
-    [...opening, ...cycle, ...cycle, ...cycle.slice(0, -1), flip(31)],
+    [...opening, ...cycle.slice(0, 3), flip(31)],
   ],
   ['Cannon capture over a hidden screen', cannonDeck(), [flip(0), flip(8), move(0, 8), flip(1)]],
   [
-    'later chase pattern on other squares and its reset',
-    pairDeck(),
-    [
-      ...opening,
-      ...cycle,
-      ...cycle,
-      ...cycle.slice(0, -1),
-      move(1, 5),
-      ...[move(4, 0), move(5, 1), move(0, 4), move(1, 5)],
-      ...[move(4, 0), move(5, 1), move(0, 4), move(1, 5)],
-      move(4, 0),
-      move(5, 1),
-      move(0, 4),
-      flip(31),
-    ],
+    'support earning and one-use redemption',
+    support.state.board.map((s) => s!.piece),
+    [...supportPrefix, move(0, 1)],
   ],
 ] as const;
 
@@ -97,14 +87,16 @@ describe('canonical reconstruction and exact undo', () => {
   );
 
   it('truncates abandoned actions and chase counts before a different continuation', () => {
-    const game = recordedGame(pairDeck(), [...opening, ...cycle, ...cycle]);
+    const game = recordedGame(pairDeck(), [...opening, ...cycle.slice(0, 2)]);
     let local = sessionReducer(game.final, { type: 'UNDO' });
     expect(local.session!.currentState.chase).toEqual(
       game.states.at(-2)!.session!.currentState.chase,
     );
     local = sessionReducer(local, { type: 'SUBMIT', playerId: 'P1', action: flip(31) });
     expect(local.error).toBeNull();
-    expect(local.session!.currentState.chase).toBeNull();
+    expect(local.session!.currentState.chase).toEqual(
+      game.states.at(-2)!.session!.currentState.chase,
+    );
     expect(local.session!.currentState.noProgressCount).toBe(0);
     expect(local.session!.actions.at(-1)!.action).toEqual(flip(31));
     expect(local.session!.actions).toHaveLength(game.final.session!.actions.length);
@@ -115,7 +107,7 @@ describe('canonical reconstruction and exact undo', () => {
   });
 
   it('preserves a rejected chase attempt and restores its exact tracker after undoing a reset', () => {
-    const game = recordedGame(pairDeck(), [...opening, ...cycle, ...cycle, ...cycle.slice(0, -1)]);
+    const game = recordedGame(pairDeck(), [...opening, ...cycle, ...cycle.slice(0, 3)]);
     const before = game.final;
     const rejected = sessionReducer(before, { type: 'SUBMIT', playerId: 'P1', action: move(1, 0) });
     expect(rejected.error?.code).toBe('PERPETUAL_CHASE');
@@ -186,7 +178,7 @@ describe('validated restart', () => {
   });
 
   it('replaces only after validation and resets every session/domain field', () => {
-    const game = recordedGame(pairDeck(), [...opening, ...cycle]);
+    const game = recordedGame(pairDeck(), [...opening, ...cycle.slice(0, 2)]);
     const before = freeze({ ...game.final, error: { code: 'ILLEGAL_MOVE' as const } });
     const invalid = sessionReducer(before, { type: 'RESTART', deck: [], confirmed: true });
     expect(invalid.error?.code).toBe('INVALID_DECK');
