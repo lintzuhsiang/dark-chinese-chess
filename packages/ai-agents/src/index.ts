@@ -55,3 +55,11 @@ export {
   getProgressState,
   countPublicPositionReturns,
 } from './progress-agent';
+export {
+  createStrategicAgent,
+  explainStrategicDecision,
+  evaluateStrategicPosition,
+  STRATEGIC_PRESETS,
+  STRATEGIC_FEATURE_WEIGHT,
+} from './strategic-agent';
+export type { StrategicFeatures } from './strategic-agent';

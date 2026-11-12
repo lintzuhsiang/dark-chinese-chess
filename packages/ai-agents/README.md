@@ -206,3 +206,18 @@ approach60; terminal values, chance handling and all search limits stay fixed.
 `progress-6b` is an opt-in CLI strategy. EV remains the browser default. See
 [AI-6B/6C evidence](../../docs/ai-6bc-implementation.md); the small held-out cohort
 does not establish a strength gain.
+
+## AI-6C strategic experiments
+
+`explainStrategicDecision(input, options, features)` and `createStrategicAgent`
+reuse frozen6B. Independent switches are `proximity`, `blockers` and `cannon`;
+all default off, and `STRATEGIC_PRESETS` enables one at a time. Terminal values,
+root EV/fallback, chance probabilities and search limits remain unchanged.
+Each normalized feature has fixed weight0.03. These are public positional
+heuristics, not legal-action queries or proof of a forced win.
+
+CLI policies: `strategic-6c-proximity`, `strategic-6c-blockers`,
+`strategic-6c-cannon`. They are experimental, not browser defaults. Compare each
+against `progress-6b`; see the source-frozen ablation/latency evidence in
+[AI-6B/6C](../../docs/ai-6bc-implementation.md). Candidate selection and promotion
+are evidence decisions, not additional game rules.

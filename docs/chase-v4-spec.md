@@ -131,3 +131,13 @@ No search defaults, widths, scoring or projection budget changed.
   used. Core/public-context and session reconstruction tests run directly on v4.
 - Historical v3 documents, fixture transcripts, AI-6A reports and diagnostic
   artifacts remain intact. No historical benchmark was rerun or overwritten.
+
+## Owner follow-up: AI-6B/6C authorization
+
+After the initial v4 verification above, the owner authorized committing the
+completed work, implementing AI-6B/6C and updating the new-evaluation Core pin.
+Core is now pinned to `973bafe42f66e3414878afb3284e1f54216cbe4d`; the strict guard
+remains unchanged. The formerly pin-blocked full suite subsequently passed.
+This supersedes the initial implementation's no-commit/no-pin-update/no-6B scope
+only; the v4 rules and context/performance constraints remain in force. See
+[AI-6B/6C](ai-6bc-implementation.md). No push or deployment is authorized.

@@ -32,7 +32,7 @@ may fall back to one-ply EV. Original EV remains the default. See the
 AI-5.1 now gives your move a visible, variable dwell before presenting the AI reply.
 Its [gameplay investigation and proposed rule changes](docs/ai-5-1-gameplay-investigation.md)
 are available for review. The approved SAFETY-TIE-1 experiment is selectable.
-Chase v4 is specified in [chase-v4-spec.md](docs/chase-v4-spec.md); the older Core pin remains unchanged.
+Chase v4 is specified in [chase-v4-spec.md](docs/chase-v4-spec.md); new AI-6B/6C evaluations pin the committed v4 Core (`973bafe`), while historical reports retain their original revisions.
 
 ## Verification
 
@@ -164,3 +164,8 @@ Typecheck, 451 unit tests, production build, and all 22 Chromium/WebKit browser 
 The owner approved chase-aware NO_LEGAL_ACTION on 2026-11-10: the next player loses after an accepted action if chase filtering leaves no permitted action. This supersedes the historical stalled-ACTIVE limitation in the Task 3–6 records above. The existing result priority and immutable rejection behavior remain unchanged.
 
 `pnpm verify:gates` runs isolated positive/negative lint, formatting, typecheck and Vitest probes, removing its own temporary test afterward. `pnpm verify:release` builds and inspects the static output and prints its asset hashes; neither command publishes anything. See [the release checklist](docs/release/checklist.md), [hosting comparison](docs/release/hosting-comparison.md), and [deployment plan](docs/release/deployment-plan.md). Formatting-only and behavioral/tooling changes are prepared separately and remain uncommitted pending approval. Hosted CI, physical-device evidence or explicit gap acceptance, hosting/account selection, and publication approval remain external gates.
+
+AI-6B/6C are opt-in headless experiments: `progress-6b` and independent
+`strategic-6c-proximity`, `strategic-6c-blockers`, `strategic-6c-cannon` CLI policies.
+They reuse the existing public-context search; EV remains the browser default.
+See [implementation, ablations and limitations](docs/ai-6bc-implementation.md).

@@ -3,6 +3,9 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
   explainTacticalDecision,
+  explainStrategicDecision,
+  STRATEGIC_PRESETS,
+  type StrategicFeatures,
   explainProgressDecision,
   evaluatePosition,
   getProgressState,
@@ -18,6 +21,7 @@ import { runTournament, formatTournamentSummary } from './tournament';
 import { verifyReplay } from './match';
 import { percentile } from './statistics';
 import { tacticalDescriptor } from './tactical-descriptor';
+import { progressDescriptor, strategicDescriptor } from './feature-descriptor';
 import type { EvaluatedAgent, TournamentReport } from './tournament-types';
 
 function audit(report: TournamentReport) {
@@ -78,35 +82,56 @@ function audit(report: TournamentReport) {
 
 async function main() {
   const phase = process.argv[2] ?? '6b-pilot';
+  const featureName = phase.split('-').at(-1);
+  const feature: keyof StrategicFeatures | null =
+    featureName === 'proximity' || featureName === 'blockers' || featureName === 'cannon'
+      ? featureName
+      : null;
+  const strategic = phase.startsWith('6c-') && feature !== null;
   const schedule =
     phase === '6b-pilot'
       ? { start: 62000, count: 1 }
       : phase === '6b-heldout'
         ? { start: 62100, count: 4 }
-        : null;
-  if (!schedule) throw Error('Use 6b-pilot or 6b-heldout.');
+        : strategic
+          ? {
+              start: phase.startsWith('6c-final-') ? 62300 : 62200,
+              count: phase.startsWith('6c-final-') ? 4 : 2,
+            }
+          : null;
+  if (!schedule)
+    throw Error('Use 6b-pilot, 6b-heldout, 6c-proximity/blockers/cannon, or 6c-final-FEATURE.');
   const directory = resolve('benchmark-results/ai6bc-v4');
   const path = resolve(directory, phase + '.json');
   if (existsSync(path)) throw Error('Refusing to overwrite ' + path);
   const samples: Record<'A' | 'B', TacticalDecision['diagnostics'][]> = { A: [], B: [] };
   function descriptor(side: 'A' | 'B'): EvaluatedAgent {
-    const base = tacticalDescriptor(side === 'A' ? 'progress-6b' : 'frozen-tactical-6a', {
-      async chooseAction(input, options) {
+    const policy = {
+      async chooseAction(
+        input: Parameters<typeof explainTacticalDecision>[0],
+        options: { readonly seed: number },
+      ) {
         const decision =
           side === 'A'
-            ? explainProgressDecision(input, options)
-            : explainTacticalDecision(input, options);
+            ? strategic
+              ? explainStrategicDecision(input, options, STRATEGIC_PRESETS[feature!])
+              : explainProgressDecision(input, options)
+            : strategic
+              ? explainProgressDecision(input, options)
+              : explainTacticalDecision(input, options);
         samples[side].push(decision.diagnostics);
         return decision.selectedAction;
       },
-    });
-    return {
-      ...base,
-      implementation: side === 'A' ? 'progress-6b-v1' : base.implementation,
-      configuration: { ...base.configuration, progress: side === 'A' },
-      sourcePaths: [...base.sourcePaths, 'packages/ai-agents/src/progress-agent.ts'],
     };
+    if (side === 'A')
+      return strategic
+        ? strategicDescriptor('strategic-6c-' + feature, feature!, policy)
+        : progressDescriptor('progress-6b', policy);
+    return strategic
+      ? progressDescriptor('frozen-progress-6b', policy)
+      : tacticalDescriptor('frozen-tactical-6a', policy);
   }
+
   const report = await runTournament({
     agents: { A: descriptor('A'), B: descriptor('B') },
     deckSeeds: Array.from({ length: schedule.count }, (_, i) => schedule.start + i),

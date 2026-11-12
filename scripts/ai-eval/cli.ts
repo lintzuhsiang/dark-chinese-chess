@@ -11,7 +11,7 @@ import {
 import { formatTournamentSummary, runTournament } from './tournament';
 import type { EvaluatedAgent } from './tournament-types';
 import { tacticalDescriptor } from './tactical-descriptor';
-import { progressDescriptor } from './feature-descriptor';
+import { progressDescriptor, strategicDescriptor } from './feature-descriptor';
 
 function uint32(value: string, label: string): number {
   const number = Number(value);
@@ -41,7 +41,7 @@ async function main(): Promise<void> {
     console.log('  --pairs 20 --deck-start 0 --agent-seed 20261110 --max-plies 4096');
     console.log('  --confidence 0.95 --output benchmark-results/random-baseline.json');
     console.log(
-      '  --agent-a random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b --agent-b random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b',
+      '  --agent-a random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b|strategic-6c-proximity|strategic-6c-blockers|strategic-6c-cannon --agent-b random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b|strategic-6c-proximity|strategic-6c-blockers|strategic-6c-cannon',
     );
     console.log('  --deck-seeds 10,20,30 may replace --pairs/--deck-start.');
     return;
@@ -58,6 +58,12 @@ async function main(): Promise<void> {
     deckSeeds = Array.from({ length: count }, (_, index) => start + index);
   }
   const descriptor = (kind: string, seat: string): EvaluatedAgent => {
+    if (kind.startsWith('strategic-6c-')) {
+      const feature = kind.slice('strategic-6c-'.length);
+      if (feature === 'proximity' || feature === 'blockers' || feature === 'cannon')
+        return strategicDescriptor(kind + '-' + seat, feature);
+      throw new RangeError('Unknown strategic6C feature.');
+    }
     if (kind === 'progress-6b') return progressDescriptor(kind + '-' + seat);
     if (kind === 'tactical-6a') return tacticalDescriptor(kind + '-' + seat);
     if (

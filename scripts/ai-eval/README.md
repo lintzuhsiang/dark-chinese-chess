@@ -174,3 +174,26 @@ ordering/fallback versions; no existing Agent configuration changes. For the fix
 pilot/held-out runs with replay, coverage and p99 analysis, use
 `tactical-benchmark.ts --phase pilot` or `--phase heldout` through the same Node
 loader. See [experiment protocol and results](../../docs/ai-6a-evaluation.md).
+
+## Chase v4 feature ablations
+
+AI-6B: `--agent-a progress-6b --agent-b tactical-6a`.
+AI-6C: choose `strategic-6c-proximity`, `strategic-6c-blockers` or
+`strategic-6c-cannon` against `progress-6b`. These opt-in policies keep the
+six-ply/8,192-projection/8-and-4-width search and exact public chance model.
+
+The predeclared experiment uses the existing tournament/manifests and writes
+new, non-overwriting files under `benchmark-results/ai6bc-v4/`:
+
+```sh
+node --import ./scripts/ai-eval/register.mjs scripts/ai-eval/feature-benchmark.ts 6b-pilot
+node --import ./scripts/ai-eval/register.mjs scripts/ai-eval/feature-benchmark.ts 6b-heldout
+node --import ./scripts/ai-eval/register.mjs scripts/ai-eval/feature-benchmark.ts 6c-proximity
+node --import ./scripts/ai-eval/register.mjs scripts/ai-eval/feature-benchmark.ts 6c-blockers
+node --import ./scripts/ai-eval/register.mjs scripts/ai-eval/feature-benchmark.ts 6c-cannon
+```
+
+Use `6c-final-FEATURE` for the reserved final cohort only after selecting a
+qualifying candidate from ablations. Do not rerun historical commands into their
+original output paths. The report documents exact seeds, acceptance criteria,
+metrics, frozen baselines and limitations; old Core reports keep their old pin.

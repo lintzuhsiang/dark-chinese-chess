@@ -33,7 +33,7 @@ public-information invariance, deterministic decisions and feature-off parity.
 
 ## AI-6C: independent strategic candidates
 
-Freeze verified 6B before evaluating these separately:
+Verified 6B is frozen at `8189576`. Evaluate these separately:
 
 - Conversion proximity: small material-advantage-weighted proximity to revealed
   enemies, using Manhattan distance. It is an approach/retreat preference, not a
@@ -42,7 +42,7 @@ Freeze verified 6B before evaluating these separately:
   public empty cells from each side. Hidden and occupied squares block paths.
   This measures multi-step access; ordinary mobility counts immediate moves.
 - Cannon setup: unique revealed victims a Cannon could newly threaten after one
-  ordinary quiet Cannon move, excluding victims it already attacks. Use Core
+  ordinary quiet Cannon move, excluding victims the side already attacks. Use Core
   ordinary move/capture queries; never infer hidden identities or duplicate
   screen/rank legality. Count a victim once per side, not once per route.
 
@@ -64,7 +64,10 @@ Keep failures and truncations visible, with no invented draw scores.
 3. After freezing 6B, independent 6C ablations: seeds 62200–62201 (two pairs per
    candidate), each candidate on vs verified 6B, with other 6C features off.
 4. Reserve seeds 62300–62303 (four fresh pairs) for a final candidate/composite
-   chosen only from the ablation evidence. If no candidate merits retention,
+   chosen only from the ablation evidence. Retain a candidate for this fresh
+   check only if its ablation mean exceeds0.5, with no errors/truncations and
+   candidate p95 no more than1.5× control p95. Choose one best qualifying feature
+   rather than tuning a composite after observing the data. If no candidate merits retention,
    report that outcome instead of manufacturing an improvement.
 
 These are deliberately small local experiments, not broad strength estimates.
@@ -106,3 +109,85 @@ The dangerous-reveal control at quiet48 places a hidden Black Chariot at8.6B
 moves Red Soldier4→5 before revealing, avoiding the immediate4-square exposure.
 6C follows after the verified6B source/configuration is frozen. Historical AI-6A
 results use the old Core and are not evidence about this v4 environment.
+
+Verification after6C implementation: lint, formatting, typecheck, build and all
+806 tests pass. All four experimental CLI policies produce legal public proposals
+through the real runner (one-ply smoke limits intentionally return TRUNCATED).
+No Core file or game rule changed after the v4 pin.
+
+## Independent6C ablation results
+
+All12 games completed with exact replays, stable source manifests and zero
+illegal actions/errors/truncations. Each row compares one feature against frozen
+6B on the same two seed pairs; all95% paired intervals are[0,1].
+
+| Candidate             | W/D/L | Mean score | Candidate/control p95(ms) | Decision                                               |
+| --------------------- | ----- | ---------- | ------------------------- | ------------------------------------------------------ |
+| Proximity             | 2/0/2 | 0.50       | 401.20/349.93             | No score gain; not selected                            |
+| Blocker accessibility | 3/0/1 | 0.75       | 337.27/298.74             | Only qualifying candidate; fresh final cohort reserved |
+| Cannon setup          | 1/2/1 | 0.50       | 817.19/401.82             | No score gain and2.03× latency; not selected           |
+
+Lead conversion (candidate/control) was2/3 vs2/3 for proximity,3/3 vs1/2
+for blockers, and1/3 vs1/3 for Cannon. Candidate/control capture counts were
+56/56,60/49 and52/55; FLIPs were62/66,62/66 and67/61 respectively. Cannon's
+two quiet-limit draws had no hidden survivors. Full reports include p50/p99,
+completed-depth distributions, projections, returns and retained transcripts.
+
+Weights/configurations were not changed after seeing these results. Keep
+proximity and Cannon available only as independent experiments; they do not
+qualify for promotion. The blocker result is a selection signal from four games,
+not a general strength conclusion. Its final test uses untouched seeds62300–62303.
+
+Feature ownership/overlap: proximity is a small material-dependent approach
+interaction; blockers count distinct multi-step empty access instead of immediate
+move count; Cannon counts only new potential victims not already in the ordinary
+threat feature. None add a capture reward or change material conservation. Leaf
+features cannot rescue omitted actions, and incomplete iterations still fall back
+to the original EV; these limitations remain visible in coverage reports.
+
+## Fresh final cohort and retention decision
+
+Blocker-only6C vs frozen6B on the four untouched seed pairs completed8/8 games
+and8 exact replays, with W/D/L3/2/3, mean0.5, paired95% interval[0,1], stable
+sources and zero errors/illegal actions/truncations. Lead conversion was3/5
+for both sides; captures93/93, FLIPs103/117, late FLIPs1/0 and quiet moves529/515.
+The two quiet-limit draws each retained18 hidden pieces. Candidate/control
+p50/p95/p99 was233.54/344.92/392.72 vs194.81/314.82/353.89 ms.
+
+The ablation gain did not reproduce. None of the three6C candidates is promoted
+into the default policy or combined evaluator.6B remains an optional local
+progress experiment; ordinary EV and frozen6A retain their existing behavior.
+The independent6C switches/CLI strategies remain available for explicit research
+reproduction, with their negative evidence documented. No further tuning or
+optimization is included in this task.30 evaluation games across all phases
+completed and replayed exactly; no historical benchmark was overwritten.
+
+The features use leaf scores only: they do not change root EV ordering, candidate
+widths, incomplete-iteration fallback or the selective tree's omitted replies.
+These small cohorts do not establish general strength. Latency is local Node
+measurement, not physical-phone evidence for the experimental policies.
+
+## Reproduction and raw report checksums
+
+All reports are in `benchmark-results/ai6bc-v4/`. Each includes complete
+transcripts, the v4 Core pin, exact feature configuration, seeds, environment and
+source archive. The preexisting AI-6A reports and old Core revisions remain intact.
+
+| Raw report               | SHA-256                                                            |
+| ------------------------ | ------------------------------------------------------------------ |
+| `6b-pilot.json`          | `12c5f73bcf67479b8597e05034cd4b62f458094daa388a2f6b7e3858511e844d` |
+| `6b-heldout.json`        | `4109bd3aa1f6a93ecef865b8639e1f71ed52b888048630460c7355ac8fd7680c` |
+| `6c-proximity.json`      | `664303c005341069ab086e841dface26aa6f9ae7cba8a0e0f158b59faa85a615` |
+| `6c-blockers.json`       | `1bef1e27cae1bd2480137f03d6e626e6ad6c00014c155a617e75e0019d24dd8f` |
+| `6c-cannon.json`         | `d5db4675ba73fb0977ff697462603355075fa35a24e6608657c06ee1ef56e554` |
+| `6c-final-blockers.json` | `86fe2339fad6b69a3aa6ea78113029d2aa6b9bfaea00ed4f783b21421c23fb5c` |
+
+## Final verification
+
+All806 tests pass, along with lint, format checking, workspace typecheck, build
+and release-artifact validation. The affected real Tactical Worker check passes
+in both Chromium and WebKit (two tests, opening/middlegame/endgame with live
+animation frames). Experimental6B/6C latency evidence above is from the Node
+runner; these policies are CLI/library opt-ins and are not exposed as browser
+strategies. Browser defaults, Core rules, search limits and context architecture
+remain unchanged. No push, deployment, new dependency or cross-turn delta.
