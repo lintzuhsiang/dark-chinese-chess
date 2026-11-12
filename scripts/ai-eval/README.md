@@ -197,3 +197,33 @@ Use `6c-final-FEATURE` for the reserved final cohort only after selecting a
 qualifying candidate from ablations. Do not rerun historical commands into their
 original output paths. The report documents exact seeds, acceptance criteria,
 metrics, frozen baselines and limitations; old Core reports keep their old pin.
+
+## Live CLI progress
+
+Add `--progress` to print one line to **stderr** after each processed game:
+
+```sh
+node --import ./scripts/ai-eval/register.mjs scripts/ai-eval/cli.ts \
+  --agent-a tactical-6a --agent-b progress-6b \
+  --pairs 50 --deck-start 70000 --agent-seed 20261112 --max-plies 512 \
+  --progress --output benchmark-results/progress-example.json
+```
+
+Example (illustrative):
+
+```text
+已處理 18/100 局 | A 勝/和/負: 7/5/4 | 失敗: 1 | 截斷: 1
+```
+
+Processed games include scored games, failures and administrative truncations.
+Only completed Core results enter A's W/D/L. Failures exclude truncations, which
+have their own count; neither is reported as a draw. Updates occur after games,
+not after individual plies. There is no progress output unless the flag is given.
+
+The optional synchronous tournament observer receives immutable, detached counts
+from the existing summary; logging is outside Agent timing and match-error
+classification. Seeds, scores, limits, final stdout summary and JSON schema are
+unchanged. JSON is still written only at the end; this flag is not checkpoint or
+resume support. Redirect stderr separately if desired (`2> progress.log`).
+Already-running processes do not gain progress output. Editing source during a
+run still marks its manifest as source-unstable, independently of this flag.

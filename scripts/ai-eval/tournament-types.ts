@@ -23,6 +23,16 @@ export interface TournamentOptions {
   readonly confidenceLevel?: number;
 }
 
+export interface TournamentProgress {
+  readonly processedGames: number;
+  readonly totalGames: number;
+  readonly wins: number;
+  readonly draws: number;
+  readonly losses: number;
+  readonly failedGames: number;
+  readonly truncatedGames: number;
+}
+
 export type FailureCategory =
   'INVALID_ACTION' | 'AGENT_EXCEPTION' | 'RUNNER_INVARIANT' | 'TRUNCATED';
 

@@ -9,6 +9,7 @@ import type {
   EvaluatedAgent,
   TournamentMatch,
   TournamentOptions,
+  TournamentProgress,
   TournamentReport,
 } from './tournament-types';
 import type { MatchReport } from './types';
@@ -90,7 +91,10 @@ function completedRecord(
   };
 }
 
-export async function runTournament(options: TournamentOptions): Promise<TournamentReport> {
+export async function runTournament(
+  options: TournamentOptions,
+  onProgress?: (progress: TournamentProgress) => void,
+): Promise<TournamentReport> {
   assertCoreBaseline();
   const deckSeeds = [...options.deckSeeds];
   if (
@@ -143,6 +147,25 @@ export async function runTournament(options: TournamentOptions): Promise<Tournam
           },
         });
       }
+      // Notify after recording each outcome, outside the match-failure boundary.
+      // Detached flat snapshots cannot modify canonical matches or final results.
+      if (onProgress) {
+        const summary = summarizeTournament(matches, confidenceLevel);
+        onProgress(
+          Object.freeze({
+            processedGames: matches.length,
+            totalGames: deckSeeds.length * 2,
+            wins: summary.scores.A.wins,
+            draws: summary.scores.A.draws,
+            losses: summary.scores.A.losses,
+            failedGames:
+              summary.failures.INVALID_ACTION +
+              summary.failures.AGENT_EXCEPTION +
+              summary.failures.RUNNER_INVARIANT,
+            truncatedGames: summary.failures.TRUNCATED,
+          }),
+        );
+      }
     }
   }
   function descriptor(agent: EvaluatedAgent): Omit<EvaluatedAgent, 'policy'> {
@@ -162,6 +185,10 @@ export async function runTournament(options: TournamentOptions): Promise<Tournam
     matches,
     summary: summarizeTournament(matches, confidenceLevel),
   };
+}
+
+export function formatTournamentProgress(progress: TournamentProgress): string {
+  return `已處理 ${progress.processedGames}/${progress.totalGames} 局 | A 勝/和/負: ${progress.wins}/${progress.draws}/${progress.losses} | 失敗: ${progress.failedGames} | 截斷: ${progress.truncatedGames}`;
 }
 
 export function formatTournamentSummary(report: TournamentReport): string {

@@ -8,7 +8,7 @@ import {
   randomAgent,
   safetyTieAgent,
 } from '../../packages/ai-agents/src/index';
-import { formatTournamentSummary, runTournament } from './tournament';
+import { formatTournamentProgress, formatTournamentSummary, runTournament } from './tournament';
 import type { EvaluatedAgent } from './tournament-types';
 import { tacticalDescriptor } from './tactical-descriptor';
 import { progressDescriptor, strategicDescriptor } from './feature-descriptor';
@@ -33,6 +33,7 @@ async function main(): Promise<void> {
       'max-plies': { type: 'string', default: '4096' },
       confidence: { type: 'string', default: '0.95' },
       output: { type: 'string', default: 'benchmark-results/random-baseline.json' },
+      progress: { type: 'boolean', default: false },
       help: { type: 'boolean', default: false },
     },
   });
@@ -44,6 +45,7 @@ async function main(): Promise<void> {
       '  --agent-a random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b|strategic-6c-proximity|strategic-6c-blockers|strategic-6c-cannon --agent-b random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b|strategic-6c-proximity|strategic-6c-blockers|strategic-6c-cannon',
     );
     console.log('  --deck-seeds 10,20,30 may replace --pairs/--deck-start.');
+    console.log('  --progress prints per-game progress to stderr.');
     return;
   }
   let deckSeeds: number[];
@@ -127,13 +129,20 @@ async function main(): Promise<void> {
           policy: heuristicAgent,
         };
   };
-  const report = await runTournament({
-    agents: { A: descriptor(values['agent-a'], 'A'), B: descriptor(values['agent-b'], 'B') },
-    deckSeeds,
-    agentSeed: uint32(values['agent-seed'], 'Agent seed'),
-    maxPlies: uint32(values['max-plies'], 'Move limit'),
-    confidenceLevel: Number(values.confidence),
-  });
+  const report = await runTournament(
+    {
+      agents: { A: descriptor(values['agent-a'], 'A'), B: descriptor(values['agent-b'], 'B') },
+      deckSeeds,
+      agentSeed: uint32(values['agent-seed'], 'Agent seed'),
+      maxPlies: uint32(values['max-plies'], 'Move limit'),
+      confidenceLevel: Number(values.confidence),
+    },
+    values.progress
+      ? (progress) => {
+          process.stderr.write(formatTournamentProgress(progress) + '\n');
+        }
+      : undefined,
+  );
   const output = resolve(values.output);
   mkdirSync(dirname(output), { recursive: true });
   writeFileSync(output, JSON.stringify(report, null, 2) + '\n');

@@ -9,7 +9,7 @@ import type { TournamentReport } from '../tournament-types';
 const root = fileURLToPath(new URL('../../../', import.meta.url));
 
 describe('standalone Node benchmark command', () => {
-  it('writes valid JSON for every truncated leg and returns a nonzero completeness status', () => {
+  it.each([false, true])('writes the same truncated result with progress=%s', (progress) => {
     const directory = mkdtempSync(join(tmpdir(), 'dark-chess-ai2-cli-'));
     try {
       const output = join(directory, 'report.json');
@@ -19,6 +19,7 @@ describe('standalone Node benchmark command', () => {
           '--import',
           './scripts/ai-eval/register.mjs',
           './scripts/ai-eval/cli.ts',
+          ...(progress ? ['--progress'] : []),
           '--pairs',
           '1',
           '--max-plies',
@@ -38,6 +39,44 @@ describe('standalone Node benchmark command', () => {
       expect(report.summary.paired.samples).toBe(0);
       expect(report.manifest.sourceStableDuringRun).toBe(true);
       expect(result.stdout).toContain('Games: 0/2 completed');
+      expect(result.stdout).not.toContain('已處理');
+      expect(result.stderr).toBe(
+        progress
+          ? '已處理 1/2 局 | A 勝/和/負: 0/0/0 | 失敗: 0 | 截斷: 1\n' +
+              '已處理 2/2 局 | A 勝/和/負: 0/0/0 | 失敗: 0 | 截斷: 2\n'
+          : '',
+      );
+    } finally {
+      rmSync(directory, { recursive: true, force: true });
+    }
+  });
+
+  it('keeps the final JSON identical when only --progress changes', () => {
+    const directory = mkdtempSync(join(tmpdir(), 'dark-chess-progress-parity-'));
+    try {
+      const reports = [false, true].map((progress) => {
+        const output = join(directory, progress ? 'progress.json' : 'quiet.json');
+        const result = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            './scripts/ai-eval/register.mjs',
+            './scripts/ai-eval/cli.ts',
+            '--pairs',
+            '1',
+            '--max-plies',
+            '0',
+            '--output',
+            output,
+            ...(progress ? ['--progress'] : []),
+          ],
+          { cwd: root, encoding: 'utf8', timeout: 30000 },
+        );
+        expect(result.error).toBeUndefined();
+        expect(result.status).toBe(2);
+        return JSON.parse(readFileSync(output, 'utf8')) as TournamentReport;
+      });
+      expect(reports[1]).toEqual(reports[0]);
     } finally {
       rmSync(directory, { recursive: true, force: true });
     }
