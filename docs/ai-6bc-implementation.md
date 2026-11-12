@@ -76,5 +76,33 @@ Use a concrete local decision to explain any claimed progress improvement.
 
 ## Results
 
-Pending implementation and verification. Historical AI-6A results use the old
-Core and are not evidence about this v4 environment.
+The repinned v4 baseline passes all 784 existing tests. The previous 32
+pin-dependent failures and unhandled rejection no longer occur.
+
+6B pilot: two completed/exactly replayed games, 1/0/1 W/D/L, 130 decisions,
+zero illegal actions/errors/truncations and stable source hashes. No decision
+reached quiet40, so this pilot establishes runtime/reliability only; it contains
+no evidence of progress-feature strength. Candidate/control decision p95 was
+336.79/342.36 ms on this local machine.
+
+Concrete progress example: from an accepted quiet48 prefix with Red Advisor0,
+Red Soldier4, Black Horse31 and one public-inventory-known Black Soldier hidden
+at16, frozen 6A selects Soldier4→8 (seed3). 6B flips16. Both complete depth6.
+6A values the quiet action 0.0302419355 vs FLIP 0.0292338710; 6B discounts the
+late quiet leaf to 0.0105846774 and retains the FLIP value 0.0292338710. The FLIP
+resets the draw counter, keeps the material lead of3 and offers no immediate
+opponent capture. This demonstrates safe progress while ahead, not a forced win.
+
+6B held-out: all8 games complete and replay exactly, W/D/L1/6/1, paired mean0.5
+and95% interval[0,1], no errors/illegal actions/truncations, source stable. The
+candidate/control made111/111 FLIPs,88/88 captures,632/633 quiet moves and2/2
+late FLIPs. Both converted1 of6 games in which they held a material lead; six
+quiet-limit draws retained0,0,12,12,5,5 hidden pieces. Candidate/control p50/p95/p99
+was199.35/291.55/352.21 vs196.43/291.83/363.26 ms. This cohort shows no aggregate
+strength or conversion gain. Keep6B experimental/opt-in for the verified local
+progress behavior; do not promote it over6A or EV by default.
+
+The dangerous-reveal control at quiet48 places a hidden Black Chariot at8.6B
+moves Red Soldier4→5 before revealing, avoiding the immediate4-square exposure.
+6C follows after the verified6B source/configuration is frozen. Historical AI-6A
+results use the old Core and are not evidence about this v4 environment.

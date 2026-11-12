@@ -197,3 +197,12 @@ is selective and can omit important replies; it does not prove a forced win
 against omitted actions. The opening can remain one-ply EV. Browser/CLI identity:
 `tactical-6a`. Original EV remains the browser default and frozen control. See
 [AI-6A results and limitations](../../docs/ai-6a-evaluation.md).
+
+## AI-6B progress experiment
+
+`progressAgent` / `explainProgressDecision` reuse the frozen6A search and public
+contexts. Only late nonterminal material advantage is discounted as quiet plies
+approach60; terminal values, chance handling and all search limits stay fixed.
+`progress-6b` is an opt-in CLI strategy. EV remains the browser default. See
+[AI-6B/6C evidence](../../docs/ai-6bc-implementation.md); the small held-out cohort
+does not establish a strength gain.

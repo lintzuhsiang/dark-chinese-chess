@@ -33,7 +33,10 @@ export const DEFAULT_SEARCH_LIMITS: SearchLimits = Object.freeze({
   interiorWidth: 4,
   alphaBeta: true,
 });
-export type PublicLeafEvaluator = (position: PositionEvaluationInput) => number;
+export type PublicLeafEvaluator = (
+  position: PositionEvaluationInput,
+  evaluation?: EvaluationBreakdown,
+) => number;
 export type TacticalTag = 'WIN' | 'TERMINAL' | 'RECAPTURE' | 'DEFENSE' | 'CAPTURE' | 'THREAT';
 export interface SearchBranchReport {
   readonly nodeId: number;
@@ -217,7 +220,9 @@ export function searchPublicPosition(
   ): Node {
     const evaluation = evaluatePosition(position, evaluationConfiguration);
     const score =
-      evaluation.terminal || evaluateLeaf === undefined ? evaluation.total : evaluateLeaf(position);
+      evaluation.terminal || evaluateLeaf === undefined
+        ? evaluation.total
+        : evaluateLeaf(position, evaluation);
     if (!Number.isFinite(score) || (!evaluation.terminal && Math.abs(score) > 1))
       throw new RangeError('Active leaf scores must be finite and within [-1,1].');
     leafEvaluations += 1;

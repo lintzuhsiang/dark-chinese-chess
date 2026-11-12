@@ -11,6 +11,7 @@ import {
 import { formatTournamentSummary, runTournament } from './tournament';
 import type { EvaluatedAgent } from './tournament-types';
 import { tacticalDescriptor } from './tactical-descriptor';
+import { progressDescriptor } from './feature-descriptor';
 
 function uint32(value: string, label: string): number {
   const number = Number(value);
@@ -40,7 +41,7 @@ async function main(): Promise<void> {
     console.log('  --pairs 20 --deck-start 0 --agent-seed 20261110 --max-plies 4096');
     console.log('  --confidence 0.95 --output benchmark-results/random-baseline.json');
     console.log(
-      '  --agent-a random|heuristic|expected-value|safety-tie-1|tactical-6a --agent-b random|heuristic|expected-value|safety-tie-1|tactical-6a',
+      '  --agent-a random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b --agent-b random|heuristic|expected-value|safety-tie-1|tactical-6a|progress-6b',
     );
     console.log('  --deck-seeds 10,20,30 may replace --pairs/--deck-start.');
     return;
@@ -57,6 +58,7 @@ async function main(): Promise<void> {
     deckSeeds = Array.from({ length: count }, (_, index) => start + index);
   }
   const descriptor = (kind: string, seat: string): EvaluatedAgent => {
+    if (kind === 'progress-6b') return progressDescriptor(kind + '-' + seat);
     if (kind === 'tactical-6a') return tacticalDescriptor(kind + '-' + seat);
     if (
       kind !== 'random' &&
@@ -65,7 +67,7 @@ async function main(): Promise<void> {
       kind !== 'safety-tie-1'
     ) {
       throw new Error(
-        'Agent must be random, heuristic, expected-value, safety-tie-1, or tactical-6a.',
+        'Agent must be random, heuristic, expected-value, safety-tie-1, tactical-6a, or progress-6b.',
       );
     }
     if (kind === 'expected-value' || kind === 'safety-tie-1') {

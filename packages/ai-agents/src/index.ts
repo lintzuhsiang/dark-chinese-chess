@@ -47,3 +47,11 @@ export type {
   SafetyTieCheck,
   SafetyTieDecision,
 } from './expected-value-agent';
+
+export {
+  progressAgent,
+  explainProgressDecision,
+  evaluateProgressPosition,
+  getProgressState,
+  countPublicPositionReturns,
+} from './progress-agent';
