@@ -1,7 +1,7 @@
 # Phase 2 — AI Opponent Plan
 
-**Version:** 0.13 — Approved AI-6A implementation and controlled evaluation, 2026-11-11  
-**Status:** AI-0–AI-5, AI-5.1 and SAFETY-TIE-1 committed with owner approval. AI-6A implemented and verified as an opt-in selective baseline; uncommitted. AI-6B/6C features and chase amendments remain deferred.  
+**Version:** AI-6B/6C authorization, 2026-11-12  
+**Status:** AI-6A and Chase v4 committed as `973bafe42f66e3414878afb3284e1f54216cbe4d`. Owner authorized AI-6B/6C implementation, commits and the v4 Core pin update on 2026-11-12. No push or deployment.
 **Authority:** This plan supersedes the earlier [phase-2-plan.md](phase-2-plan.md) draft.
 
 ## 1. Approved Architecture Decisions
@@ -56,26 +56,18 @@ The original AI-1/AI-2 pin was **34452df2bc198d382e36399218d2cfcb9e95f3f3** (rel
 
 Runner metadata records this pin, randomness versions, roots, and environment. Before a match, verify the checkout's Core/rules match the pin; unrelated Phase 2 changes do not invalidate the Core baseline. Never label a later modified Core with this revision.
 
-## 3. Verified Chase Counting Convention
+## 3. Current Chase v4 baseline
 
-The approved threshold is **reject the third qualifying return**, equivalently reject the candidate **fourth qualifying appearance of that same logical threat position**. The first appearance establishes zero completed returns.
+The current rules are [Chase v4](chase-v4-spec.md): reject the third qualifying
+physical A/B + post-move coordinate appearance in the inclusive last 20 plies.
+Preserve NO_PIECES → ordinary NO_LEGAL_ACTION → CHASE_STALEMATE → NO_PROGRESS.
+This supersedes the old continuous-chain/fourth-appearance descriptions in
+historical reports. Never relabel old benchmark results as v4 results.
 
-With Red Chariot 0 and Black Horse 5, P1 first moves Chariot 0→1 to establish threat position A (Chariot 1, Horse 5, P2 next). Other pieces stay stationary and no extra eligible target changes the chase.
-
-One return to A is: Horse 5→4; Chariot 1→0; Horse 4→5; Chariot 0→1.
-
-| Candidate appearance of A | Returns if accepted | Decision                                       |
-| ------------------------- | ------------------- | ---------------------------------------------- |
-| Initial threat: 1         | 0                   | Accept; store count 1                          |
-| First return: 2           | 1                   | Accept; store count 2                          |
-| Second return: 3          | 2                   | Accept; store count 3                          |
-| Third-return candidate: 4 | 3                   | Reject final Chariot 0→1; stored count stays 3 |
-
-Only the initial threat and qualifying renewals count. Defender escapes and general board repetitions do not. Counts apply to every qualifying threat-position key within the continuous chase, including later loops elsewhere; resets and physical-pair continuity follow the existing rules.
-
-Evidence: [game-rules.md §10](game-rules.md#10-perpetual-chasing-長捉--simplified-house-rule), [chase.ts](../packages/game-core/src/chase.ts) initializes count 1 and rejects candidate counts greater than 3; [chase.test.ts](../packages/game-core/tests/chase.test.ts) covers zero initial returns, two accepted returns, rejected third return, alternate routes, and later loops. [outcome-integration.test.ts](../apps/web/tests/outcome-integration.test.ts) verifies legal-action filtering and unchanged state/timeline on rejection.
-
-The approved chase-aware immobilization amendment also remains in force: an accepted action leaving the next player without any permitted action ends with NO_LEGAL_ACTION, before NO_PROGRESS. A rejected attempt does not itself adjudicate a game. The sequence above assumes alternatives remain; the separate Cannon regression tests terminal resolution when none remain. This plan changes no rules.
+The owner approved pinning new evaluations to the committed v4 Core. The strict
+baseline guard remains intact; old revisions and original reports are retained.
+See [AI-6B/6C implementation and evaluation](ai-6bc-implementation.md) for the
+new frozen baselines, feature ownership, ablations and held-out evidence.
 
 ## 4. Evaluation and Public Projection
 
@@ -356,11 +348,12 @@ fallback are explicit. Existing Core contracts suffice and rules/pin are unchang
 Original EV remains frozen/default; `tactical-6a` is a separate selectable strategy.
 Diagnostics report actual depth, budget exhaustion and root/interior omissions.
 
-Latest authorization excludes AI-6B/6C feature implementation in this experiment;
-progress, relative-position, blocker and Cannon features remain deferred. Historical
-111 EV/Heuristic draws are not claimed as measurements of this search baseline.
-No commit, push or deployment is authorized. The initial read-only opening probe
-and exact search proposal are retained as the approval/evidence record.
+Owner amendment on 2026-11-12: AI-6B/6C implementation and commits are now
+approved, in dependency order, on the committed Chase v4 baseline. The v4 pin
+update is separately approved. Keep the same search limits/context architecture,
+use independent feature ablations and fresh held-out seeds, and preserve all
+historical results. No push or deployment is authorized. The experiment plan
+and results are in [AI-6B/6C](ai-6bc-implementation.md).
 
 ## 5. Evaluation Harness and Experiments
 

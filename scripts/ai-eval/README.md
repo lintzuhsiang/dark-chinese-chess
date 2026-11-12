@@ -2,7 +2,7 @@
 
 The [Phase 2 plan](../../docs/phase-2-ai-plan.md) records the approved boundaries.
 AI-2 extends the existing AI-1 runner; it adds no strategy or game rules.
-Core is pinned to b3e7b2b139f0e8d9598876cc3a9b00d2bf032f75. Execution and
+New Chase v4 evaluations pin Core to 973bafe42f66e3414878afb3284e1f54216cbe4d. Historical reports retain their original Core revision. Execution and
 replay verification require this Git checkout and reject a changed Core/rules.
 
 The AI-3 shared Core movement extraction was separately approved, committed, and
