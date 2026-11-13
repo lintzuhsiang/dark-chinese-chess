@@ -1,4 +1,4 @@
-import type { PublicSquare } from '@dark-chess/game-core';
+import type { ActionEvent, PublicSquare } from '@dark-chess/game-core';
 import { coordinateLabel, pieceGlyph, pieceLabel } from './labels';
 
 export function Board({
@@ -6,11 +6,13 @@ export function Board({
   selectedSquare = null,
   onSquareClick,
   disabled = false,
+  lastAction,
 }: {
   readonly squares: readonly PublicSquare[];
   readonly selectedSquare?: number | null;
   readonly onSquareClick: (position: number) => void;
   readonly disabled?: boolean;
+  readonly lastAction?: ActionEvent | undefined;
 }) {
   return (
     <ol className="board" aria-label="暗棋棋盤，八列四欄">
@@ -19,10 +21,22 @@ export function Board({
         const piece = square.kind === 'REVEALED' ? square.piece : null;
         const glyph = piece ? pieceGlyph(piece) : '暗';
         const label = piece ? pieceLabel(piece) : square.kind === 'HIDDEN' ? '暗棋' : '空格';
+        const mark =
+          lastAction?.type === 'FLIP' && lastAction.position === position
+            ? 'FLIP'
+            : lastAction?.type === 'MOVE'
+              ? lastAction.from === position
+                ? 'FROM'
+                : lastAction.to === position
+                  ? lastAction.captured
+                    ? 'CAPTURE'
+                    : 'TO'
+                  : null
+              : null;
         return (
           <li key={position}>
             <button
-              className={`square ${piece ? `revealed ${piece.color.toLowerCase()}` : square.kind.toLowerCase()}${selectedSquare === position ? ' selected' : ''}`}
+              className={`square ${piece ? `revealed ${piece.color.toLowerCase()}` : square.kind.toLowerCase()}${selectedSquare === position ? ' selected' : ''}${mark ? ` replay-mark replay-${mark.toLowerCase()}` : ''}`}
               type="button"
               tabIndex={0}
               aria-label={`${coordinate}，${label}`}
@@ -33,6 +47,7 @@ export function Board({
               <span className="piece" aria-hidden="true">
                 {square.kind === 'EMPTY' ? '' : glyph}
               </span>
+              {mark && <span className="replay-square-label">{mark}</span>}
             </button>
           </li>
         );

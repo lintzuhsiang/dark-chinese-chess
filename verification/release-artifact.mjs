@@ -33,6 +33,11 @@ for (const file of files) {
   if (/\.(?:js|html)$/.test(name)) {
     assert.doesNotMatch(
       content.toString(),
+      /Tournament Replay Inspector|replay\.worker|__REPLAY_CORE__/,
+      `Development Replay Inspector leaked into ${name}`,
+    );
+    assert.doesNotMatch(
+      content.toString(),
       /runPhoneVerification|phoneVerificationReport|phoneVerificationStage|fixtureDeck|shuffleSamples|verificationSample/,
       `Test tooling leaked into ${name}`,
     );

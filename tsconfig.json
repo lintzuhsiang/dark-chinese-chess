@@ -5,6 +5,9 @@
     "vitest.config.ts",
     "playwright.config.ts",
     "playwright.performance.config.ts",
+    "playwright.replay.config.ts",
+    "apps/web/vite.config.ts",
+    "e2e-replay",
     "e2e",
     "verification",
     "scripts/ai-eval"

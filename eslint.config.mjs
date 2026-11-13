@@ -9,6 +9,7 @@ export default defineConfig([
       '**/dist/**',
       'coverage/**',
       'test-results/**',
+      'test-results-replay/**',
       'playwright-report/**',
       'performance-results/**',
     ],
