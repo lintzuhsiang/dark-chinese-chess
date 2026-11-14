@@ -1,7 +1,7 @@
 # AI-7: terminal-only Banqi self-play
 
-Branch B is maintained on `ai-self-play` in the existing
-`experiment/selfplay-zero` worktree, based on `c377a68`. GameCore
+Branch B is maintained on the existing `experiment/selfplay-zero` branch and
+worktree, based on `c377a68`. GameCore
 and `docs/game-rules.md` must exactly match
 `973bafe42f66e3414878afb3284e1f54216cbe4d`. Startup checks tracked differences and
 uncommitted/untracked Core files. Existing heuristic agents and the browser default

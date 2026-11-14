@@ -14,7 +14,7 @@ from .campaign import ROOT, atomic_json, directory_bytes, read_json, utc_now, va
 def running_groups(output):
     status = read_json(output / "run-status.json", {})
     return {record["pid"] for run in status.get("runs", [])
-            for record in [run.get(phase, {}) for phase in ("training", "evaluation", "probes")]
+            for record in [run.get(phase, {}) for phase in ("training", "evaluation", "probes", "historical_evaluation")]
             if record.get("state") == "running" and record.get("pid")}
 
 
@@ -76,7 +76,7 @@ def main():
             process.wait(timeout=3)
         status = read_json(output / "run-status.json", {})
         for run in status.get("runs", []):
-            for phase in ("training", "evaluation", "probes"):
+            for phase in ("training", "evaluation", "probes", "historical_evaluation"):
                 if run.get(phase, {}).get("state") == "running":
                     run[phase].update({"state": "failed", "reason": reason or "supervisor_crashed"})
         status.update({"state": "partial", "guard_stop_reason": reason or "supervisor_crashed", "finished_at": utc_now()})

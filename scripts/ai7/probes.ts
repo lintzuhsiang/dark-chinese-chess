@@ -1,5 +1,6 @@
 // Evaluation-only Core-derived diagnostics. Never imported by environment.ts or PPO.
 import {
+  createInitialState,
   createPublicProjectionContext,
   getLegalActions,
   getObservation,
@@ -193,6 +194,84 @@ export function createEvaluationProbes() {
     version: 'core-terminal-probes-v1',
     setup:
       'Core-validated cooperative prefixes constructed with existing test fixture compiler; its setup heuristics do not reach model inputs or training. Diagnostics are public/chance-derived.',
+    probes,
+  };
+}
+
+/** New geometric counterparts, replayed by authoritative Core; evaluation only. */
+export function createConfirmationProbes() {
+  const fixtures = [
+    recaptureFixture(),
+    profitableFixture(),
+    tacticalSnapshot([
+      [9, 'RED', 'SOLDIER'],
+      [4, 'BLACK', 'ADVISOR'],
+      [31, 'BLACK', 'SOLDIER'],
+    ]),
+    tacticalSnapshot([
+      [9, 'RED', 'GENERAL'],
+      [10, 'BLACK', 'SOLDIER'],
+      [31, 'BLACK', 'CANNON', false],
+    ]),
+    tacticalSnapshot([
+      [9, 'RED', 'GENERAL'],
+      [0, 'BLACK', 'GENERAL'],
+      [10, 'BLACK', 'SOLDIER', false],
+      [31, 'BLACK', 'CANNON', false],
+    ]),
+    tacticalSnapshot([
+      [9, 'RED', 'SOLDIER'],
+      [10, 'BLACK', 'GENERAL'],
+    ]),
+    tacticalSnapshot([
+      [9, 'RED', 'HORSE'],
+      [10, 'BLACK', 'HORSE'],
+    ]),
+    tacticalSnapshot([
+      [9, 'RED', 'HORSE'],
+      [10, 'BLACK', 'HORSE'],
+    ]),
+  ];
+  const last = fixtures[7]!;
+  const cycle: readonly GameAction[] = [
+    { type: 'MOVE', from: 9, to: 8 },
+    { type: 'MOVE', from: 10, to: 11 },
+    { type: 'MOVE', from: 8, to: 9 },
+    { type: 'MOVE', from: 11, to: 10 },
+  ];
+  for (let i = 0; i < 56; i++) accept(last, cycle[i % 4]!);
+  const categories = [
+    'capture',
+    'capture',
+    'defense',
+    'defense',
+    'flip_risk',
+    'endgame',
+    'endgame',
+    'repetition',
+  ];
+  const probes = fixtures.map((fixture, index) => {
+    if (!fixture.initialDeck) throw new Error('Confirmation setup requires a complete replay deck');
+    const initial = createInitialState([...fixture.initialDeck].reverse());
+    if (!initial.ok) throw new Error('Invalid confirmation deck');
+    const mirrored: ProjectionFixture = { state: initial.state, history: [] };
+    const previous = new Set<string>([publicKey(mirrored)]);
+    for (const event of fixture.history) {
+      accept(
+        mirrored,
+        event.type === 'FLIP'
+          ? { type: 'FLIP', position: 31 - event.position }
+          : { type: 'MOVE', from: 31 - event.from, to: 31 - event.to },
+      );
+      previous.add(publicKey(mirrored));
+    }
+    return describeProbe(`confirmation-${index}`, categories[index]!, mirrored, previous);
+  });
+  return {
+    evaluationOnly: true,
+    version: 'p1p2-confirmation-mirror-v1',
+    setup:
+      'Previously unevaluated 180-degree geometric counterparts; every accepted prefix and action classification validated by Core. Narrow symmetry confirmation, not independent tactical tasks.',
     probes,
   };
 }

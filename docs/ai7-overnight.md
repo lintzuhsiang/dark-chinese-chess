@@ -2,7 +2,7 @@
 
 This extends the first terminal-only PPO pilot. It does not change GameCore, Chase
 v4, existing AI baselines, Branch A, or the browser default. The experiment runs in
-the existing `experiment/selfplay-zero` worktree, now on `ai-self-play`. Original
+the existing `experiment/selfplay-zero` worktree, now on `experiment/selfplay-zero`. Original
 run sources remain preserved as exact source snapshots and hashes. Archiving the
 implementation in Git is separate from campaign execution; the campaign does not
 push, merge, or deploy changes.

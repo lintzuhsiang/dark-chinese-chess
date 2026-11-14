@@ -10,7 +10,7 @@ import { createAgentInput } from '../ai-eval/agent-input';
 import { createExpectedValueAgent } from '../../packages/ai-agents/src/expected-value-agent';
 import { tacticalAgent } from '../../packages/ai-agents/src/tactical-agent';
 import { actionId, createEnvironment, OBSERVATION_VERSION } from './environment';
-import { createEvaluationProbes } from './probes';
+import { createEvaluationProbes, createConfirmationProbes } from './probes';
 
 assertCoreBaseline();
 type Environment = ReturnType<typeof createEnvironment>;
@@ -32,7 +32,15 @@ function artifactBytes(path: string): number {
 }
 
 interface Request {
-  readonly command: 'hello' | 'reset' | 'step' | 'baseline' | 'benchmark' | 'probes' | 'close';
+  readonly command:
+    | 'hello'
+    | 'reset'
+    | 'step'
+    | 'baseline'
+    | 'benchmark'
+    | 'probes'
+    | 'confirmation-probes'
+    | 'close';
   readonly games?: readonly { id: number; seed: number; archive?: string }[];
   readonly actions?: readonly { id: number; action: number }[];
   readonly ids?: readonly number[];
@@ -48,6 +56,8 @@ function getGame(id: number) {
 
 async function handle(request: Request): Promise<unknown> {
   switch (request.command) {
+    case 'confirmation-probes':
+      return createConfirmationProbes();
     case 'probes':
       return createEvaluationProbes();
     case 'hello':

@@ -58,12 +58,19 @@ def directory_bytes(path):
 
 
 def validate_config(config, output):
-    if not output.resolve().is_relative_to(CAMPAIGN_BASE):
+    p1p2 = config.get("experiment_type") == "p1p2"
+    architectures = ("baseline", "low_lr", "random_rich") if p1p2 else ARCHITECTURES
+    seeds = (4011, 4023, 4037) if p1p2 else SEEDS
+    base = ROOT / "benchmark-results/ai7-selfplay/p1p2-comparison" if p1p2 else CAMPAIGN_BASE
+    if not output.resolve().is_relative_to(base):
         raise ValueError("Campaign output must be isolated under overnight-comparison")
-    if set(config["architectures"]) != set(ARCHITECTURES) or tuple(config["seeds"]) != SEEDS:
+    if set(config["architectures"]) != set(architectures) or tuple(config["seeds"]) != seeds:
         raise ValueError("This campaign requires exactly baseline/critic/cnn and seeds 11,23,37")
+    if p1p2:
+        expected={'baseline':{'learning_rate':.0003,'opponent_mixture':'standard'},'low_lr':{'learning_rate':.0001,'opponent_mixture':'standard'},'random_rich':{'learning_rate':.0003,'opponent_mixture':'random_rich'}}
+        if config.get('treatments') != expected: raise ValueError('P1/P2 requires strictly isolated predefined treatments')
     matrix = [(job["architecture"], job["seed"]) for job in config["jobs"]]
-    if len(matrix) != 9 or set(matrix) != {(architecture, seed) for architecture in ARCHITECTURES for seed in SEEDS}:
+    if len(matrix) != 9 or set(matrix) != {(architecture, seed) for architecture in architectures for seed in seeds}:
         raise ValueError("Campaign must contain each of the nine independent runs exactly once")
     if len({job["id"] for job in config["jobs"]}) != 9:
         raise ValueError("Duplicate run ID")
@@ -94,7 +101,7 @@ class Supervisor:
         old = read_json(self.output / "run-status.json")
         if old:
             for run in old.get("runs", []):
-                for phase in ("training", "evaluation", "probes"):
+                for phase in ("training", "evaluation", "probes", "historical_evaluation"):
                     record = run.get(phase, {})
                     if record.get("state") == "running" and record.get("pid"):
                         try:
@@ -137,6 +144,10 @@ class Supervisor:
             file.write(json.dumps({"at": utc_now(), "event": event, **details}) + "\n")
 
     def check_sources(self):
+        if self.config.get('historical_opponent'):
+            historical=Path(self.config['historical_opponent'])
+            if hashlib.sha256(historical.read_bytes()).hexdigest()!=self.config['historical_opponent_sha256']:
+                raise RuntimeError('Frozen historical opponent changed')
         if not self.config.get("source_hashes"):
             raise RuntimeError("Campaign requires frozen source fingerprints from correctness-gated preparation")
         for name, expected in self.config.get("source_hashes", {}).items():
@@ -271,14 +282,17 @@ class Supervisor:
                 run["training"] = {"state": "skipped", "reason": reason}
                 continue
             arguments = [
-                "scripts.ai7.train", "--output", str(run_root), "--architecture", run["architecture"],
+                "scripts.ai7.train", "--output", str(run_root), "--architecture", "baseline" if self.config.get("experiment_type") == "p1p2" else run["architecture"],
                 "--seed", str(run["seed"]), "--max-env-steps", str(self.config["target_env_steps"]),
                 "--max-updates", "100000", "--training-seconds", str(self.config["per_run_training_seconds"]),
                 "--batch-games", "16", "--threads", str(self.config["threads"]), "--device", "cpu",
                 "--checkpoint-every-steps", str(self.config["milestone_steps"]), "--max-replays", "4",
-                "--validation-seed-start", str(self.config["validation_seed_start"]), "--validation-pairs", "8",
+                "--validation-seed-start", str(self.config["validation_seed_start"]), "--validation-pairs", str(self.config.get("validation_pairs",8)),
                 "--deadline-epoch", str(training_deadline),
             ]
+            if self.config.get('experiment_type') == 'p1p2':
+                treatment = self.config['treatments'][run['architecture']]
+                arguments.extend(['--learning-rate',str(treatment['learning_rate']),'--opponent-mixture',treatment['opponent_mixture'],'--instrumentation','detailed'])
             resume_path = run_root / "latest.pt"
             if run_root.exists():
                 if not resume_path.exists():
@@ -320,6 +334,26 @@ class Supervisor:
             complete = len(reports) == 2 and all(report.get("completed") == self.config["evaluation_pairs"] * 2 for report in reports)
             run["evaluation"].update({"state": "completed" if result["returncode"] == 0 and complete else "partial" if reports else "skipped" if not result["started"] else "failed", "summary": str(evaluation / "summary.json")})
             self.persist()
+        if self.config.get('experiment_type') == 'p1p2':
+            self.status['state'] = 'historical_evaluation'
+            self.persist()
+            for run in self.status['runs']:
+                path = self.output/'runs'/run['id']
+                dest = self.output/'historical-evaluations'/run['id']
+                record = run.setdefault('historical_evaluation', {'state':'pending'})
+                if dest.exists(): continue
+                if not (path/'final.pt').exists():
+                    record.update(state='skipped', reason='no final checkpoint');continue
+                result = self.child(run['id']+'-historical',[
+                    'scripts.ai7.evaluate','--checkpoints',str(path/'initial.pt'),str(path/'final.pt'),
+                    '--historical',self.config['historical_opponent'],'--output',str(dest),
+                    '--pairs','64','--seed-start','7000000','--opponents','random','--archive-count','0',
+                    '--deadline-epoch',str(self.deadline-self.config['reserve_report_seconds'])],
+                    self.deadline-self.config['reserve_report_seconds'],record)
+                data=read_json(dest/'summary.json',{})
+                complete=len(data.get('matchups',[]))==4 and all(x.get('completed')==128 for x in data['matchups'])
+                record.update(state='completed' if result['returncode']==0 and complete else 'partial',summary=str(dest/'summary.json'))
+                self.persist()
         self.status["state"] = "probes"
         self.persist()
         for run in self.status["runs"]:
@@ -336,6 +370,7 @@ class Supervisor:
                 result = self.child(run["id"] + "-probes", [
                     "scripts.ai7.research", "--checkpoint", str(run_root / "final.pt"),
                     "--initial-checkpoint", str(run_root / "initial.pt"),
+                    *(["--confirmation-probes"] if self.config.get("experiment_type") == "p1p2" else []),
                     "--probe-output", str(probe_path), "--deadline-epoch", str(self.deadline - self.config["reserve_report_seconds"]),
                 ], self.deadline - self.config["reserve_report_seconds"], run["probes"])
                 probe = read_json(probe_path, {})
@@ -343,10 +378,11 @@ class Supervisor:
                 run["probes"].update({"state": "completed" if result["returncode"] == 0 and complete else "partial" if probe else "skipped" if not result["started"] else "failed", "path": str(probe_path)})
             self.persist()
         for run in self.status["runs"]:
-            for phase in ("training", "evaluation", "probes"):
-                if run[phase]["state"] == "pending":
+            for phase in ("training", "evaluation", "probes", "historical_evaluation"):
+                if run.get(phase, {}).get("state") == "pending":
                     run[phase].update({"state": "skipped", "reason": "campaign_stopped_before_phase"})
         self.status["state"] = "completed" if all(run["training"]["state"] == run["evaluation"]["state"] == run["probes"]["state"] == "completed" for run in self.status["runs"]) else "partial"
+        if self.config.get("experiment_type") == "p1p2" and any(r.get("historical_evaluation",{}).get("state") != "completed" for r in self.status["runs"]): self.status["state"]="partial"
         self.status["finished_at"] = utc_now()
         self.report(final=True)
         self.persist()

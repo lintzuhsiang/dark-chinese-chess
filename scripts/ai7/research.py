@@ -110,7 +110,7 @@ def probe_policy(model, suite, device="cpu", deadline=float("inf")):
     return {"completed": len(results), "planned": len(suite["probes"]), "summary": summary, "positions": results}
 
 
-def run_probes(checkpoint, initial_checkpoint, output, deadline_epoch=None, device="cpu"):
+def run_probes(checkpoint, initial_checkpoint, output, deadline_epoch=None, device="cpu", confirmation=False):
     output = output.resolve()
     if not output.is_relative_to(ROOT / "benchmark-results/ai7-selfplay"):
         raise ValueError("Probe artifacts must be inside the AI-7 experiment tree")
@@ -120,7 +120,7 @@ def run_probes(checkpoint, initial_checkpoint, output, deadline_epoch=None, devi
     deadline = float("inf") if deadline_epoch is None else deadline_epoch
     bridge = Bridge(output.parent / (output.stem + "-bridge"))
     try:
-        suite = bridge.request(command="probes")
+        suite = bridge.request(command="confirmation-probes" if confirmation else "probes")
         report = {"evaluation_only": True, "version": suite["version"], "setup": suite["setup"], "metadata": bridge.metadata, "deadline_epoch": deadline_epoch}
         for label, path in [("initial", initial_checkpoint), ("final", checkpoint)]:
             if path is None or time.time() >= deadline:
@@ -205,6 +205,20 @@ def comparison_rows(campaign, config, status):
         for name, result in probes.get("final", {}).get("summary", {}).items():
             row[f"probe_{name}_mass"] = result.get("mean_mass")
             row[f"probe_{name}_delta"] = probes.get("delta", {}).get(name)
+        if config.get('experiment_type') == 'p1p2':
+            ds=[m['diagnostics'] for m in metrics if 'diagnostics' in m]
+            masses=[];deltas=[];kls=[]
+            for d in ds:
+                groups=[p['groups']['immediate_win'] for p in d['probes'] if 'immediate_win' in p['groups']]
+                if groups:
+                    masses.append(float(np.mean([g['after'] for g in groups])))
+                    deltas.append(float(np.mean([g['after']-g['before'] for g in groups])))
+                kls += [p['kl_before_after'] for p in d['probes']]
+            row.update(treatment=job['architecture'],network_architecture=training.get('model_config',manifest.get('model_config',{})).get('architecture','baseline'),probe_win_mass_peak=max(masses) if masses else None,probe_win_mass_final=masses[-1] if masses else None,
+                       worst_update_win_mass_change=min(deltas) if deltas else None,probe_kl_p95=float(np.quantile(kls,.95)) if kls else None)
+            historical=read_json(campaign/'historical-evaluations'/run_id/'summary.json')
+            row['frozen_opponent_matchups']=[{k:v for k,v in x.items() if k not in ('games','pair_scores')} for x in historical.get('matchups',[]) if x.get('opponent')!='random']
+            row['frozen_opponent_comparisons']=[x for x in historical.get('comparisons',[]) if x.get('opponent')!='random']
         rows.append(row)
     return rows
 
@@ -254,7 +268,7 @@ def aggregate_rows(rows, config):
         probe_keys = sorted({key for row in qualified for key in row if key.startswith("probe_") and key.endswith("_delta")})
         aggregate["probe_probability_changes"] = {key: seed_statistics([row.get(key) for row in qualified]) for key in probe_keys}
     differences = {}
-    for architecture in ["critic", "cnn"]:
+    for architecture in [a for a in config.get("architectures", ["baseline","critic","cnn"]) if a != "baseline"]:
         values = []
         variance = []
         for seed in config.get("seeds", [11, 23, 37]):
@@ -289,9 +303,9 @@ def plot_curves(campaign, config, rows):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    colors = {"baseline": "#375ccc", "critic": "#cf7133", "cnn": "#168569"}
+    colors = dict(zip(config.get("architectures",["baseline","critic","cnn"]), ["#375ccc","#cf7133","#168569"]))
     fig, axes = plt.subplots(2, 4, figsize=(17, 8), constrained_layout=True)
-    fig.suptitle("AI-7 controlled architecture comparison · training seeds 11, 23, 37")
+    fig.suptitle("AI-7 controlled comparison · seeds " + str(config.get("seeds")))
     panels = [("explained_variance", "Value explained variance"), ("normalized_entropy", "Normalized policy entropy"), ("env_steps_per_second", "Collection throughput (steps/s)"), ("validation_score", "Independent validation score (8 pairs)"), ("no_progress_rate", "Self-play NO_PROGRESS rate"), ("mean_repetitions", "Self-play repeated public positions"), ("mean_reversals", "Self-play own-move reversals")]
     for row in rows:
         metrics = metric_rows(campaign / "runs" / row["run_id"] / "metrics.jsonl")
@@ -315,7 +329,7 @@ def plot_curves(campaign, config, rows):
             final_axis.scatter(architecture_index + jitter, value, color=colors[row["architecture"]], s=35)
             if row.get("initial_paired_score") is not None:
                 final_axis.scatter(architecture_index + jitter, row["initial_paired_score"], facecolors="none", edgecolors=colors[row["architecture"]], s=35)
-    final_axis.set(title="Random score per independent seed", ylabel="Filled=final; open=initial", ylim=(0, 1), xticks=[0, 1, 2], xticklabels=["MLP", "Critic", "CNN"])
+    final_axis.set(title="Random score per independent seed", ylabel="Filled=final; open=initial", ylim=(0, 1), xticks=[0, 1, 2], xticklabels=config.get("architectures",["MLP","Critic","CNN"]))
     final_axis.axhline(.5, color="gray", linestyle="--", linewidth=1)
     final_axis.grid(alpha=.15)
     for architecture, color in colors.items():
@@ -349,7 +363,7 @@ def build_report(campaign):
         interval = estimate.get("t95")
         ci = "unavailable" if interval is None else f"[{100*interval[0]:.2f}, {100*interval[1]:.2f}] pp"
         lines.append(f"| {architecture} | {summary['complete_comparable_replications']}/{summary['planned_replications']} | {format_delta(estimate['mean'])} | {ci} | {summary['seeds_with_bootstrap_ci_above_zero']} |")
-    lines += ["", "Training seed, not individual game, is the replication unit. With only three seeds, t intervals depend strongly on approximate normality; conservative bounded-seed intervals are also in comparison.json. Individual 128-pair policy confidence intervals do not turn thousands of games into thousands of independent learning experiments. No architecture winner is declared from the highest observed score.", "", "## Direct research answers", ""]
+    lines += ["", "Training seed, not individual game, is the replication unit. With only three seeds, t intervals depend strongly on approximate normality; conservative bounded-seed intervals are also in comparison.json. Individual fixed-policy confidence intervals do not turn thousands of games into thousands of independent learning experiments. No architecture winner is declared from the highest observed score.", "", "## Direct research answers", ""]
     completed = sum(value["complete_comparable_replications"] for value in aggregates.values())
     if completed < len(config.get("jobs", [])):
         lines.append(f"Only {completed}/{len(config.get('jobs', []))} runs currently have a complete equal-budget initial/final Random comparison. Conclusions remain provisional; pending/failed/skipped runs are retained in run-status.json.")
@@ -357,7 +371,7 @@ def build_report(campaign):
         n = summary["complete_comparable_replications"]
         lines.append(f"- **{architecture} learning:** {summary['seeds_with_positive_point_estimate']}/{n} completed seeds have a positive improvement point estimate; {summary['seeds_with_bootstrap_ci_above_zero']}/{n} have an individual paired bootstrap interval above zero. This is reported alongside replication-level intervals, not a claim based on loss reduction.")
         lines.append(f"  {summary['evidence_assessment']}")
-    for architecture in ["critic", "cnn"]:
+    for architecture in [a for a in config.get("architectures", ["baseline","critic","cnn"]) if a != "baseline"]:
         matched = differences[f"{architecture}_minus_baseline"]
         lines.append(f"- **{architecture} versus MLP:** matched-seed final score difference mean {format_delta(matched['final_score']['mean'])}; explained-variance difference {format_value(matched['explained_variance']['mean'])}. Compare their intervals in comparison.json. Better value fit alone does not establish stronger play. CNN efficiency is compared at the same transition endpoint; curves show optimization and cost, not unobserved between-checkpoint playing strength.")
     lines += ["- **Tactical/endgame evidence:** probe results measure categorical action probability on eight frozen Core-validated positions. Compare initial/final masses in comparison.csv/json. Immediate captures are not necessarily good captures; endgame/repetition probes test one-move terminal conversion, not general coordination or multi-move endgames.", "- **FLIP risk:** labels use publicly remaining inventory and all possible reveals, then check an opponent's immediate terminal winning MOVE. They never use actual hidden identities. This narrow risk metric cannot judge long-horizon FLIP quality.", "- **Repetition/draw-seeking:** initial/final NO_PROGRESS, repeated public positions, and own-move reversals are recorded per run. Higher repetition alone is not evidence of intent. High score through draws must be separated from improved winning conversion.", "", "## Limits and next experiment", "", "No probe, validation, or held-out result feeds training or selects a replacement architecture. No reward shaping or baseline promotion is performed. A reliable advantage requires consistent independent seeds, positive paired evidence, and compatible replication-level uncertainty; all inconclusive cases remain inconclusive. Next prioritize a preregistered replication of any consistent effect on fresh deck seeds, or an unchanged-reward failure analysis of exploration, critic predictions and conversion if no effect is supported.", "", "## Replay examples", ""]
@@ -369,6 +383,21 @@ def build_report(campaign):
         description = archive.get("summary", {})
         lines.append(f"- `{path.relative_to(campaign)}` — {description.get('plies', '?')} plies, result {json.dumps(description.get('result'))}; deterministic Core replay verified by the archive writer.")
     lines += ["", "Full configurations and source hashes are in config.json/source fingerprints and each run manifest. comparison.csv/json include completed/attempted denominators, cost, entropy, value diagnostics, draw/repetition metrics and evaluation-only probe masses. Missing values remain empty/pending.", ""]
+    if config.get('experiment_type') == 'p1p2':
+        lines=[line.replace('Core, observations, action masks, PPO hyperparameters and opponent mixture are shared; only model architecture differs','Core, public observations, masks, rewards and baseline MLP are fixed; each treatment changes only its predeclared learning rate OR opponent mixture').replace('architecture comparison','P1/P2 controlled comparison').replace('| Architecture |','| Treatment |').replace('CNN efficiency is compared','Treatment efficiency is compared') for line in lines]
+        lines += ['', '## Instrumentation and frozen-opponent generalization', '', 'All treatments use the baseline MLP. Final-vs-initial score changes must be decomposed into win and loss changes. Lower probe volatility without retained capability is not success; Random-only improvement without historical-opponent generalization is limited exploitation. Probe data never tunes or selects checkpoints.', '']
+        for row in rows:
+            folder=campaign/'runs'/row['run_id']
+            metrics=metric_rows(folder/'metrics.jsonl');ds=[m['diagnostics'] for m in metrics if 'diagnostics' in m]
+            drops=[]; conflicts=[]
+            for d in ds:
+                groups=[p['groups']['immediate_win'] for p in d['probes'] if 'immediate_win' in p['groups']]
+                if groups: drops.append(sum(g['after']-g['before'] for g in groups)/len(groups))
+                conflicts += [g['shared_actor_critic_cosine'] for g in d['gradients'] if g['shared_actor_critic_cosine'] is not None]
+            detail={'worst_update_win_mass_change':min(drops) if drops else None,'sampled_gradient_conflict_fraction':float(np.mean(np.array(conflicts)<0)) if conflicts else None}
+            historical=read_json(campaign/'historical-evaluations'/row['run_id']/'summary.json')
+            lines += [f"- {row['run_id']}: diagnostic {json.dumps(detail)}; frozen-opponent comparisons {json.dumps(historical.get('comparisons',[]))}"]
+        lines += ['', 'Confirmation probes are new Core-validated geometric counterparts of prior diagnostics, not an independent sample of all tactics. Metrics compare three training seeds; all intervals remain exploratory and unadjusted for multiple comparisons.']
     (campaign / "overnight-summary.md").write_text("\n".join(lines))
     plot_curves(campaign, config, rows)
     return result
@@ -376,6 +405,7 @@ def build_report(campaign):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--confirmation-probes", action="store_true")
     parser.add_argument("--campaign", type=Path)
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--initial-checkpoint", type=Path)
@@ -386,7 +416,7 @@ def main():
     if args.campaign:
         build_report(args.campaign)
     elif args.checkpoint and args.probe_output:
-        run_probes(args.checkpoint, args.initial_checkpoint, args.probe_output, args.deadline_epoch, args.device)
+        run_probes(args.checkpoint, args.initial_checkpoint, args.probe_output, args.deadline_epoch, args.device, args.confirmation_probes)
     else:
         parser.error("Use --campaign PATH or --checkpoint PATH --probe-output PATH")
 

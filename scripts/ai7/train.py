@@ -19,11 +19,15 @@ from .runtime import (
 )
 
 
-def optimize(model, optimizer, trajectories, config, device="cpu", deadline=float("inf"), stop_requested=None):
+def optimize(model, optimizer, trajectories, config, device="cpu", deadline=float("inf"), stop_requested=None, diagnostics=None):
     rows = [row for trajectory in trajectories for row in trajectory]
     estimated = [advantages(trajectory, config["gamma"], config["gae_lambda"]) for trajectory in trajectories]
     advantage = np.concatenate([pair[0] for pair in estimated])
     returns = np.concatenate([pair[1] for pair in estimated])
+    if diagnostics is not None:
+        from .instrumentation import advantage_diagnostics
+        diagnostics.record['advantages'] = advantage_diagnostics(trajectories, advantage.copy())
+    outcome_tensor = torch.tensor([t[-1]['reward'] for t in trajectories for _ in t], device=device) if diagnostics is not None else None
     predicted = np.asarray([row["value"] for row in rows])
     explained_variance = float(1 - np.var(returns - predicted) / np.var(returns)) if np.var(returns) > 1e-8 else None
     features = torch.from_numpy(np.stack([row["features"] for row in rows])).to(device)
@@ -39,9 +43,9 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
     measurements = []
     started = time.perf_counter()
     stop = False
-    for _ in range(config["epochs"]):
+    for epoch in range(config["epochs"]):
         indices = torch.randperm(len(rows), device=device)
-        for subset in indices.split(config["minibatch"]):
+        for minibatch, subset in enumerate(indices.split(config["minibatch"])):
             if time.perf_counter() >= deadline or (stop_requested and stop_requested()):
                 stop = True
                 break
@@ -58,11 +62,16 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
             loss = policy_loss + config["value_coefficient"] * value_loss - config["entropy_coefficient"] * entropy
             if not torch.isfinite(loss):
                 raise RuntimeError("Nonfinite PPO loss")
+            if diagnostics is not None:
+                diagnostics.gradients(epoch, minibatch, policy_loss, value_loss, entropy, loss, -torch.minimum(unclipped, clipped), outcome_tensor[subset], config)
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), config["max_grad_norm"])
             if not torch.isfinite(grad_norm):
                 raise RuntimeError("Nonfinite PPO gradient")
+            if diagnostics is not None and diagnostics.detailed:
+                post_norm = float(torch.linalg.vector_norm(torch.cat([p.grad.detach().flatten() for p in model.parameters() if p.grad is not None])).item())
+                diagnostics.clipping(float(grad_norm), post_norm)
             optimizer.step()
             with torch.no_grad():
                 kl = ((ratio - 1) - logratio).mean().item()
@@ -90,15 +99,16 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
     }
 
 
-def sample_opponent(rng, update, history):
+def sample_opponent(rng, update, history, mixture="standard"):
     if update <= 4:
         return "current" if rng.random() < 0.8 else "random"
     bucket = rng.random()
-    if bucket < 0.5:
+    current, random_cutoff, recent_cutoff = (.3, .7, .9) if mixture == "random_rich" else (.5, .6, .85)
+    if bucket < current:
         return "current"
-    if bucket < 0.6:
+    if bucket < random_cutoff:
         return "random"
-    if bucket < 0.85:
+    if bucket < recent_cutoff:
         return str(rng.choice(history[-3:]))
     return str(rng.choice(history[:-3] or history[:1]))
 
@@ -106,6 +116,10 @@ def sample_opponent(rng, update, history):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--learning-rate", type=float)
+    parser.add_argument("--opponent-mixture", choices=["standard", "random_rich"])
+    parser.add_argument("--instrumentation", choices=["off", "basic", "detailed"])
+    parser.add_argument("--gradient-sample-every-updates", type=int)
     parser.add_argument("--architecture", choices=["baseline", "critic", "cnn"])
     parser.add_argument("--seed", type=int)
     parser.add_argument("--training-seconds", type=float)
@@ -129,7 +143,7 @@ def parse_args(argv=None):
 
 def configuration(args, previous=None):
     defaults = {
-        "architecture": "baseline", "seed": 7, "training_seconds": 7200.,
+        "opponent_mixture": "standard", "instrumentation": "off", "gradient_sample_every_updates": 10, "architecture": "baseline", "seed": 7, "training_seconds": 7200.,
         "max_env_steps": 262144, "max_updates": 100000, "batch_games": 16,
         "checkpoint_every": 8, "checkpoint_every_steps": 0, "max_replays": 8,
         "threads": 2, "device": "cpu", "validation_seed_start": 1_000_000,
@@ -150,12 +164,18 @@ def configuration(args, previous=None):
         if prior_deadline is not None and args.deadline_epoch > prior_deadline:
             raise ValueError("Resume cannot extend the absolute campaign deadline")
         config["deadline_epoch"] = args.deadline_epoch
-    for key in ["architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
+    for key in ["learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
         value = getattr(args, key)
         if value is not None:
-            if previous and key in ["architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
+            if previous and key in ["learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
                 raise ValueError(f"Exact resume cannot change {key}")
             config[key] = value
+    if not 0 < config["learning_rate"] <= .01:
+        raise ValueError("Invalid learning rate")
+    if config["opponent_mixture"] == "random_rich":
+        config["opponent_sampling"] = "updates1-4 current.8/random.2; then current.3/random.4/recent.2/old.1"
+    if config["gradient_sample_every_updates"] < 1:
+        raise ValueError("Gradient sampling interval must be positive")
     if not 0 < config["training_seconds"] <= 25200:
         raise ValueError("Training time budget must be in (0, 25200] seconds")
     if not 1 <= config["batch_games"] <= 32 or not 1 <= config["threads"] <= 2:
@@ -255,6 +275,19 @@ def main(argv=None):
     status = "running"
     stop_reason = None
     bridge = Bridge(output / "training-replays")
+    suite = None
+    if config['instrumentation'] != 'off':
+        from .instrumentation import UpdateDiagnostics, suite_fingerprint
+        suite = bridge.request(command='probes')
+        fingerprint = suite_fingerprint(suite)
+        if state.get('probe_fingerprint', fingerprint) != fingerprint:
+            raise ValueError('Diagnostic probe suite changed on resume')
+        state['probe_fingerprint'] = fingerprint
+        if 'probe_initial' not in state:
+            observer = UpdateDiagnostics(model, suite, [], 0)
+            state['probe_initial'] = observer.before.tolist()
+        if not args.resume:
+            write_json(output / 'instrumentation-probes.json', suite)
     saved = saved_milestones(config)
     def elapsed_total():
         return previous_seconds + time.perf_counter() - started
@@ -302,7 +335,7 @@ def main(argv=None):
                 archive = i == 0 and state["replay_count"] < config["max_replays"] and (state["rollouts"] == 0 or state["env_steps"] // max(1, config["max_env_steps"] // max(1, config["max_replays"])) >= state["replay_count"])
                 specs.append({
                     "seed": int(rng.integers(0, 900_000)), "seat": int(rng.integers(0, 2)),
-                    "action_seed": int(rng.integers(0, 2**32)), "opponent": sample_opponent(rng, update, history),
+                    "action_seed": int(rng.integers(0, 2**32)), "opponent": sample_opponent(rng, update, history, config["opponent_mixture"]),
                     **({"archive": f"rollout-{state['rollouts'] + 1:06d}-game-{i:02d}.json"} if archive else {}),
                 })
             target = min(config["max_env_steps"], state["next_milestone"]) if config["checkpoint_every_steps"] else config["max_env_steps"]
@@ -310,7 +343,15 @@ def main(argv=None):
             metrics = None
             interrupted = stop_requested() or time.perf_counter() >= deadline
             if rollout["trajectories"] and not interrupted:
-                metrics = optimize(model, optimizer, rollout["trajectories"], config, config["device"], deadline, stop_requested)
+                diagnostics = None
+                if suite is not None:
+                    diagnostics = UpdateDiagnostics(model, suite, state['probe_initial'], update, config['gradient_sample_every_updates'])
+                    if config['instrumentation'] == 'basic':
+                        diagnostics.detailed = False
+                        diagnostics.record['gradient_sampling'] = 'none'
+                metrics = optimize(model, optimizer, rollout["trajectories"], config, config["device"], deadline, stop_requested, diagnostics)
+                if diagnostics is not None and not metrics['interrupted']:
+                    metrics['diagnostics'] = diagnostics.finish()
                 interrupted = metrics["interrupted"]
             if interrupted:
                 model.load_state_dict(boundary_model)
