@@ -1,4 +1,7 @@
 node_modules/
+.venv/
+benchmark-results/
+__pycache__/
 **/dist/
 coverage/
 test-results/

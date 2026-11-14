@@ -10,6 +10,7 @@
     "e2e-replay",
     "e2e",
     "verification",
-    "scripts/ai-eval"
+    "scripts/ai-eval",
+    "scripts/ai7"
   ]
 }

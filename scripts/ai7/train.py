@@ -1,0 +1,407 @@
+"""Minimal on-policy masked PPO; run with python -m scripts.ai7.train."""
+from __future__ import annotations
+
+import argparse
+import copy
+import json
+import os
+import signal
+from pathlib import Path
+import time
+
+import numpy as np
+import torch
+
+from .runtime import (
+    Bridge, ROOT, advantages, collect, guard_artifacts, load_checkpoint, make_policy,
+    provenance, save_checkpoint, seed_all, summarize, write_json, capture_rng, restore_rng,
+    restore_training_checkpoint,
+)
+
+
+def optimize(model, optimizer, trajectories, config, device="cpu", deadline=float("inf"), stop_requested=None):
+    rows = [row for trajectory in trajectories for row in trajectory]
+    estimated = [advantages(trajectory, config["gamma"], config["gae_lambda"]) for trajectory in trajectories]
+    advantage = np.concatenate([pair[0] for pair in estimated])
+    returns = np.concatenate([pair[1] for pair in estimated])
+    predicted = np.asarray([row["value"] for row in rows])
+    explained_variance = float(1 - np.var(returns - predicted) / np.var(returns)) if np.var(returns) > 1e-8 else None
+    features = torch.from_numpy(np.stack([row["features"] for row in rows])).to(device)
+    masks = np.zeros((len(rows), 1056), dtype=np.bool_)
+    for i, row in enumerate(rows):
+        masks[i, row["legal"]] = True
+    masks = torch.from_numpy(masks).to(device)
+    actions = torch.tensor([row["action"] for row in rows], device=device)
+    old_logp = torch.tensor([row["logp"] for row in rows], device=device)
+    returns_tensor = torch.from_numpy(returns).to(device)
+    advantage = torch.from_numpy((advantage - advantage.mean()) / (advantage.std() + 1e-8)).to(device)
+    before = torch.cat([parameter.detach().flatten().cpu() for parameter in model.parameters()])
+    measurements = []
+    started = time.perf_counter()
+    stop = False
+    for _ in range(config["epochs"]):
+        indices = torch.randperm(len(rows), device=device)
+        for subset in indices.split(config["minibatch"]):
+            if time.perf_counter() >= deadline or (stop_requested and stop_requested()):
+                stop = True
+                break
+            distribution, values = model(features[subset], masks[subset])
+            logp = distribution.log_prob(actions[subset])
+            logratio = logp - old_logp[subset]
+            ratio = logratio.exp()
+            unclipped = ratio * advantage[subset]
+            clipped = ratio.clamp(1 - config["clip"], 1 + config["clip"]) * advantage[subset]
+            policy_loss = -torch.minimum(unclipped, clipped).mean()
+            value_loss = (values - returns_tensor[subset]).square().mean()
+            entropy = distribution.entropy().mean()
+            normalized_entropy = (distribution.entropy() / masks[subset].sum(-1).float().log().clamp_min(1e-8)).mean()
+            loss = policy_loss + config["value_coefficient"] * value_loss - config["entropy_coefficient"] * entropy
+            if not torch.isfinite(loss):
+                raise RuntimeError("Nonfinite PPO loss")
+            optimizer.zero_grad(set_to_none=True)
+            loss.backward()
+            grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), config["max_grad_norm"])
+            if not torch.isfinite(grad_norm):
+                raise RuntimeError("Nonfinite PPO gradient")
+            optimizer.step()
+            with torch.no_grad():
+                kl = ((ratio - 1) - logratio).mean().item()
+                measurements.append({
+                    "policy_loss": policy_loss.item(), "value_loss": value_loss.item(),
+                    "entropy": entropy.item(), "normalized_entropy": normalized_entropy.item(),
+                    "approx_kl": kl, "clip_fraction": ((ratio - 1).abs() > config["clip"]).float().mean().item(),
+                    "gradient_norm": grad_norm.item(),
+                })
+            if kl > config["target_kl"]:
+                stop = True
+                break
+        if stop:
+            break
+    after = torch.cat([parameter.detach().flatten().cpu() for parameter in model.parameters()])
+    return {
+        **({key: float(np.mean([row[key] for row in measurements])) for key in measurements[0]} if measurements else {}),
+        "explained_variance": explained_variance,
+        "parameter_delta_l2": torch.linalg.vector_norm(after - before).item(),
+        "optimizer_steps": len(measurements), "optimization_seconds": time.perf_counter() - started,
+        "learner_samples": len(rows), "kl_or_deadline_stop": stop,
+        "interrupted": time.perf_counter() >= deadline or bool(stop_requested and stop_requested()),
+        "return_mean": float(np.mean([trajectory[-1]["reward"] for trajectory in trajectories])),
+        "return_std": float(np.std([trajectory[-1]["reward"] for trajectory in trajectories])),
+    }
+
+
+def sample_opponent(rng, update, history):
+    if update <= 4:
+        return "current" if rng.random() < 0.8 else "random"
+    bucket = rng.random()
+    if bucket < 0.5:
+        return "current"
+    if bucket < 0.6:
+        return "random"
+    if bucket < 0.85:
+        return str(rng.choice(history[-3:]))
+    return str(rng.choice(history[:-3] or history[:1]))
+
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--architecture", choices=["baseline", "critic", "cnn"])
+    parser.add_argument("--seed", type=int)
+    parser.add_argument("--training-seconds", type=float)
+    parser.add_argument("--deadline-epoch", type=float, help="Absolute campaign deadline; cannot be extended on resume")
+    parser.add_argument("--max-env-steps", type=int)
+    parser.add_argument("--max-updates", type=int)
+    parser.add_argument("--batch-games", type=int)
+    parser.add_argument("--checkpoint-every", type=int)
+    parser.add_argument("--checkpoint-every-steps", type=int)
+    parser.add_argument("--max-replays", type=int)
+    parser.add_argument("--threads", type=int)
+    parser.add_argument("--device", choices=["cpu", "mps"])
+    parser.add_argument("--validation-seed-start", type=int)
+    parser.add_argument("--validation-pairs", type=int)
+    parser.add_argument("--skip-initial-validation", action="store_true")
+    parser.add_argument("--resume", type=Path)
+    parser.add_argument("--status", type=Path)
+    parser.add_argument("--stop-after-updates", type=int, help="Graceful boundary stop for resume verification")
+    return parser.parse_args(argv)
+
+
+def configuration(args, previous=None):
+    defaults = {
+        "architecture": "baseline", "seed": 7, "training_seconds": 7200.,
+        "max_env_steps": 262144, "max_updates": 100000, "batch_games": 16,
+        "checkpoint_every": 8, "checkpoint_every_steps": 0, "max_replays": 8,
+        "threads": 2, "device": "cpu", "validation_seed_start": 1_000_000,
+        "validation_pairs": 8, "resume_every_steps": 50_000,
+        "deadline_epoch": None,
+        "max_saved_milestones": 3,
+        "gamma": 1.0, "gae_lambda": 1.0, "learning_rate": .0003,
+        "epochs": 4, "minibatch": 256, "clip": .2, "target_kl": .03,
+        "value_coefficient": .5, "entropy_coefficient": .01, "max_grad_norm": .5,
+        "rewards": {"win": 1, "draw": 0, "loss": -1, "intermediate": 0},
+        "opponent_sampling": "updates 1-4: current .8/random .2; later current .5/random .1/recent .25/old .15",
+        "checkpoint_selection": "final predetermined step, never final-evaluation results",
+        "step_limit_semantics": "exact transition cap; unfinished games are counted and excluded from PPO",
+    }
+    config = {**defaults, **(previous or {})}
+    if args.deadline_epoch is not None:
+        prior_deadline = config.get("deadline_epoch")
+        if prior_deadline is not None and args.deadline_epoch > prior_deadline:
+            raise ValueError("Resume cannot extend the absolute campaign deadline")
+        config["deadline_epoch"] = args.deadline_epoch
+    for key in ["architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
+        value = getattr(args, key)
+        if value is not None:
+            if previous and key in ["architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
+                raise ValueError(f"Exact resume cannot change {key}")
+            config[key] = value
+    if not 0 < config["training_seconds"] <= 25200:
+        raise ValueError("Training time budget must be in (0, 25200] seconds")
+    if not 1 <= config["batch_games"] <= 32 or not 1 <= config["threads"] <= 2:
+        raise ValueError("Use 1-32 games and at most two Torch threads")
+    if not 1 <= config["max_updates"] <= 100000 or not 1 <= config["max_env_steps"] <= 100_000_000:
+        raise ValueError("Invalid bounded update/step target")
+    if config["checkpoint_every"] < 1 or config["checkpoint_every_steps"] < 0 or not 0 <= config["max_replays"] <= 32:
+        raise ValueError("Invalid checkpoint/replay limits")
+    if not 0 <= config["validation_pairs"] <= 128 or config["validation_seed_start"] < 1_000_000:
+        raise ValueError("Validation decks must be independent of training")
+    config["output"] = str(args.output.resolve())
+    config["held_out_validation_seeds"] = list(range(config["validation_seed_start"], config["validation_seed_start"] + config["validation_pairs"]))
+    return config
+
+
+def empty_training_state():
+    return {
+        "updates": 0, "rollouts": 0, "env_steps": 0,
+        "attempted_games": 0, "completed_games": 0, "incomplete_games": 0,
+        "training_wall_seconds": 0., "validation_seconds": 0., "optimization_seconds": 0.,
+        "inference_seconds": 0., "inference_decisions": 0, "optimizer_steps": 0,
+        "next_milestone": 0, "last_resume_steps": 0, "replay_count": 0,
+        "discarded_env_steps_after_interrupt": 0,
+        "metrics_offset": 0, "games_offset": 0,
+    }
+
+
+def restore_log_boundary(path, offset):
+    if not path.exists():
+        if offset:
+            raise ValueError(f"Resume log missing: {path}")
+        return
+    data = path.read_bytes()
+    if len(data) < offset:
+        raise ValueError(f"Resume log shorter than checkpoint boundary: {path}")
+    if len(data) > offset:
+        # Preserve orphaned log records separately rather than mixing them into
+        # a replayed continuation or deleting potentially useful failure evidence.
+        recovered = path.with_name(path.name + f".orphan-{time.time_ns()}")
+        recovered.write_bytes(data[offset:])
+        with path.open("r+b") as file:
+            file.truncate(offset)
+
+
+def saved_milestones(config):
+    interval = config["checkpoint_every_steps"]
+    if not interval:
+        return set()
+    candidates = list(range(interval, config["max_env_steps"], interval))
+    if len(candidates) <= config["max_saved_milestones"]:
+        return set(candidates)
+    return {candidates[min(len(candidates) - 1, max(0, int(round(fraction * len(candidates))) - 1))] for fraction in [.25, .5, .75]}
+
+
+def main(argv=None):
+    args = parse_args(argv)
+    output = args.output.resolve()
+    experiment_root = ROOT / "benchmark-results/ai7-selfplay"
+    if not output.is_relative_to(experiment_root):
+        raise ValueError("Experiment output must be inside benchmark-results/ai7-selfplay")
+    resume_checkpoint = None
+    if args.resume:
+        _, resume_checkpoint = load_checkpoint(args.resume)
+    config = configuration(args, resume_checkpoint["config"] if resume_checkpoint else None)
+    seed_all(config["seed"], config["threads"])
+    if args.resume:
+        model, optimizer, rng, history, opponents, state, _ = restore_training_checkpoint(args.resume, config["device"])
+        if not output.exists():
+            output.mkdir(parents=True)
+        restore_log_boundary(output / "metrics.jsonl", state["metrics_offset"])
+        restore_log_boundary(output / "training-games.jsonl", state["games_offset"])
+        # Account for time recorded after the last periodic checkpoint too.
+        prior_status = args.status.resolve() if args.status else output / "status.json"
+        if prior_status.exists():
+            prior = json.loads(prior_status.read_text())
+            state["training_wall_seconds"] = max(state["training_wall_seconds"], prior.get("training_wall_seconds", 0.))
+    else:
+        output.mkdir(parents=True, exist_ok=False)
+        model = make_policy({"architecture": config["architecture"]}).to(config["device"])
+        optimizer = torch.optim.Adam(model.parameters(), lr=config["learning_rate"], eps=1e-5)
+        rng = np.random.default_rng(config["seed"])
+        history = ["initial"]
+        opponents = {"initial": copy.deepcopy(model).eval()}
+        state = empty_training_state()
+        state["next_milestone"] = config["checkpoint_every_steps"]
+    status_path = args.status.resolve() if args.status else output / "status.json"
+    stop = {"requested": False, "signal": None}
+    def on_signal(number, _frame):
+        stop.update(requested=True, signal=number)
+    previous_handlers = {number: signal.signal(number, on_signal) for number in [signal.SIGTERM, signal.SIGINT]}
+    stop_requested = lambda: stop["requested"]
+    started = time.perf_counter()
+    previous_seconds = state["training_wall_seconds"]
+    deadline = started + max(0, config["training_seconds"] - previous_seconds)
+    if config["deadline_epoch"] is not None:
+        deadline = min(deadline, started + max(0, config["deadline_epoch"] - time.time()))
+    status = "running"
+    stop_reason = None
+    bridge = Bridge(output / "training-replays")
+    saved = saved_milestones(config)
+    def elapsed_total():
+        return previous_seconds + time.perf_counter() - started
+    def persist_status(phase, **extra):
+        write_json(status_path, {
+            **state, "status": phase, "architecture": config["architecture"],
+            "seed": config["seed"], "pid": os.getpid(), "training_wall_seconds": elapsed_total(),
+            "target_env_steps": config["max_env_steps"], "updated_at_unix": time.time(),
+            "checkpoint": str(output / "latest.pt"), **extra,
+        })
+    def checkpoint(path):
+        state["training_wall_seconds"] = elapsed_total()
+        guard_artifacts(experiment_root, additional=100_000_000)
+        save_checkpoint(path, model, optimizer, config, state["updates"], state["env_steps"], rng, history, opponents, state)
+    def validate(label):
+        validation_start = time.perf_counter()
+        specs = [{"seed": seed, "seat": seat, "action_seed": seed ^ 0x13579, "opponent": "random"} for seed in config["held_out_validation_seeds"] for seat in [0, 1]]
+        result = collect(bridge, model, specs, {}, config["device"], deadline=deadline, stop_requested=stop_requested)
+        report = {"checkpoint": label, "env_steps": state["env_steps"], "attempted": result["attempted"], "incomplete": result["incomplete"], **summarize(result["games"]), "games": result["games"]}
+        write_json(output / f"validation-{label}.json", report)
+        state["validation_seconds"] += time.perf_counter() - validation_start
+        return {key: value for key, value in report.items() if key != "games"}
+    try:
+        guard_artifacts(experiment_root, additional=100_000_000)
+        manifest = output / (f"resume-manifest-{time.time_ns()}.json" if args.resume else "manifest.json")
+        write_json(manifest, {"config": config, "provenance": provenance(config["architecture"]), "node_environment": bridge.metadata, "resume_from": str(args.resume) if args.resume else None, "parameters": sum(parameter.numel() for parameter in model.parameters()), "parameter_count": sum(parameter.numel() for parameter in model.parameters()), "model_config": model.config})
+        if not args.resume:
+            checkpoint(output / "initial.pt")
+            checkpoint(output / "latest.pt")
+            if config["validation_pairs"] and not args.skip_initial_validation:
+                print(json.dumps({"initial_validation": validate("initial")}), flush=True)
+        persist_status("running")
+        while state["updates"] < config["max_updates"] and state["env_steps"] < config["max_env_steps"]:
+            if stop_requested() or time.perf_counter() >= deadline:
+                stop_reason = "signal" if stop_requested() else "time_budget"
+                break
+            guard_artifacts(experiment_root, additional=100_000_000)
+            # All mutable learning/RNG state is recoverable at this exact boundary.
+            boundary_rng = capture_rng(rng)
+            boundary_model = copy.deepcopy(model.state_dict())
+            boundary_optimizer = copy.deepcopy(optimizer.state_dict())
+            update = state["updates"] + 1
+            specs = []
+            for i in range(config["batch_games"]):
+                archive = i == 0 and state["replay_count"] < config["max_replays"] and (state["rollouts"] == 0 or state["env_steps"] // max(1, config["max_env_steps"] // max(1, config["max_replays"])) >= state["replay_count"])
+                specs.append({
+                    "seed": int(rng.integers(0, 900_000)), "seat": int(rng.integers(0, 2)),
+                    "action_seed": int(rng.integers(0, 2**32)), "opponent": sample_opponent(rng, update, history),
+                    **({"archive": f"rollout-{state['rollouts'] + 1:06d}-game-{i:02d}.json"} if archive else {}),
+                })
+            target = min(config["max_env_steps"], state["next_milestone"]) if config["checkpoint_every_steps"] else config["max_env_steps"]
+            rollout = collect(bridge, model, specs, opponents, config["device"], training=True, deadline=deadline, max_env_steps=target - state["env_steps"], stop_requested=stop_requested)
+            metrics = None
+            interrupted = stop_requested() or time.perf_counter() >= deadline
+            if rollout["trajectories"] and not interrupted:
+                metrics = optimize(model, optimizer, rollout["trajectories"], config, config["device"], deadline, stop_requested)
+                interrupted = metrics["interrupted"]
+            if interrupted:
+                model.load_state_dict(boundary_model)
+                optimizer.load_state_dict(boundary_optimizer)
+                restore_rng(boundary_rng, rng)
+                state["discarded_env_steps_after_interrupt"] += rollout["env_steps"]
+                stop_reason = "signal" if stop_requested() else "time_budget"
+                break
+            state["env_steps"] += rollout["env_steps"]
+            state["rollouts"] += 1
+            state["attempted_games"] += rollout["attempted"]
+            state["completed_games"] += len(rollout["games"])
+            state["incomplete_games"] += rollout["incomplete"]
+            state["inference_seconds"] += rollout["inference_seconds"]
+            state["inference_decisions"] += rollout["inference_decisions"]
+            state["replay_count"] += sum("archive" in game for game in rollout["games"])
+            if metrics:
+                state["updates"] += 1
+                state["optimization_seconds"] += metrics["optimization_seconds"]
+                state["optimizer_steps"] += metrics["optimizer_steps"]
+            else:
+                metrics = {"optimizer_steps": 0, "learner_samples": 0, "parameter_delta_l2": 0., "explained_variance": None, "normalized_entropy": None, "entropy": None, "value_loss": None, "policy_loss": None, "approx_kl": None, "clip_fraction": None}
+            metrics.update({
+                "architecture": config["architecture"], "update": state["updates"], "rollout": state["rollouts"],
+                "env_steps": state["env_steps"], "training_seconds": elapsed_total(),
+                "rollout_seconds": rollout["seconds"], "env_steps_per_second": rollout["env_steps"] / max(1e-9, rollout["seconds"]),
+                "inference_ms_per_decision": 1000 * rollout["inference_seconds"] / max(1, rollout["inference_decisions"]),
+                "attempted": rollout["attempted"], "incomplete": rollout["incomplete"],
+                "training_games": summarize(rollout["games"]),
+                "opponents": {key: summarize([game for game in rollout["games"] if game["opponent"] == key]) for key in sorted({game["opponent"] for game in rollout["games"]})},
+            })
+            with (output / "metrics.jsonl").open("a") as file:
+                file.write(json.dumps(metrics, allow_nan=False) + "\n")
+            with (output / "training-games.jsonl").open("a") as file:
+                for game in rollout["games"]:
+                    file.write(json.dumps({**game, "update": state["updates"], "rollout": state["rollouts"]}, allow_nan=False) + "\n")
+            state["metrics_offset"] = (output / "metrics.jsonl").stat().st_size
+            state["games_offset"] = (output / "training-games.jsonl").stat().st_size
+            print(json.dumps(metrics, allow_nan=False), flush=True)
+            milestone = config["checkpoint_every_steps"] and state["env_steps"] == state["next_milestone"]
+            legacy_snapshot = not config["checkpoint_every_steps"] and state["updates"] and state["updates"] % config["checkpoint_every"] == 0
+            if milestone or legacy_snapshot:
+                label = f"step-{state['env_steps']:09d}"
+                history.append(label)
+                opponents[label] = copy.deepcopy(model).eval()
+                keep = set(history[-3:] + history[:2] + history[len(history)//2:len(history)//2 + 1])
+                history = [key for key in history if key in keep]
+                opponents = {key: value for key, value in opponents.items() if key in keep}
+                if milestone:
+                    state["next_milestone"] += config["checkpoint_every_steps"]
+                if state["env_steps"] < config["max_env_steps"] and ((milestone and state["env_steps"] in saved) or (legacy_snapshot and len(list(output.glob("step-*.pt"))) < config["max_saved_milestones"])):
+                    checkpoint(output / f"{label}.pt")
+                if config["validation_pairs"] and not stop_requested() and time.perf_counter() < deadline:
+                    print(json.dumps({"validation": validate(label)}), flush=True)
+            if milestone or state["env_steps"] - state["last_resume_steps"] >= config["resume_every_steps"]:
+                state["last_resume_steps"] = state["env_steps"]
+                checkpoint(output / "latest.pt")
+            persist_status("running")
+            if args.stop_after_updates and state["updates"] >= args.stop_after_updates:
+                stop_reason = "requested_boundary_stop"
+                break
+        stop_reason = stop_reason or ("step_target" if state["env_steps"] >= config["max_env_steps"] else "update_limit")
+        status = "completed" if stop_reason == "step_target" else "partial"
+        checkpoint(output / "latest.pt")
+        checkpoint(output / "final.pt")
+        reloaded, _ = load_checkpoint(output / "final.pt", config["device"])
+        exact_reload = all(torch.equal(a, b) for a, b in zip(model.state_dict().values(), reloaded.state_dict().values()))
+        games_path = output / "training-games.jsonl"
+        games = [json.loads(line) for line in games_path.read_text().splitlines()] if games_path.exists() else []
+        summary = {
+            **state, "architecture": config["architecture"], "seed": config["seed"],
+            "parameters": sum(parameter.numel() for parameter in model.parameters()),
+            "parameter_count": sum(parameter.numel() for parameter in model.parameters()), "model_config": model.config,
+            "actual_training_seconds": state["training_wall_seconds"] - state["validation_seconds"],
+            "optimizer_steps_per_second": state["optimizer_steps"] / max(1e-9, state["optimization_seconds"]),
+            "updates_per_second": state["updates"] / max(1e-9, state["training_wall_seconds"] - state["validation_seconds"]),
+            "inference_ms_per_decision": 1000 * state["inference_seconds"] / max(1, state["inference_decisions"]),
+            "checkpoint_exact_reload": exact_reload, "stop_reason": stop_reason, "status": status,
+            "behavior": summarize(games), "artifact_bytes": guard_artifacts(experiment_root, additional=0),
+        }
+        write_json(output / "summary.json", summary)
+        persist_status(status, stop_reason=stop_reason)
+        print(json.dumps({"summary": summary}), flush=True)
+    except BaseException as error:
+        persist_status("failed", error=repr(error))
+        raise
+    finally:
+        bridge.close()
+        for number, handler in previous_handlers.items():
+            signal.signal(number, handler)
+
+
+if __name__ == "__main__":
+    main()

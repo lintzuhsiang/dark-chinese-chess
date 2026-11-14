@@ -1,4 +1,5 @@
 node_modules/
+/node_modules
 dist/
 coverage/
 test-results/
@@ -9,3 +10,5 @@ benchmark-results/
 .DS_Store
 *.local
 *.log
+.venv/
+__pycache__/

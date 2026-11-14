@@ -7,6 +7,7 @@ export default defineConfig({
       'packages/*/tests/**/*.test.ts',
       'apps/*/tests/**/*.test.ts',
       'scripts/ai-eval/tests/**/*.test.ts',
+      'scripts/ai7/tests/**/*.test.ts',
     ],
   },
 });
