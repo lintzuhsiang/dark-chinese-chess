@@ -38,7 +38,22 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
     actions = torch.tensor([row["action"] for row in rows], device=device)
     old_logp = torch.tensor([row["logp"] for row in rows], device=device)
     returns_tensor = torch.from_numpy(returns).to(device)
-    advantage = torch.from_numpy((advantage - advantage.mean()) / (advantage.std() + 1e-8)).to(device)
+    normalized_advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-8)
+    if diagnostics is not None and config.get('audit_records') == 'full':
+        diagnostics.record['decisions'] = []
+        row_id = 0
+        for game_index, trajectory in enumerate(trajectories):
+            for decision, row in enumerate(trajectory):
+                diagnostics.record['decisions'].append({'row': row_id, 'game_index': game_index,
+                    'decision': decision, 'ply': row.get('ply'), 'quiet': row.get('quiet'),
+                    'hidden': row.get('hidden'), 'legal_count': len(row['legal']),
+                    'legal': row['legal'], 'old_legal_probabilities': row.get('old_legal_probabilities'), 'action': row['action'],
+                    'old_log_probability': row['logp'], 'old_value': row['value'],
+                    'reward': row['reward'], 'outcome': trajectory[-1]['reward'],
+                    'return_target': float(returns[row_id]), 'raw_advantage': float(advantage[row_id]),
+                    'normalized_advantage': float(normalized_advantage[row_id])})
+                row_id += 1
+    advantage = torch.from_numpy(normalized_advantage).to(device)
     before = torch.cat([parameter.detach().flatten().cpu() for parameter in model.parameters()])
     measurements = []
     started = time.perf_counter()
@@ -72,7 +87,12 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
             if diagnostics is not None and diagnostics.detailed:
                 post_norm = float(torch.linalg.vector_norm(torch.cat([p.grad.detach().flatten() for p in model.parameters() if p.grad is not None])).item())
                 diagnostics.clipping(float(grad_norm), post_norm)
+            audit_before = torch.cat([p.detach().flatten().cpu() for p in model.parameters()]) if diagnostics is not None and getattr(diagnostics, 'all_minibatches', False) else None
             optimizer.step()
+            if audit_before is not None:
+                diagnostics.after_step(audit_before, subset.detach().cpu().tolist(),
+                    logp.detach().cpu().tolist(), values.detach().cpu().tolist(),
+                    ratio.detach().cpu().tolist(), (-torch.minimum(unclipped, clipped)).detach().cpu().tolist())
             with torch.no_grad():
                 kl = ((ratio - 1) - logratio).mean().item()
                 measurements.append({
@@ -118,6 +138,9 @@ def parse_args(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--learning-rate", type=float)
     parser.add_argument("--opponent-mixture", choices=["standard", "random_rich"])
+    parser.add_argument("--audit-records", choices=["off", "full"])
+    parser.add_argument("--replay-sample-denominator", type=int)
+    parser.add_argument("--audit-max-bytes", type=int)
     parser.add_argument("--instrumentation", choices=["off", "basic", "detailed"])
     parser.add_argument("--gradient-sample-every-updates", type=int)
     parser.add_argument("--architecture", choices=["baseline", "critic", "cnn"])
@@ -143,7 +166,7 @@ def parse_args(argv=None):
 
 def configuration(args, previous=None):
     defaults = {
-        "opponent_mixture": "standard", "instrumentation": "off", "gradient_sample_every_updates": 10, "architecture": "baseline", "seed": 7, "training_seconds": 7200.,
+        "audit_records": "off", "replay_sample_denominator": 32, "audit_max_bytes": 250_000_000, "opponent_mixture": "standard", "instrumentation": "off", "gradient_sample_every_updates": 10, "architecture": "baseline", "seed": 7, "training_seconds": 7200.,
         "max_env_steps": 262144, "max_updates": 100000, "batch_games": 16,
         "checkpoint_every": 8, "checkpoint_every_steps": 0, "max_replays": 8,
         "threads": 2, "device": "cpu", "validation_seed_start": 1_000_000,
@@ -164,12 +187,18 @@ def configuration(args, previous=None):
         if prior_deadline is not None and args.deadline_epoch > prior_deadline:
             raise ValueError("Resume cannot extend the absolute campaign deadline")
         config["deadline_epoch"] = args.deadline_epoch
-    for key in ["learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
+    for key in ["audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
         value = getattr(args, key)
         if value is not None:
-            if previous and key in ["learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
+            if previous and key in ["audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
                 raise ValueError(f"Exact resume cannot change {key}")
             config[key] = value
+    if config['replay_sample_denominator'] < 1 or config['audit_max_bytes'] < 1:
+        raise ValueError('Audit limits must be positive')
+    if config['audit_records'] == 'full':
+        if not previous and args.max_replays is None: config['max_replays'] = 512
+        if config['instrumentation'] != 'detailed':
+            raise ValueError('Full audit requires --instrumentation detailed')
     if not 0 < config["learning_rate"] <= .01:
         raise ValueError("Invalid learning rate")
     if config["opponent_mixture"] == "random_rich":
@@ -182,7 +211,7 @@ def configuration(args, previous=None):
         raise ValueError("Use 1-32 games and at most two Torch threads")
     if not 1 <= config["max_updates"] <= 100000 or not 1 <= config["max_env_steps"] <= 100_000_000:
         raise ValueError("Invalid bounded update/step target")
-    if config["checkpoint_every"] < 1 or config["checkpoint_every_steps"] < 0 or not 0 <= config["max_replays"] <= 32:
+    if config["checkpoint_every"] < 1 or config["checkpoint_every_steps"] < 0 or not 0 <= config["max_replays"] <= (2048 if config["audit_records"] == "full" else 32):
         raise ValueError("Invalid checkpoint/replay limits")
     if not 0 <= config["validation_pairs"] <= 128 or config["validation_seed_start"] < 1_000_000:
         raise ValueError("Validation decks must be independent of training")
@@ -338,6 +367,13 @@ def main(argv=None):
                     "action_seed": int(rng.integers(0, 2**32)), "opponent": sample_opponent(rng, update, history, config["opponent_mixture"]),
                     **({"archive": f"rollout-{state['rollouts'] + 1:06d}-game-{i:02d}.json"} if archive else {}),
                 })
+            if config['audit_records'] == 'full':
+                retained = 0
+                for game_id, spec in enumerate(specs):
+                    spec.pop('archive', None)
+                    if spec['seed'] % config['replay_sample_denominator'] == 0 and state['replay_count'] + retained < config['max_replays']:
+                        spec['archive'] = f"rollout-{state['rollouts'] + 1:06d}-game-{game_id:02d}.json"
+                        retained += 1
             target = min(config["max_env_steps"], state["next_milestone"]) if config["checkpoint_every_steps"] else config["max_env_steps"]
             rollout = collect(bridge, model, specs, opponents, config["device"], training=True, deadline=deadline, max_env_steps=target - state["env_steps"], stop_requested=stop_requested)
             metrics = None
@@ -346,6 +382,10 @@ def main(argv=None):
                 diagnostics = None
                 if suite is not None:
                     diagnostics = UpdateDiagnostics(model, suite, state['probe_initial'], update, config['gradient_sample_every_updates'])
+                    if config['audit_records'] == 'full':
+                        diagnostics.detailed = True
+                        diagnostics.all_minibatches = True
+                        diagnostics.record['gradient_sampling'] = 'every optimizer minibatch; summary vectors only'
                     if config['instrumentation'] == 'basic':
                         diagnostics.detailed = False
                         diagnostics.record['gradient_sampling'] = 'none'
@@ -360,6 +400,18 @@ def main(argv=None):
                 state["discarded_env_steps_after_interrupt"] += rollout["env_steps"]
                 stop_reason = "signal" if stop_requested() else "time_budget"
                 break
+            audit_size = 0
+            if config['audit_records'] == 'full' and metrics and 'diagnostics' in metrics:
+                metrics['diagnostics']['games'] = rollout['games']
+                audit_size = len(json.dumps(metrics['diagnostics'], allow_nan=False).encode())
+                if state.get('audit_bytes', 0) + audit_size > config['audit_max_bytes']:
+                    model.load_state_dict(boundary_model)
+                    optimizer.load_state_dict(boundary_optimizer)
+                    restore_rng(boundary_rng, rng)
+                    state['discarded_env_steps_after_interrupt'] += rollout['env_steps']
+                    stop_reason = 'audit_budget'
+                    break
+                state['audit_bytes'] = state.get('audit_bytes', 0) + audit_size
             state["env_steps"] += rollout["env_steps"]
             state["rollouts"] += 1
             state["attempted_games"] += rollout["attempted"]

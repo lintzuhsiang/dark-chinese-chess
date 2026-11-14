@@ -48,7 +48,8 @@ class UpdateDiagnostics:
             return d.probs.detach().cpu().numpy().copy()
 
     def gradients(self,epoch,minibatch,policy_loss,value_loss,entropy,loss,per_row_policy,outcomes,config):
-        if not self.detailed or epoch in self.sampled_epochs:return
+        if not self.detailed or (epoch in self.sampled_epochs and not getattr(self, 'all_minibatches', False)):return
+        if getattr(self, 'all_minibatches', False): self.minibatch_before = self.probe_snapshot()
         self.sampled_epochs.add(epoch)
         params=tuple(self.model.parameters())
         actor=flat_gradient(policy_loss,params)
@@ -74,6 +75,23 @@ class UpdateDiagnostics:
             'shared_critic_actor_norm_ratio':float(torch.linalg.vector_norm(critic[shared].double())/torch.linalg.vector_norm(actor[shared].double())) if len(shared) and torch.linalg.vector_norm(actor[shared])>0 else None,
             'component_sum_max_abs_error':float((actor+critic+exploration-total).abs().max()),
             'outcome_sum_max_abs_error':float((sum(vectors)-actor).abs().max()),'actor_by_outcome':classes})
+
+    def after_step(self, before_parameters, indices, logp, values, ratios, policy_losses):
+        after = torch.cat([p.detach().flatten().cpu() for p in self.model.parameters()])
+        after_probes = self.probe_snapshot()
+        probe_changes = []
+        for i, probe in enumerate(self.suite['probes']):
+            a = self.minibatch_before[i].astype(float); b = after_probes[i].astype(float)
+            support = a > 0
+            probe_changes.append({'id': probe['id'],
+                'kl_before_after': max(0., float(np.sum(a[support]*(np.log(a[support])-np.log(np.maximum(b[support],np.finfo(float).tiny)))))),
+                'groups': {name: {'before': float(a[ids].sum()), 'after': float(b[ids].sum())}
+                           for name, ids in probe['groups'].items() if ids}})
+        self.record['gradients'][-1].update(row_indices=indices,
+            chosen_log_probability_before=logp, value_before=values, importance_ratios=ratios,
+            per_row_policy_losses=policy_losses,
+            adam_parameter_delta_l2=float(torch.linalg.vector_norm(after-before_parameters)),
+            probes=probe_changes)
 
     def clipping(self,before,after):
         if self.record['gradients'] and 'actual_pre_clip_norm' not in self.record['gradients'][-1]:

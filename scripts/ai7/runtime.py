@@ -221,7 +221,7 @@ def collect(bridge, learner, specifications, opponents, device="cpu", training=F
                 action = int(streams[i][0 if is_learner else 1].choice(legal, p=weights))
                 actions.append({"id": i, "action": action})
                 if training and is_learner:
-                    trajectories[i].append({"features": features[j], "legal": legal, "action": action, "logp": float(log_probabilities[j, action]), "value": float(values[j]), "reward": 0.0})
+                    trajectories[i].append({"ply": observation["ply"], "quiet": observation["quiet"], "hidden": observation["board"].count(1), "features": features[j], "legal": legal, "old_legal_probabilities": probabilities[j, legal].tolist(), "action": action, "logp": float(log_probabilities[j, action]), "value": float(values[j]), "reward": 0.0})
         results = bridge.request(command="step", actions=actions)
         env_steps += len(results)
         for result in results:
