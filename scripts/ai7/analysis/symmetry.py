@@ -25,7 +25,7 @@ def intervals(values, indices):
     return {'mean': float(values.mean()), 'ci95': np.quantile(means, [.025, .975]).tolist()}
 
 
-def evaluate(root, phase):
+def evaluate(root, phase, campaign=None):
     if phase not in ['stage1', 'stage2']:
         raise ValueError('Reserved bank cannot be evaluated by this tool')
     destination = root / f'{phase}-evaluation.json'
@@ -41,12 +41,14 @@ def evaluate(root, phase):
     features = torch.from_numpy(np.stack([encode(o) for o in observations]))
     masks = torch.from_numpy(mask_array(observations))
     seed_all(7331, threads=2)
-    campaign = ROOT / 'benchmark-results/ai7-selfplay/p1p2-comparison/20261114-v1/runs'
+    campaign_root = campaign or ROOT/'benchmark-results/ai7-selfplay/p1p2-comparison/20261114-v1'
+    cfg=json.loads((campaign_root/'config.json').read_text())
+    campaign = campaign_root/'runs'
     rows, details = [], []
     started = time.monotonic()
-    treatments = ['baseline'] if phase == 'stage1' else ['baseline', 'low_lr', 'random_rich']
+    treatments = ['baseline'] if phase == 'stage1' else cfg['architectures']
     for treatment in treatments:
-        for seed in [4011, 4023, 4037]:
+        for seed in cfg['seeds']:
             run = campaign / f'{treatment}-seed-{seed}'
             paths = [run/'initial.pt', *sorted(run.glob('step-*.pt')), run/'final.pt']
             for path in paths:
@@ -66,7 +68,7 @@ def evaluate(root, phase):
                     entry = {'id': item['id'], 'category': category, 'original': a, 'rotated': b,
                              'symmetry_gap': abs(a-b) if a is not None else None,
                              'signed_gap': b-a if a is not None else None,
-                             'equivariance_tv': tv, 'uniform': len(target)/len(legal) if target else None}
+                             'top_is_target': int(p.argmax()) in target, 'best_target_rank': int(1+sum(p[a]>max(p[target]) for a in legal)) if target else None, 'equivariance_tv': tv, 'uniform': len(target)/len(legal) if target else None}
                     state_rows.append(entry)
                 for category in expected:
                     subset = [r for r in state_rows if r['category'] == category]
@@ -119,5 +121,6 @@ if __name__ == '__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--phase', choices=['stage1','stage2'], required=True)
+    parser.add_argument('--campaign',type=Path)
     args=parser.parse_args()
-    evaluate(args.output, args.phase)
+    evaluate(args.output, args.phase, args.campaign)

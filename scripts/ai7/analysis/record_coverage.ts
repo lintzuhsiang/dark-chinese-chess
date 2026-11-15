@@ -7,7 +7,13 @@ import { classify } from '../symmetry';
 import { assertCoreBaseline } from '../../ai-eval/baseline';
 
 assertCoreBaseline();
-const campaign = resolve('benchmark-results/ai7-selfplay/p1p2-comparison/20261114-v1');
+const campaign = resolve(
+  process.argv[3] ?? 'benchmark-results/ai7-selfplay/p1p2-comparison/20261114-v1',
+);
+const config = JSON.parse(readFileSync(resolve(campaign, 'config.json'), 'utf8')) as {
+  architectures: string[];
+  seeds: number[];
+};
 const output = resolve(process.argv[2]!);
 if (!output.startsWith(resolve('benchmark-results/ai7-selfplay') + '/'))
   throw new Error('Invalid output');
@@ -15,8 +21,8 @@ if (existsSync(resolve(output, 'replay-coverage.json'))) throw new Error('Output
 mkdirSync(output, { recursive: true });
 const games = [];
 const opportunities = [];
-for (const treatment of ['baseline', 'low_lr', 'random_rich']) {
-  for (const seed of [4011, 4023, 4037]) {
+for (const treatment of config.architectures) {
+  for (const seed of config.seeds) {
     const run = `${treatment}-seed-${seed}`;
     const folder = resolve(campaign, 'runs', run);
     const summaries = readFileSync(resolve(folder, 'training-games.jsonl'), 'utf8')
@@ -32,9 +38,16 @@ for (const treatment of ['baseline', 'low_lr', 'random_rich']) {
             rollout: number;
             return: number;
             opponent: string;
+            prefix_plies?: number;
           },
       );
-    for (const summary of summaries.filter((row) => row.archive)) {
+    const saved = summaries.filter((row) => row.archive);
+    const cap = Number(process.argv[4] ?? saved.length);
+    const selected =
+      saved.length > cap
+        ? Array.from({ length: cap }, (_, i) => saved[Math.floor((i * saved.length) / cap)]!)
+        : saved;
+    for (const summary of selected) {
       const archive = JSON.parse(
         readFileSync(resolve(folder, 'training-replays', summary.archive!), 'utf8'),
       ) as ReturnType<ReturnType<typeof createEnvironment>['archive']>;
@@ -50,7 +63,7 @@ for (const treatment of ['baseline', 'low_lr', 'random_rich']) {
       for (const entry of archive.actions) {
         const observation = env.observe();
         const chosen = actionId(entry.action);
-        if (observation.player === summary.seat) {
+        if (observation.player === summary.seat && observation.ply >= (summary.prefix_plies ?? 0)) {
           learnerDecisions++;
           if (!observation.board.includes(1)) {
             revealedDecisions++;
