@@ -1,0 +1,13 @@
+{
+  "state": "completed",
+  "started_epoch": 1794723592.6293519,
+  "cohort": "actual-M1-Exp3-2M",
+  "sampling_protocol": "ai7-intel-p0-common-opponent-256-v1",
+  "completed_matchups": 24,
+  "total_matchups": 24,
+  "games_per_matchup": 512,
+  "active_run": "symmetry-5037",
+  "active_opponent": "historical",
+  "finished_epoch": 1794724155.366508,
+  "elapsed_seconds": 562.7371561527252
+}

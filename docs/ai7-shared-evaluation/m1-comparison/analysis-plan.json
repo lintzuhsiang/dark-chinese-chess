@@ -1,0 +1,20 @@
+{
+  "primary_comparisons": [
+    "draw_light vs baseline",
+    "draw_strong vs baseline",
+    "symmetry vs baseline"
+  ],
+  "opponents": [
+    "random",
+    "baseline-4023-3640000"
+  ],
+  "official_score": "W1/D0.5/L0",
+  "deck_pair_unit": "same deck both seats averaged first",
+  "deck_bootstrap_resamples": 10000,
+  "bootstrap_seed": 19,
+  "learning_replications": 3,
+  "n3_t_critical": 4.30265272975,
+  "multiple_comparison_adjustment": false,
+  "interpretation": "exploratory; lower draws alone not strength; compare W and L decomposition",
+  "tactical_input_model_fingerprints": "tactical/per-position-results.json includes checkpoint SHA256 for each model"
+}

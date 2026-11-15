@@ -1,0 +1,82 @@
+[
+  {
+    "opponent": "random",
+    "treatment": "baseline",
+    "games": 1536,
+    "wins": 275,
+    "draws": 1132,
+    "losses": 129,
+    "score": 0.5475260416666666,
+    "no_progress_rate": 0.736328125
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_light",
+    "games": 1536,
+    "wins": 315,
+    "draws": 1062,
+    "losses": 159,
+    "score": 0.55078125,
+    "no_progress_rate": 0.6907552083333334
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_strong",
+    "games": 1536,
+    "wins": 294,
+    "draws": 1109,
+    "losses": 133,
+    "score": 0.5524088541666666,
+    "no_progress_rate": 0.7200520833333334
+  },
+  {
+    "opponent": "random",
+    "treatment": "symmetry",
+    "games": 1536,
+    "wins": 264,
+    "draws": 1130,
+    "losses": 142,
+    "score": 0.5397135416666666,
+    "no_progress_rate": 0.7356770833333334
+  },
+  {
+    "opponent": "historical",
+    "treatment": "baseline",
+    "games": 1536,
+    "wins": 156,
+    "draws": 1173,
+    "losses": 207,
+    "score": 0.4833984375,
+    "no_progress_rate": 0.7630208333333334
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_light",
+    "games": 1536,
+    "wins": 189,
+    "draws": 1114,
+    "losses": 233,
+    "score": 0.4856770833333333,
+    "no_progress_rate": 0.724609375
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_strong",
+    "games": 1536,
+    "wins": 167,
+    "draws": 1177,
+    "losses": 192,
+    "score": 0.4918619791666667,
+    "no_progress_rate": 0.7643229166666666
+  },
+  {
+    "opponent": "historical",
+    "treatment": "symmetry",
+    "games": 1536,
+    "wins": 186,
+    "draws": 1087,
+    "losses": 263,
+    "score": 0.4749348958333333,
+    "no_progress_rate": 0.70703125
+  }
+]

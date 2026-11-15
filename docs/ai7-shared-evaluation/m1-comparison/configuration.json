@@ -1,0 +1,20 @@
+{
+  "cohort_id": "m1-local-exp3-2m-on-intel-sampling-v1",
+  "steps": 2000000,
+  "seeds": [
+    5011,
+    5023,
+    5037
+  ],
+  "treatments": [
+    "baseline",
+    "draw_light",
+    "draw_strong",
+    "symmetry"
+  ],
+  "sampling_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568",
+  "Intel_manifest_selection_gate": "unchanged in original; this local adapter explicitly authorizes actual M1 2M cohort only",
+  "historical_opponent_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+  "eval_only": true,
+  "reserved_accessed": false
+}

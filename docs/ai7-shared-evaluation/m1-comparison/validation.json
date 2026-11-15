@@ -1,0 +1,9 @@
+{
+  "complete": true,
+  "matchups": 24,
+  "full_games": 12288,
+  "tactical_models_same_fingerprints": 12,
+  "training_performed": false,
+  "reserved_evaluated": false,
+  "checkpoint_bytes_verified_unchanged": true
+}

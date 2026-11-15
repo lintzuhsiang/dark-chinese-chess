@@ -1,0 +1,1874 @@
+[
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "baseline",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "843acdaf066c4d8edd571da16330a3f9381b77e6f39df444b7e3b8eb209a81e0",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.1091105362714734,
+        "percentile95": [
+          0.09561681531484646,
+          0.12287843928069923
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.0925,
+        "percentile95": [
+          0.065,
+          0.1225
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.4625,
+        "percentile95": [
+          5.09,
+          5.8425625000000005
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.10435927968705073,
+        "percentile95": [
+          0.08651559064420872,
+          0.12257493364956464
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5061501275748015,
+        "percentile95": [
+          0.48627822946012017,
+          0.5255016043633223
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "baseline",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "843acdaf066c4d8edd571da16330a3f9381b77e6f39df444b7e3b8eb209a81e0",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5744238332659006,
+        "percentile95": [
+          0.5415476343192277,
+          0.6078868417626946
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.5675,
+        "percentile95": [
+          0.515,
+          0.6225
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.5375,
+        "percentile95": [
+          1.46,
+          1.615
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.23494366072118283,
+        "percentile95": [
+          0.208042203007848,
+          0.26219275372847917
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.3643444463983178,
+        "percentile95": [
+          0.3376118915649131,
+          0.3915848782369867
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "baseline",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "08e46a65f7996b9e433b035ec61563346ad230c6a3a7e53526c7a820fdec8805",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.10844220568716992,
+        "percentile95": [
+          0.09566471786412876,
+          0.12185632182490372
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.11,
+        "percentile95": [
+          0.08,
+          0.1425
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.7975,
+        "percentile95": [
+          5.42,
+          6.1750625
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.12063976864679717,
+        "percentile95": [
+          0.10418313195381779,
+          0.13815145644044968
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5845834822952747,
+        "percentile95": [
+          0.5653311146870256,
+          0.603226250551641
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "baseline",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "08e46a65f7996b9e433b035ec61563346ad230c6a3a7e53526c7a820fdec8805",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.6016282334737479,
+        "percentile95": [
+          0.5725852742593269,
+          0.6303134909772781
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.62,
+        "percentile95": [
+          0.5725,
+          0.6675
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.4875,
+        "percentile95": [
+          1.4175,
+          1.5625
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.26492558665573596,
+        "percentile95": [
+          0.23601281750621272,
+          0.29441773436404767
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.456241967882961,
+        "percentile95": [
+          0.4268563493024558,
+          0.48712677575275304
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "baseline",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "a8f570f3623df720b718005a7083ebe731a5b35e80a21d46897d72cef450b1c2",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.10307807824166958,
+        "percentile95": [
+          0.09043669604130991,
+          0.11628058705864532
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.105,
+        "percentile95": [
+          0.0775,
+          0.1325
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.8375,
+        "percentile95": [
+          5.4425,
+          6.25
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.11078326613060199,
+        "percentile95": [
+          0.09297151334844239,
+          0.12948327873219387
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5958878837525845,
+        "percentile95": [
+          0.5816584340780974,
+          0.6107667249254882
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "baseline",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "a8f570f3623df720b718005a7083ebe731a5b35e80a21d46897d72cef450b1c2",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.6132898447243497,
+        "percentile95": [
+          0.5844761985775548,
+          0.6424730729723814
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.6125,
+        "percentile95": [
+          0.5675,
+          0.655
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.485,
+        "percentile95": [
+          1.425,
+          1.55
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.33172039316035806,
+        "percentile95": [
+          0.29925841552601196,
+          0.36454122081445534
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5174469351023435,
+        "percentile95": [
+          0.49284908252116294,
+          0.5424240196989849
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_light",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "ac7eb2713f67b94c218984f79561c8e6497cf7acdceb64052486b5686afee1c0",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.11643505141095374,
+        "percentile95": [
+          0.10285786328596441,
+          0.13076718740003343
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.1025,
+        "percentile95": [
+          0.075,
+          0.135
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.75,
+        "percentile95": [
+          5.4025,
+          6.1125
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.13929806340573123,
+        "percentile95": [
+          0.11770225091817701,
+          0.16235008592261876
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5702404934167862,
+        "percentile95": [
+          0.5533402196541429,
+          0.5874323168955743
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_light",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "ac7eb2713f67b94c218984f79561c8e6497cf7acdceb64052486b5686afee1c0",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5705877440120094,
+        "percentile95": [
+          0.5340657900198129,
+          0.6073462903776672
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.5775,
+        "percentile95": [
+          0.5225,
+          0.6325
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.54,
+        "percentile95": [
+          1.4625,
+          1.62
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.2635656806314364,
+        "percentile95": [
+          0.23457561160845217,
+          0.2923774654144654
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.4275890595652163,
+        "percentile95": [
+          0.39330787893896924,
+          0.4612077559432946
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_light",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "36c35b6928a83fe6898d1c59eb6f9744703b6ec859c230b4eff1d7e58f6af35c",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.10231960947683547,
+        "percentile95": [
+          0.08898987267968915,
+          0.11777695125302853
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.0975,
+        "percentile95": [
+          0.07,
+          0.13
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.985,
+        "percentile95": [
+          5.585,
+          6.365
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.11488860849640332,
+        "percentile95": [
+          0.09521923682733904,
+          0.13704739724473622
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5648400555551052,
+        "percentile95": [
+          0.5403833469878883,
+          0.5890131127536297
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_light",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "36c35b6928a83fe6898d1c59eb6f9744703b6ec859c230b4eff1d7e58f6af35c",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.6058828840847127,
+        "percentile95": [
+          0.5719777025714866,
+          0.6383354945564643
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.62,
+        "percentile95": [
+          0.5675,
+          0.67
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.4325,
+        "percentile95": [
+          1.37,
+          1.4925
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.2471336551802233,
+        "percentile95": [
+          0.21750715067272539,
+          0.278871032913099
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.39266728062648326,
+        "percentile95": [
+          0.3586105735859601,
+          0.42624560587422455
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_light",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "a661b161028f5b7fe4e5fa3d3a42be472d017378b59f0a3d4e612079a01b5736",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.11390186895732768,
+        "percentile95": [
+          0.10021505652164342,
+          0.12867505037493537
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.1225,
+        "percentile95": [
+          0.0925,
+          0.1575
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.86,
+        "percentile95": [
+          5.4374375,
+          6.2575
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.09944033467909322,
+        "percentile95": [
+          0.08409353138407459,
+          0.11616499887907412
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.4443290045857429,
+        "percentile95": [
+          0.42740059076622133,
+          0.4611343157328665
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_light",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "a661b161028f5b7fe4e5fa3d3a42be472d017378b59f0a3d4e612079a01b5736",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.590447524851188,
+        "percentile95": [
+          0.5611868788502179,
+          0.6186236332010012
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.57,
+        "percentile95": [
+          0.52,
+          0.62
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.525,
+        "percentile95": [
+          1.4575,
+          1.5975
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.21441729048267008,
+        "percentile95": [
+          0.1899409048850648,
+          0.2397823840416968
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.34536009781062604,
+        "percentile95": [
+          0.3200346126286313,
+          0.3710861733099446
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_strong",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "ea8e380b09d5028039949f3dc53359bf3839bb3de843cd7fc49e15cbd725aa84",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.1186574352151365,
+        "percentile95": [
+          0.10207509093205953,
+          0.13644826672413182
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.13,
+        "percentile95": [
+          0.0975,
+          0.165
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.3725,
+        "percentile95": [
+          5.01,
+          5.755
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.13890547080838586,
+        "percentile95": [
+          0.11594515130386207,
+          0.16349352832513978
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.6690018803626299,
+        "percentile95": [
+          0.6388842281894759,
+          0.6971232169251889
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_strong",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "ea8e380b09d5028039949f3dc53359bf3839bb3de843cd7fc49e15cbd725aa84",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5876178132055793,
+        "percentile95": [
+          0.5526132599411648,
+          0.6227775025064766
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.6175,
+        "percentile95": [
+          0.5675,
+          0.6675
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.47,
+        "percentile95": [
+          1.4,
+          1.5475
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.2956638408335857,
+        "percentile95": [
+          0.25988156234339116,
+          0.33337729597033466
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5026621150039137,
+        "percentile95": [
+          0.4656023580469191,
+          0.5416083545992151
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_strong",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "58181135afdf33757ea5a9c79cca6cb52401ae7c5a5fc35442c31582aa9e3a1e",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.09333439719809916,
+        "percentile95": [
+          0.07343479792421696,
+          0.11517443511315262
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.0975,
+        "percentile95": [
+          0.07,
+          0.1275
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 6.0875,
+        "percentile95": [
+          5.6725,
+          6.5375625
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.1365264428922933,
+        "percentile95": [
+          0.10651437282930096,
+          0.17049170498404623
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.80002681478858,
+        "percentile95": [
+          0.7716535511035473,
+          0.8284735651370138
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_strong",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "58181135afdf33757ea5a9c79cca6cb52401ae7c5a5fc35442c31582aa9e3a1e",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5294262374392201,
+        "percentile95": [
+          0.48499605556609915,
+          0.5761789901938482
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.5325,
+        "percentile95": [
+          0.4774375,
+          0.59
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.57,
+        "percentile95": [
+          1.49,
+          1.65
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.3168776648837229,
+        "percentile95": [
+          0.2773016503573708,
+          0.35750624043684
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.46576301159337163,
+        "percentile95": [
+          0.41921568850008767,
+          0.5140418842004146
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_strong",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "a866ce901ff1b990082eecf5d87bd31ee64a179688786cd3597729051e27a053",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.11112408313212654,
+        "percentile95": [
+          0.09210259060014414,
+          0.13080130997766537
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.0975,
+        "percentile95": [
+          0.0675,
+          0.13
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 6.0575,
+        "percentile95": [
+          5.645,
+          6.48
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.14254650439812394,
+        "percentile95": [
+          0.1143354296199359,
+          0.17321282472374516
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.6679535847902298,
+        "percentile95": [
+          0.641153683681041,
+          0.6938379556983709
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "draw_strong",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "a866ce901ff1b990082eecf5d87bd31ee64a179688786cd3597729051e27a053",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5749126139250439,
+        "percentile95": [
+          0.5398700605065405,
+          0.6092506373025371
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.5725,
+        "percentile95": [
+          0.5224375,
+          0.62
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.5425,
+        "percentile95": [
+          1.4724374999999998,
+          1.6175625000000002
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.3207264512190886,
+        "percentile95": [
+          0.2829918886889172,
+          0.3617316693853318
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.519143144087866,
+        "percentile95": [
+          0.4812876762617379,
+          0.5587419236761052
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "symmetry",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "5d76f1130024ccd050a8f531f6881a9a719e07f15ad643cd6debbb7bea9ee88f",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.10482968517382688,
+        "percentile95": [
+          0.08906940684043912,
+          0.12185652315575862
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.115,
+        "percentile95": [
+          0.0825,
+          0.15
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.9425,
+        "percentile95": [
+          5.5574375,
+          6.3275
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.11746318781675655,
+        "percentile95": [
+          0.09830944498860482,
+          0.13738148934281344
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5918707741051912,
+        "percentile95": [
+          0.5729147843159735,
+          0.6100318972039968
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "symmetry",
+    "training_seed": 5011,
+    "steps": 2000000,
+    "checkpoint_sha256": "5d76f1130024ccd050a8f531f6881a9a719e07f15ad643cd6debbb7bea9ee88f",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5884690609236713,
+        "percentile95": [
+          0.5605595367212663,
+          0.6180448324457976
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.5875,
+        "percentile95": [
+          0.54,
+          0.635
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.4875,
+        "percentile95": [
+          1.425,
+          1.5500625000000003
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.3207796132494696,
+        "percentile95": [
+          0.28830420092359416,
+          0.35344974075362556
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.4866587731800973,
+        "percentile95": [
+          0.4522592423893511,
+          0.5215278723188675
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "symmetry",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "0a660c20bcbb16b0a7011b8e24a8728c4d36c556b5ca29d15ff89cafc251b898",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.09586506565799936,
+        "percentile95": [
+          0.08570648956947843,
+          0.10645075612465735
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.08,
+        "percentile95": [
+          0.055,
+          0.1075
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 6.1925,
+        "percentile95": [
+          5.7425,
+          6.6425625
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.07569652064237743,
+        "percentile95": [
+          0.0637099657332874,
+          0.0883132933031884
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.424155131354928,
+        "percentile95": [
+          0.4092998377680778,
+          0.43942145716771486
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "symmetry",
+    "training_seed": 5023,
+    "steps": 2000000,
+    "checkpoint_sha256": "0a660c20bcbb16b0a7011b8e24a8728c4d36c556b5ca29d15ff89cafc251b898",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5872397810034454,
+        "percentile95": [
+          0.5618915396290831,
+          0.6129882801510393
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.5825,
+        "percentile95": [
+          0.5375,
+          0.6275
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.4825,
+        "percentile95": [
+          1.425,
+          1.54
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.23295577201992274,
+        "percentile95": [
+          0.21105732671916486,
+          0.25456875284481795
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.3637716582790017,
+        "percentile95": [
+          0.3434859839798883,
+          0.38500581073388457
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "symmetry",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "6955f8681ce2b77753e30c4ddd1b8f21d3895a299fa9d566b63967927271cc3e",
+    "task": "win",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.11335393716057297,
+        "percentile95": [
+          0.10052084010266117,
+          0.12691089164109146
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.1225,
+        "percentile95": [
+          0.0925,
+          0.155
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 5.8175,
+        "percentile95": [
+          5.38,
+          6.265
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.10515082180891006,
+        "percentile95": [
+          0.09978240026925686,
+          0.11083541878872759
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.10919883913476952,
+        "percentile95": [
+          0.09332275057845982,
+          0.12678050691052342
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.5142823264375329,
+        "percentile95": [
+          0.4958039047885686,
+          0.5324053859114647
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  },
+  {
+    "machine": "m1",
+    "cohort": "actual_m1_exp3_2M_supplement_only",
+    "treatment": "symmetry",
+    "training_seed": 5037,
+    "steps": 2000000,
+    "checkpoint_sha256": "6955f8681ce2b77753e30c4ddd1b8f21d3895a299fa9d566b63967927271cc3e",
+    "task": "defense",
+    "independent_positions": 200,
+    "metrics": {
+      "target_probability": {
+        "mean": 0.5798088756238576,
+        "percentile95": [
+          0.5458698499455058,
+          0.6134770941783207
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "top1_correct": {
+        "mean": 0.62,
+        "percentile95": [
+          0.5649375,
+          0.6750625000000002
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "best_target_rank": {
+        "mean": 1.505,
+        "percentile95": [
+          1.42,
+          1.5925
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "uniform_probability": {
+        "mean": 0.5794166666666666,
+        "percentile95": [
+          0.5591666666666667,
+          0.5998333333333333
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "symmetry_gap": {
+        "mean": 0.2020233835768886,
+        "percentile95": [
+          0.1757301063038758,
+          0.22719304804038257
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      },
+      "policy_tv": {
+        "mean": 0.3465087051130831,
+        "percentile95": [
+          0.3201959335496649,
+          0.3726922440556809
+        ],
+        "pairs": 200,
+        "resamples": 4000,
+        "bootstrap_seed": 91023,
+        "unit": "independent source positions; both orientations averaged before resampling; conditional on fixed trained models"
+      }
+    }
+  }
+]
