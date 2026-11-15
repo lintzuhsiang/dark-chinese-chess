@@ -11,3 +11,6 @@ performance-results/
 pnpm-lock.yaml
 docs/verification/*baseline.json
 docs/phase-2-plan.md
+
+# Preserve imported protocol and experiment evidence byte for byte.
+docs/ai7-shared-evaluation/
