@@ -14,10 +14,10 @@ def distribution_stats(values):
 
 
 def advantage_diagnostics(trajectories, raw):
-    outcomes=np.concatenate([np.full(len(t),t[-1]['reward']) for t in trajectories])
+    outcomes=np.concatenate([np.full(len(t),t[-1].get('outcome',t[-1]['reward'])) for t in trajectories])
     norm=(raw-raw.mean())/(raw.std()+1e-8)
     return {'raw':distribution_stats(raw),'normalized':distribution_stats(norm), 'by_outcome':{
-        str(reward):{'games':sum(t[-1]['reward']==reward for t in trajectories),'game_fraction':sum(t[-1]['reward']==reward for t in trajectories)/len(trajectories),
+        str(reward):{'games':sum(t[-1].get('outcome',t[-1]['reward'])==reward for t in trajectories),'game_fraction':sum(t[-1].get('outcome',t[-1]['reward'])==reward for t in trajectories)/len(trajectories),
                      'decisions':int((outcomes==reward).sum()),'decision_fraction':float(np.mean(outcomes==reward)),
                      'raw':distribution_stats(raw[outcomes==reward]),'normalized':distribution_stats(norm[outcomes==reward])} for reward in [-1,0,1]}}
 

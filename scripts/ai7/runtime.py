@@ -1,6 +1,7 @@
 """Public-only bridge, small masked policy, complete-game collection, provenance."""
 from __future__ import annotations
 
+import shutil
 import hashlib
 import copy
 import io
@@ -163,7 +164,7 @@ def collect(bridge, learner, specifications, opponents, device="cpu", training=F
     decision. No artificial draw/zero reward is assigned to interrupted games.
     """
     states = bridge.request(command="reset", games=[{
-        "id": i, "seed": spec["seed"], **({"archive": spec["archive"]} if spec.get("archive") else {})
+        "id": i, "seed": spec["seed"], **({"prefix":spec["prefix"]} if spec.get("prefix") else {}), **({"archive": spec["archive"]} if spec.get("archive") else {})
     } for i, spec in enumerate(specifications)])
     active = {state["id"]: state["observation"] for state in states}
     trajectories = [[] for _ in specifications]
@@ -203,7 +204,8 @@ def collect(bridge, learner, specifications, opponents, device="cpu", training=F
             actions.extend(bridge.request(command="baseline", ids=ids, opponent=key))
         for key, entries in groups.items():
             model = learner if key in ("learner", "current") else opponents[key]
-            observations = [entry[1] for entry in entries]
+            from .exp3_support import rotate_observation, rotate_id
+            observations = [rotate_observation(entry[1]) if entry[2] and specifications[entry[0]].get('rotation') else entry[1] for entry in entries]
             features = np.stack([encode(obs) for obs in observations])
             masks = mask_array(observations)
             infer_start = time.perf_counter()
@@ -215,11 +217,12 @@ def collect(bridge, learner, specifications, opponents, device="cpu", training=F
             inference_seconds += time.perf_counter() - infer_start
             inference_decisions += len(entries)
             for j, (i, observation, is_learner) in enumerate(entries):
-                legal = observation["legal"]
+                public_observation = observations[j]
+                legal = public_observation["legal"]
                 weights = probabilities[j, legal].astype(np.float64)
                 weights /= weights.sum()
                 action = int(streams[i][0 if is_learner else 1].choice(legal, p=weights))
-                actions.append({"id": i, "action": action})
+                actions.append({"id": i, "action": rotate_id(action) if is_learner and specifications[i].get("rotation") else action})
                 if training and is_learner:
                     trajectories[i].append({"ply": observation["ply"], "quiet": observation["quiet"], "hidden": observation["board"].count(1), "features": features[j], "legal": legal, "old_legal_probabilities": probabilities[j, legal].tolist(), "action": action, "logp": float(log_probabilities[j, action]), "value": float(values[j]), "reward": 0.0})
         results = bridge.request(command="step", actions=actions)
@@ -229,11 +232,14 @@ def collect(bridge, learner, specifications, opponents, device="cpu", training=F
             if result["terminated"]:
                 spec = specifications[i]
                 reward = result["rewards"]["P1" if spec["seat"] == 0 else "P2"]
+                from .exp3_support import reward_for
+                objective_reward=reward_for(result['summary']['result'],reward,spec.get('draw_penalty',0.)) if training else reward
                 if training:
                     if not trajectories[i]:
                         raise RuntimeError("Terminal game without a learner decision")
-                    trajectories[i][-1]["reward"] = reward
-                completed.append({**spec, **result["summary"], "return": reward, "id": i})
+                    trajectories[i][-1]["reward"] = objective_reward
+                    for row in trajectories[i]: row['outcome'] = reward
+                completed.append({**{k:v for k,v in spec.items() if k != "prefix"}, "prefix_plies":len(spec.get("prefix",[])), **result["summary"], "return": reward, "objective_return":objective_reward, "id": i})
                 del active[i]
             else:
                 active[i] = result["observation"]
@@ -268,6 +274,10 @@ def artifact_bytes(path):
 def guard_artifacts(path, additional=20_000_000):
     configured = os.environ.get("AI7_ARTIFACT_ROOT")
     path = Path(configured).resolve() if configured else Path(path)
+    if os.environ.get('AI7_DISK_HEADROOM'):
+        required=int(os.environ['AI7_DISK_HEADROOM'])
+        if shutil.disk_usage(ROOT).free < required + additional: raise RuntimeError('Disk headroom reached')
+        return 0
     size = artifact_bytes(path)
     if size + additional > HARD_ARTIFACT_BYTES:
         raise RuntimeError(f"Artifact budget reached: {size} bytes")

@@ -27,7 +27,7 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
     if diagnostics is not None:
         from .instrumentation import advantage_diagnostics
         diagnostics.record['advantages'] = advantage_diagnostics(trajectories, advantage.copy())
-    outcome_tensor = torch.tensor([t[-1]['reward'] for t in trajectories for _ in t], device=device) if diagnostics is not None else None
+    outcome_tensor = torch.tensor([t[-1].get('outcome',t[-1]['reward']) for t in trajectories for _ in t], device=device) if diagnostics is not None else None
     predicted = np.asarray([row["value"] for row in rows])
     explained_variance = float(1 - np.var(returns - predicted) / np.var(returns)) if np.var(returns) > 1e-8 else None
     features = torch.from_numpy(np.stack([row["features"] for row in rows])).to(device)
@@ -39,17 +39,20 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
     old_logp = torch.tensor([row["logp"] for row in rows], device=device)
     returns_tensor = torch.from_numpy(returns).to(device)
     normalized_advantage = (advantage - advantage.mean()) / (advantage.std() + 1e-8)
-    if diagnostics is not None and config.get('audit_records') == 'full':
+    if diagnostics is not None and (config.get('audit_records') == 'full' or config.get('audit_game_indices')):
         diagnostics.record['decisions'] = []
         row_id = 0
         for game_index, trajectory in enumerate(trajectories):
             for decision, row in enumerate(trajectory):
+                if config.get('audit_records') != 'full' and game_index not in config.get('audit_game_indices',[]):
+                    row_id += 1
+                    continue
                 diagnostics.record['decisions'].append({'row': row_id, 'game_index': game_index,
                     'decision': decision, 'ply': row.get('ply'), 'quiet': row.get('quiet'),
                     'hidden': row.get('hidden'), 'legal_count': len(row['legal']),
                     'legal': row['legal'], 'old_legal_probabilities': row.get('old_legal_probabilities'), 'action': row['action'],
                     'old_log_probability': row['logp'], 'old_value': row['value'],
-                    'reward': row['reward'], 'outcome': trajectory[-1]['reward'],
+                    'reward': row['reward'], 'outcome': trajectory[-1].get('outcome',trajectory[-1]['reward']),
                     'return_target': float(returns[row_id]), 'raw_advantage': float(advantage[row_id]),
                     'normalized_advantage': float(normalized_advantage[row_id])})
                 row_id += 1
@@ -138,7 +141,11 @@ def parse_args(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--learning-rate", type=float)
     parser.add_argument("--opponent-mixture", choices=["standard", "random_rich"])
-    parser.add_argument("--audit-records", choices=["off", "full"])
+    parser.add_argument('--draw-penalty', type=float)
+    parser.add_argument('--rotation', type=int, choices=[0,1])
+    parser.add_argument('--curriculum-pool', type=str)
+    parser.add_argument('--curriculum-rate', type=float)
+    parser.add_argument("--audit-records", choices=["off", "full", "windowed"])
     parser.add_argument("--replay-sample-denominator", type=int)
     parser.add_argument("--audit-max-bytes", type=int)
     parser.add_argument("--instrumentation", choices=["off", "basic", "detailed"])
@@ -166,7 +173,7 @@ def parse_args(argv=None):
 
 def configuration(args, previous=None):
     defaults = {
-        "audit_records": "off", "replay_sample_denominator": 32, "audit_max_bytes": 250_000_000, "opponent_mixture": "standard", "instrumentation": "off", "gradient_sample_every_updates": 10, "architecture": "baseline", "seed": 7, "training_seconds": 7200.,
+        "draw_penalty":0., "rotation":0, "curriculum_pool":None, "curriculum_rate":0., "audit_records": "off", "replay_sample_denominator": 32, "audit_max_bytes": 250_000_000, "opponent_mixture": "standard", "instrumentation": "off", "gradient_sample_every_updates": 10, "architecture": "baseline", "seed": 7, "training_seconds": 7200.,
         "max_env_steps": 262144, "max_updates": 100000, "batch_games": 16,
         "checkpoint_every": 8, "checkpoint_every_steps": 0, "max_replays": 8,
         "threads": 2, "device": "cpu", "validation_seed_start": 1_000_000,
@@ -187,15 +194,20 @@ def configuration(args, previous=None):
         if prior_deadline is not None and args.deadline_epoch > prior_deadline:
             raise ValueError("Resume cannot extend the absolute campaign deadline")
         config["deadline_epoch"] = args.deadline_epoch
-    for key in ["audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
+    for key in ["draw_penalty", "rotation", "curriculum_pool", "curriculum_rate", "audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
         value = getattr(args, key)
         if value is not None:
-            if previous and key in ["audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
+            if previous and key in ["draw_penalty", "rotation", "curriculum_pool", "curriculum_rate", "audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
                 raise ValueError(f"Exact resume cannot change {key}")
             config[key] = value
+    if not -.5 <= config['draw_penalty'] <= 0 or not 0 <= config['curriculum_rate'] <= 1: raise ValueError('Invalid treatment')
+    if config['curriculum_rate'] and not config['curriculum_pool']: raise ValueError('Missing curriculum pool')
+    if config['curriculum_pool']:
+        config['curriculum_pool_sha256'] = __import__('hashlib').sha256(Path(config['curriculum_pool']).read_bytes()).hexdigest()
+        if previous and previous.get('curriculum_pool_sha256') != config['curriculum_pool_sha256']: raise ValueError('Curriculum changed on resume')
     if config['replay_sample_denominator'] < 1 or config['audit_max_bytes'] < 1:
         raise ValueError('Audit limits must be positive')
-    if config['audit_records'] == 'full':
+    if config['audit_records'] in ['full','windowed']:
         if not previous and args.max_replays is None: config['max_replays'] = 512
         if config['instrumentation'] != 'detailed':
             raise ValueError('Full audit requires --instrumentation detailed')
@@ -211,7 +223,7 @@ def configuration(args, previous=None):
         raise ValueError("Use 1-32 games and at most two Torch threads")
     if not 1 <= config["max_updates"] <= 100000 or not 1 <= config["max_env_steps"] <= 100_000_000:
         raise ValueError("Invalid bounded update/step target")
-    if config["checkpoint_every"] < 1 or config["checkpoint_every_steps"] < 0 or not 0 <= config["max_replays"] <= (2048 if config["audit_records"] == "full" else 32):
+    if config["checkpoint_every"] < 1 or config["checkpoint_every_steps"] < 0 or not 0 <= config["max_replays"] <= (2048 if config["audit_records"] in ["full","windowed"] else 32):
         raise ValueError("Invalid checkpoint/replay limits")
     if not 0 <= config["validation_pairs"] <= 128 or config["validation_seed_start"] < 1_000_000:
         raise ValueError("Validation decks must be independent of training")
@@ -270,6 +282,7 @@ def main(argv=None):
         _, resume_checkpoint = load_checkpoint(args.resume)
     config = configuration(args, resume_checkpoint["config"] if resume_checkpoint else None)
     seed_all(config["seed"], config["threads"])
+    curriculum = json.loads(Path(config['curriculum_pool']).read_text()) if config['curriculum_pool'] else []
     if args.resume:
         model, optimizer, rng, history, opponents, state, _ = restore_training_checkpoint(args.resume, config["device"])
         if not output.exists():
@@ -367,7 +380,13 @@ def main(argv=None):
                     "action_seed": int(rng.integers(0, 2**32)), "opponent": sample_opponent(rng, update, history, config["opponent_mixture"]),
                     **({"archive": f"rollout-{state['rollouts'] + 1:06d}-game-{i:02d}.json"} if archive else {}),
                 })
-            if config['audit_records'] == 'full':
+            for spec in specs:
+                if config['draw_penalty']: spec['draw_penalty']=config['draw_penalty']
+                if config['rotation']: spec['rotation']=bool((spec['action_seed'] >> 17)&1)
+                if curriculum and (spec['action_seed'] ^ 0x8456)%10000 < int(config['curriculum_rate']*10000):
+                    start=curriculum[(spec['action_seed'] ^ 0x9933)%len(curriculum)]
+                    spec['seed']=start['seed']; spec['prefix']=start['prefix']
+            if config['audit_records'] in ['full','windowed']:
                 retained = 0
                 for game_id, spec in enumerate(specs):
                     spec.pop('archive', None)
@@ -382,14 +401,17 @@ def main(argv=None):
                 diagnostics = None
                 if suite is not None:
                     diagnostics = UpdateDiagnostics(model, suite, state['probe_initial'], update, config['gradient_sample_every_updates'])
-                    if config['audit_records'] == 'full':
+                    from .exp3_support import audit_window
+                    full_window = config['audit_records']=='full' or (config['audit_records']=='windowed' and audit_window(state['env_steps'],config['max_env_steps']))
+                    if full_window:
                         diagnostics.detailed = True
                         diagnostics.all_minibatches = True
                         diagnostics.record['gradient_sampling'] = 'every optimizer minibatch; summary vectors only'
                     if config['instrumentation'] == 'basic':
                         diagnostics.detailed = False
                         diagnostics.record['gradient_sampling'] = 'none'
-                metrics = optimize(model, optimizer, rollout["trajectories"], config, config["device"], deadline, stop_requested, diagnostics)
+                observer_config = {**config, 'audit_records': 'full' if full_window else 'off', 'audit_game_indices':[i for i,g in enumerate(rollout['games']) if g.get('archive')]} if suite is not None else config
+                metrics = optimize(model, optimizer, rollout["trajectories"], observer_config, config["device"], deadline, stop_requested, diagnostics)
                 if diagnostics is not None and not metrics['interrupted']:
                     metrics['diagnostics'] = diagnostics.finish()
                 interrupted = metrics["interrupted"]
@@ -401,7 +423,7 @@ def main(argv=None):
                 stop_reason = "signal" if stop_requested() else "time_budget"
                 break
             audit_size = 0
-            if config['audit_records'] == 'full' and metrics and 'diagnostics' in metrics:
+            if config['audit_records'] in ['full','windowed'] and metrics and 'diagnostics' in metrics:
                 metrics['diagnostics']['games'] = rollout['games']
                 audit_size = len(json.dumps(metrics['diagnostics'], allow_nan=False).encode())
                 if state.get('audit_bytes', 0) + audit_size > config['audit_max_bytes']:

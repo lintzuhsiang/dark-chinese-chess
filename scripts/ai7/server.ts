@@ -1,6 +1,7 @@
 import { createInterface } from 'node:readline';
 import { mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { statfsSync } from 'node:fs';
 import { cpus, totalmem } from 'node:os';
 import { performance } from 'node:perf_hooks';
 import { assertCoreBaseline, CORE_REVISION } from '../ai-eval/baseline';
@@ -41,7 +42,12 @@ interface Request {
     | 'probes'
     | 'confirmation-probes'
     | 'close';
-  readonly games?: readonly { id: number; seed: number; archive?: string }[];
+  readonly games?: readonly {
+    id: number;
+    seed: number;
+    archive?: string;
+    prefix?: readonly number[];
+  }[];
   readonly actions?: readonly { id: number; action: number }[];
   readonly ids?: readonly number[];
   readonly opponent?: 'ev' | 'ai6a';
@@ -71,11 +77,16 @@ async function handle(request: Request): Promise<unknown> {
       };
     case 'reset':
       games.clear();
-      return request.games!.map(({ id, seed, archive }) => {
+      return request.games!.map(({ id, seed, archive, prefix }) => {
         const archivePath = archive ? resolve(outputRoot, archive) : null;
         if (archivePath && !archivePath.startsWith(outputRoot + '/'))
           throw new Error('Archive outside output directory.');
         const env = createEnvironment(seed);
+        for (const action of prefix ?? []) {
+          if (env.summary().result) throw new Error('Terminal curriculum prefix');
+          env.step(action);
+        }
+        if (env.summary().result) throw new Error('Terminal curriculum start');
         games.set(id, { env, archivePath, seed });
         return { id, observation: env.observe() };
       });
@@ -96,7 +107,13 @@ async function handle(request: Request): Promise<unknown> {
             ...archive,
             metadata: { coreRevision: CORE_REVISION, deckSeed: game.seed, replayVerified: true },
           });
-          if (artifactBytes(artifactRoot) + Buffer.byteLength(serialized) > 5_000_000_000)
+          const headroom = process.env.AI7_DISK_HEADROOM;
+          const disk = headroom ? statfsSync(outputRoot) : null;
+          if (
+            headroom
+              ? disk!.bavail * disk!.bsize < Number(headroom) + Buffer.byteLength(serialized)
+              : artifactBytes(artifactRoot) + Buffer.byteLength(serialized) > 5_000_000_000
+          )
             throw new Error('5 GB artifact limit reached.');
           writeFileSync(game.archivePath, serialized);
         }
