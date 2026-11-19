@@ -1,5 +1,5 @@
 import { createInterface } from 'node:readline';
-import { mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { cpus, totalmem } from 'node:os';
 import { performance } from 'node:perf_hooks';
@@ -11,10 +11,20 @@ import { createExpectedValueAgent } from '../../packages/ai-agents/src/expected-
 import { tacticalAgent } from '../../packages/ai-agents/src/tactical-agent';
 import { actionId, createEnvironment, OBSERVATION_VERSION } from './environment';
 import { createEvaluationProbes, createConfirmationProbes } from './probes';
+import { restoreEnvironment, sha256, validateRestartArchive, type RestartRecord } from './restart';
 
 assertCoreBaseline();
 type Environment = ReturnType<typeof createEnvironment>;
-const games = new Map<number, { env: Environment; archivePath: string | null; seed: number }>();
+const games = new Map<
+  number,
+  {
+    env: Environment;
+    archivePath: string | null;
+    seed: number;
+    restart?: { id: string; ply: number };
+  }
+>();
+let restarts = new Map<string, RestartRecord>();
 const outputRoot = resolve(process.argv[2] ?? 'benchmark-results/ai7-selfplay/server');
 const experimentRoot = resolve('benchmark-results/ai7-selfplay');
 const artifactRoot = resolve(process.env.AI7_ARTIFACT_ROOT ?? experimentRoot);
@@ -35,13 +45,16 @@ interface Request {
   readonly command:
     | 'hello'
     | 'reset'
+    | 'load-restarts'
     | 'step'
     | 'baseline'
     | 'benchmark'
     | 'probes'
     | 'confirmation-probes'
     | 'close';
-  readonly games?: readonly { id: number; seed: number; archive?: string }[];
+  readonly games?: readonly { id: number; seed: number; archive?: string; restartId?: string }[];
+  readonly path?: string;
+  readonly sha256?: string;
   readonly actions?: readonly { id: number; action: number }[];
   readonly ids?: readonly number[];
   readonly opponent?: 'ev' | 'ai6a';
@@ -69,14 +82,34 @@ async function handle(request: Request): Promise<unknown> {
         cpuCount: cpus().length,
         memoryBytes: totalmem(),
       };
+    case 'load-restarts': {
+      const path = resolve(request.path ?? '');
+      if (!path.startsWith(experimentRoot + '/'))
+        throw new Error('Restart archive must be under the AI-7 experiment directory.');
+      const serialized = readFileSync(path, 'utf8');
+      if (sha256(serialized) !== request.sha256) throw new Error('Restart archive SHA mismatch.');
+      const archive = validateRestartArchive(serialized);
+      restarts = new Map(archive.records.map((record) => [record.descriptor.id, record]));
+      // Only public descriptors cross the pipe. Private decks and snapshots stay here.
+      return archive.records.map((record) => record.descriptor);
+    }
     case 'reset':
       games.clear();
-      return request.games!.map(({ id, seed, archive }) => {
+      return request.games!.map(({ id, seed, archive, restartId }) => {
         const archivePath = archive ? resolve(outputRoot, archive) : null;
         if (archivePath && !archivePath.startsWith(outputRoot + '/'))
           throw new Error('Archive outside output directory.');
-        const env = createEnvironment(seed);
-        games.set(id, { env, archivePath, seed });
+        const record = restartId === undefined ? undefined : restarts.get(restartId);
+        if (restartId !== undefined && !record) throw new Error('Unknown restart record.');
+        const env = record
+          ? restoreEnvironment(JSON.stringify(record.snapshot))
+          : createEnvironment(seed);
+        games.set(id, {
+          env,
+          archivePath,
+          seed: record?.source.seed ?? seed,
+          ...(record ? { restart: { id: record.descriptor.id, ply: record.descriptor.ply } } : {}),
+        });
         return { id, observation: env.observe() };
       });
     case 'step':
@@ -94,10 +127,18 @@ async function handle(request: Request): Promise<unknown> {
           mkdirSync(resolve(game.archivePath, '..'), { recursive: true });
           const serialized = JSON.stringify({
             ...archive,
-            metadata: { coreRevision: CORE_REVISION, deckSeed: game.seed, replayVerified: true },
+            metadata: {
+              coreRevision: CORE_REVISION,
+              deckSeed: game.seed,
+              replayVerified: true,
+              ...(game.restart ? { restart: game.restart } : {}),
+            },
           });
-          if (artifactBytes(artifactRoot) + Buffer.byteLength(serialized) > 5_000_000_000)
-            throw new Error('5 GB artifact limit reached.');
+          const artifactLimit = Number(process.env.AI7_ARTIFACT_LIMIT_BYTES ?? 5_000_000_000);
+          if (!Number.isSafeInteger(artifactLimit) || artifactLimit <= 0)
+            throw new Error('Invalid artifact byte limit.');
+          if (artifactBytes(artifactRoot) + Buffer.byteLength(serialized) > artifactLimit)
+            throw new Error('Configured artifact limit reached.');
           writeFileSync(game.archivePath, serialized);
         }
         return {

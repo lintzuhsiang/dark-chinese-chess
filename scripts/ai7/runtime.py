@@ -162,14 +162,21 @@ def collect(bridge, learner, specifications, opponents, device="cpu", training=F
     Terminal rewards, including an opponent's last action, go to the final learner
     decision. No artificial draw/zero reward is assigned to interrupted games.
     """
+    if not training and any("restartId" in spec for spec in specifications):
+        raise ValueError("Restart starts are training-only; evaluation requires normal full games")
+    reset_started = time.perf_counter()
     states = bridge.request(command="reset", games=[{
-        "id": i, "seed": spec["seed"], **({"archive": spec["archive"]} if spec.get("archive") else {})
+        "id": i, "seed": spec["seed"], **({"archive": spec["archive"]} if spec.get("archive") else {}),
+        **({"restartId": spec["restartId"]} if "restartId" in spec else {})
     } for i, spec in enumerate(specifications)])
+    reset_seconds = time.perf_counter() - reset_started
     active = {state["id"]: state["observation"] for state in states}
+    start_plies = {i: observation["ply"] for i, observation in active.items()}
     trajectories = [[] for _ in specifications]
     streams = [(np.random.default_rng(spec["action_seed"]), np.random.default_rng(spec["action_seed"] ^ 0x5A5A5A5A)) for spec in specifications]
     completed = []
     env_steps = 0
+    transitions_by_start = {"normal": 0, "restart": 0}
     inference_seconds = 0.0
     inference_decisions = 0
     started = time.perf_counter()
@@ -226,24 +233,36 @@ def collect(bridge, learner, specifications, opponents, device="cpu", training=F
         env_steps += len(results)
         for result in results:
             i = result["id"]
+            transitions_by_start["restart" if "restartId" in specifications[i] else "normal"] += 1
             if result["terminated"]:
                 spec = specifications[i]
                 reward = result["rewards"]["P1" if spec["seat"] == 0 else "P2"]
                 if training:
                     if not trajectories[i]:
-                        raise RuntimeError("Terminal game without a learner decision")
-                    trajectories[i][-1]["reward"] = reward
-                completed.append({**spec, **result["summary"], "return": reward, "id": i})
+                        if "restartId" not in spec:
+                            raise RuntimeError("Terminal game without a learner decision")
+                        # A legal restart can end on the opponent's first action.
+                        # Count the transition/outcome, but never fabricate a PPO row.
+                    else:
+                        trajectories[i][-1]["reward"] = reward
+                completed.append({**spec, **result["summary"], "return": reward, "id": i,
+                    **({"start_ply": start_plies[i],
+                        "continuation_plies": result["summary"]["plies"] - start_plies[i],
+                        "learner_decisions": len(trajectories[i])} if "restartId" in spec else {})})
                 del active[i]
             else:
                 active[i] = result["observation"]
     done_ids = {record["id"] for record in completed}
     return {
-        "trajectories": [trajectory for i, trajectory in enumerate(trajectories) if i in done_ids],
+        "trajectories": [trajectory for i, trajectory in enumerate(trajectories) if i in done_ids and (trajectory or not training)],
+        "trajectory_game_ids": [i for i, trajectory in enumerate(trajectories) if i in done_ids and (trajectory or not training)],
         "games": sorted(completed, key=lambda record: record["id"]),
         "attempted": len(specifications), "incomplete": len(active), "env_steps": env_steps,
         "seconds": time.perf_counter() - started,
         "inference_seconds": inference_seconds, "inference_decisions": inference_decisions,
+        "zero_decision_games": sum(not trajectories[i] for i in done_ids) if training else 0,
+        "reset_seconds": reset_seconds,
+        "transitions_by_start": transitions_by_start,
     }
 
 
@@ -269,7 +288,10 @@ def guard_artifacts(path, additional=20_000_000):
     configured = os.environ.get("AI7_ARTIFACT_ROOT")
     path = Path(configured).resolve() if configured else Path(path)
     size = artifact_bytes(path)
-    if size + additional > HARD_ARTIFACT_BYTES:
+    limit = int(os.environ.get("AI7_ARTIFACT_LIMIT_BYTES", HARD_ARTIFACT_BYTES))
+    if limit <= 0:
+        raise ValueError("Artifact byte limit must be positive")
+    if size + additional > limit:
         raise RuntimeError(f"Artifact budget reached: {size} bytes")
     return size
 

@@ -33,7 +33,7 @@ export function decodeAction(id: number): GameAction {
     : { type: 'MOVE', from: Math.floor((id - 32) / 32), to: (id - 32) % 32 };
 }
 
-// This is the ONLY game data contract passed to Python. No seed, deck, Core IDs,
+// This is the ONLY per-decision game data contract passed to Python. No seed, deck, Core IDs,
 // private chase tracker, result ownership hint, or heuristic score is included.
 export interface PublicInput {
   readonly board: readonly number[];
