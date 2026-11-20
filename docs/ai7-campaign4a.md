@@ -6,11 +6,11 @@ per seed, for 12 runs and 43,680,000 transitions. Initial and 910,000-transition
 milestones are retained. Playing-strength comparisons use the fixed final model.
 
 | Treatment | GAE λ | Extra Critic |
-| --- | --- | --- |
-| A0 | .95 | Off |
-| A1 | .95 | On |
-| A2 | .80 | Off |
-| A3 | .80 | On |
+| --------- | ----- | ------------ |
+| A0        | .95   | Off          |
+| A1        | .95   | On           |
+| A2        | .80   | Off          |
+| A3        | .80   | On           |
 
 Extra Critic runs after standard PPO. It uses the same rollout's frozen
 pre-PPO GAE returns and features from the updated, frozen trunk. Two passes in
