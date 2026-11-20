@@ -1,0 +1,74 @@
+{
+  "architecture": "e2a_g",
+  "validated_environment_transitions": 100000,
+  "learner_samples": 45913,
+  "adam_steps_at_resume": [
+    4
+  ],
+  "adam_steps_final": [
+    144
+  ],
+  "parameter_delta_l2_by_tensor": {
+    "body.0.weight": 1.7742202281951904,
+    "body.0.bias": 0.01140192523598671,
+    "body.2.weight": 0.4652533233165741,
+    "body.2.bias": 0.01741732470691204,
+    "actor.generator.0.weight": 0.28960761427879333,
+    "actor.generator.0.bias": 0.12670154869556427,
+    "actor.generator.2.weight": 0.6958104372024536,
+    "actor.generator.2.bias": 4.463718596525723e-06,
+    "critic.weight": 0.07162962108850479,
+    "critic.bias": 0.0006309693562798202
+  },
+  "update_metrics": {
+    "entropy": {
+      "first_5_mean": 2.2076020547321864,
+      "last_5_mean": 1.8928085223936928,
+      "minimum": 1.7125499929700578,
+      "maximum": 2.3187652826309204
+    },
+    "normalized_entropy": {
+      "first_5_mean": 0.8952549857752665,
+      "last_5_mean": 0.780602517130571,
+      "minimum": 0.7109822375433785,
+      "maximum": 0.9843696653842926
+    },
+    "value_loss": {
+      "first_5_mean": 0.08243788554377499,
+      "last_5_mean": 0.02398538206506408,
+      "minimum": 0.014594027373407568,
+      "maximum": 0.16391152143478394
+    },
+    "policy_loss": {
+      "first_5_mean": 0.023763197707012296,
+      "last_5_mean": 0.01572994025730532,
+      "minimum": -0.06896162488394314,
+      "maximum": 0.05323484788338343
+    },
+    "gradient_norm": {
+      "first_5_mean": 2.1385419153031853,
+      "last_5_mean": 1.6595340835067618,
+      "minimum": 1.2846127947171528,
+      "maximum": 3.2762492895126343
+    },
+    "approx_kl": {
+      "first_5_mean": 0.02225814381658676,
+      "last_5_mean": 0.017977722524362916,
+      "minimum": 0.014465087559074163,
+      "maximum": 0.0354810394346714
+    },
+    "clip_fraction": {
+      "first_5_mean": 0.19879173125539507,
+      "last_5_mean": 0.1839876868637093,
+      "minimum": 0.12942708366447025,
+      "maximum": 0.3046875
+    }
+  },
+  "training_terminal_reasons": {
+    "NO_PROGRESS": 225,
+    "NO_PIECES": 82
+  },
+  "training_seconds": 92.408280916,
+  "transitions_per_second": 1082.15409927278,
+  "optimizer_updates": 20
+}

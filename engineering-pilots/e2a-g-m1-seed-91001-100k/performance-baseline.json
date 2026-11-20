@@ -1,0 +1,29 @@
+{
+  "architecture": "baseline",
+  "threads": 2,
+  "device": "cpu",
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "torch": "2.8.0",
+  "timings": {
+    "1": {
+      "forward_ms_median": 0.076666,
+      "backward_ms_median": 0.210084
+    },
+    "8": {
+      "forward_ms_median": 0.1875205,
+      "backward_ms_median": 0.188708
+    },
+    "16": {
+      "forward_ms_median": 0.24325000000000002,
+      "backward_ms_median": 0.208541
+    },
+    "256": {
+      "forward_ms_median": 1.677187,
+      "backward_ms_median": 1.101542
+    }
+  },
+  "parameters": 429857,
+  "head_parameters": 136224,
+  "autograd_saved_storage_bytes_batch256": 5520896,
+  "whole_process_peak_rss_bytes": 211697664
+}
