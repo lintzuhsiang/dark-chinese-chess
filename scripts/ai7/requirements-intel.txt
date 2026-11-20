@@ -1,0 +1,4 @@
+# Official macOS x86_64 wheels; use Python 3.11. Separate from M1 requirements.
+torch==2.2.2
+numpy==1.26.4
+matplotlib==3.9.4

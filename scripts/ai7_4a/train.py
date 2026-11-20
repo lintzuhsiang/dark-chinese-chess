@@ -73,7 +73,10 @@ def install(treatment):
         config = original_configuration(args, previous)
         if config["learning_method"] != "gae_lambda_095" or config["chain_alpha"] or config["architecture"] != "baseline":
             raise ValueError("Campaign 4A requires unchanged GAE baseline MLP")
-        if config['draw_penalty'] or config['rotation'] or config['curriculum_rate'] or config['audit_records'] != 'off':
+        if (config['draw_penalty'] or config['rotation'] or config['curriculum_rate']
+                or config['audit_records'] != 'off' or config.get('restart_treatment') is not None
+                or config['opponent_mixture'] != 'standard' or config['learning_rate'] != 3e-4
+                or getattr(args, 'gae_lambda', None) is not None):
             raise ValueError("Campaign 4A forbids additional treatments")
         config.update(gae_lambda=lam, campaign4a_treatment=treatment, extra_critic=enabled,
                       extra_critic_passes=2 if enabled else 0,

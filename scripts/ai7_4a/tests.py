@@ -2,7 +2,6 @@
 import copy
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
 import time
@@ -12,14 +11,17 @@ import numpy as np
 import torch
 
 from scripts.ai7.runtime import ROOT, Policy, advantages, collect, load_checkpoint, seed_all
-from scripts.ai7.tests.test_resume import ResumeTests
+from scripts.ai7.tests.test_resume import ResumeTests as _ResumeTests
+from scripts.ai7_4a.campaign import training_source_hashes
 from scripts.ai7_4a.train import extra_passes
 
 
 class CorrectnessTests(unittest.TestCase):
     def test_reward_perspective_and_truncation_exclusion(self):
-        path=ROOT/'benchmark-results/ai7-selfplay/intel-p0/20261115-v1/imports/intel-evaluation-bundle/tactical-bank/stage2.json'
-        observation=json.loads(path.read_text())['bank'][0]['observation']
+        inventory = [1, 2, 2, 2, 2, 2, 5] * 2
+        observation = {'board': [1] * 32, 'references': [0] * 32, 'hiddenInventory': inventory,
+                       'remainingInventory': inventory, 'player': 0, 'color': 0,
+                       'quiet': 0, 'ply': 0, 'history': [], 'legal': list(range(32))}
         seed_all(7091,1); model=Policy()
         class Transport:
             def __init__(self,seat,terminal): self.seat,self.terminal=seat,terminal
@@ -67,11 +69,12 @@ class CorrectnessTests(unittest.TestCase):
         for name,value in model.state_dict().items():
             if not name.startswith('critic.'): self.assertTrue(torch.equal(value,weights[name]),name)
         self.assertTrue(any(not torch.equal(v,weights[k]) for k,v in model.state_dict().items() if k.startswith('critic.')))
-        ResumeTests().assert_nested_equal(state,ppo.state_dict())
+        _ResumeTests().assert_nested_equal(state,ppo.state_dict())
         self.assertTrue(all(p.requires_grad for p in model.parameters()))
 
     def test_real_core_A0_equivalence_and_extra_resume(self):
-        root=ROOT/f'benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/pilots/correctness-{time.time_ns()}'
+        hashes = training_source_hashes()
+        root=ROOT/f'benchmark-results/ai7-selfplay/campaign4a-correctness/pilot-{time.time_ns()}'
         root.mkdir(parents=True)
         env={**os.environ,'AI7_ARTIFACT_ROOT':str(root),'PYTHONDONTWRITEBYTECODE':'1'}
         common=['--learning-method','gae_lambda_095','--seed','7091','--max-env-steps','6000',
@@ -88,7 +91,7 @@ class CorrectnessTests(unittest.TestCase):
         original=run('existing-gae095'); control=run('A0','A0')
         a=load_checkpoint(original/'final.pt')[1]; b=load_checkpoint(control/'final.pt')[1]
         keys=['model','optimizer','torch_rng','numpy_rng','python_rng','sampling_rng','opponent_pool','opponent_models','update','env_steps']
-        for key in keys: ResumeTests().assert_nested_equal(a[key],b[key])
+        for key in keys: _ResumeTests().assert_nested_equal(a[key],b[key])
         self.assertEqual((original/'training-games.jsonl').read_bytes(),(control/'training-games.jsonl').read_bytes())
         for treatment in ['A1','A2','A3']:
             full=run(treatment+'-full',treatment)
@@ -96,14 +99,15 @@ class CorrectnessTests(unittest.TestCase):
             self.assertLess(load_checkpoint(partial/'latest.pt')[1]['env_steps'],6000)
             run(treatment+'-resume',treatment,['--resume',str(partial/'latest.pt')])
             a=load_checkpoint(full/'final.pt')[1]; b=load_checkpoint(partial/'final.pt')[1]
-            for key in keys: ResumeTests().assert_nested_equal(a[key],b[key])
+            for key in keys: _ResumeTests().assert_nested_equal(a[key],b[key])
             self.assertEqual(a['env_steps'],6000)
             self.assertEqual((full/'training-games.jsonl').read_bytes(),(partial/'training-games.jsonl').read_bytes())
             if treatment in ['A1','A3']:
                 self.assertIn('extra_value_optimizer',a['optimizer'])
                 self.assertTrue(a['optimizer']['extra_value_optimizer']['state'])
+        self.assertEqual(hashes, training_source_hashes())
         (root/'verification.json').write_text(json.dumps({'passed':True,'A0_exact_model_PPO_pool_RNG_games':True,
-            'resume_exact':['A1','A2','A3'],'target':6000,'test_only_not_model_selection':True},indent=2)+'\n')
+            'resume_exact':['A1','A2','A3'],'source_hashes':hashes,'target':6000,'test_only_not_model_selection':True},indent=2)+'\n')
         print('Bounded pilot evidence:',root,flush=True)
 
 

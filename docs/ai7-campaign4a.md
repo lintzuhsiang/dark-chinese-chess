@@ -1,79 +1,70 @@
-# Intel Campaign 4A: GAE × value-head training
+# Campaign 4A — GAE × value-head training
 
-Branch: `experiment/intel-4a-gae-critic`. No commit, push or deployment is part
-of this campaign. Existing trainer, runtime, Core and earlier models remain
-unchanged. New code is isolated under `scripts/ai7_4a/`.
+The shared trainer uses the baseline MLP and standard PPO. Each treatment uses
+training seeds 7011, 7023 and 7037 and exactly 3,640,000 environment transitions
+per seed, for 12 runs and 43,680,000 transitions. Initial and 910,000-transition
+milestones are retained. Playing-strength comparisons use the fixed final model.
 
-Three fresh training RNG seeds 7011/7023/7037; four treatments: A0=.95/OFF,
-A1=.95/ON, A2=.80/OFF, A3=.80/ON. Each run completes exactly 3,640,000
-environment transitions, including incomplete-game transitions; incomplete games
-are excluded from PPO as in the established collector. Total 43,680,000.
-One heavy trainer at a time, no wall-time shortening or score-based stopping.
-Milestones: initial, .91M, 1.82M, 2.73M, 3.64M; final is the primary endpoint.
+| Treatment | GAE λ | Extra Critic |
+| --- | --- | --- |
+| A0 | .95 | Off |
+| A1 | .95 | On |
+| A2 | .80 | Off |
+| A3 | .80 | On |
 
-The adapter invokes the unchanged original standard PPO optimization. The only
-learning interventions are lambda and two extra value-head passes. Frozen GAE
-returns are computed before PPO. After standard PPO, the trunk's hidden features
-are detached, shared/body and actor parameters are frozen, and exactly two full
-passes in fixed rollout order update only the existing linear critic head.
-Adam LR3e-4/eps1e-5/betas(.9,.999), minibatch256, loss=.5*MSE, head-only gradient
-clip .5. No extra RNG draws. The separate value optimizer is stored as
-`checkpoint['optimizer']['extra_value_optimizer']`; PPO's own state/parameter
-groups are unchanged. A checkpoint includes both after the complete update.
-Interrupted extra passes roll back with the model/PPO boundary and restore the
-value optimizer. Logs record extra steps/time separately; resumable log offsets
-prevent replayed records from being counted twice.
+Extra Critic runs after standard PPO. It uses the same rollout's frozen
+pre-PPO GAE returns and features from the updated, frozen trunk. Two passes in
+fixed rollout order update the linear value head. Adam uses LR 3e-4, epsilon
+1e-5, betas .9/.999, minibatch 256, loss .5 × MSE and gradient clipping .5.
+The optimizer is separately checkpointed inside the standard optimizer envelope.
+If an update is interrupted, training restores the model, both optimizers and
+RNG states to the update boundary.
 
-The original gamma1, LR3e-4, epochs4, entropy/clipping, MLP, masks, public inputs,
-rollout16, minibatch256, opponent mixture and +1/0/−1 terminal rewards remain.
-This head-only intervention does not test a new architecture, full PPG, or
-additional representation learning. Its failure would not refute all forms of
-better critic training.
+The primary contrast from the original 21M preregistration is A1−A0 in score
+against frozen Intel GAE095 seed6011. Secondary analyses separate the other
+factorial contrasts, W/D/L, NO_PROGRESS, and each opponent, including Uniform
+Random and Historical4023. Paired deck intervals average the two seats for each
+deck first. Training-seed intervals use three independent seed effects.
 
-Frozen opponents: Uniform Random, M1 Exp2 Baseline4023 final, and Intel GAE095
-seed6011 final selected by seed identity. Original checkpoint bytes/hashes and
-reference inference are checked. The portable training-reference bundle contains
-the actual successful old configuration and source, not today's integrated code.
+## Running a new campaign
 
-The proposed new common protocol has 256 deck pairs in the 21M namespace, both
-seats, stochastic temperature1 masked categorical, independent PCG64 role
-streams, explicit deck-derived seeds, official score 1/.5/0 and authoritative
-Core stopping. Old 20M results are already-used data. A separate 32-deck
-calibration namespace uses the frozen reference policy against Baseline4023;
-all models predict the same public states and reference-policy sampled terminal
-returns. These off-policy noisy outcomes are not exact ground truth for each new
-policy. Average both seats per reference deck for uncertainty. Training-target
-value loss/explained variance stay separately labeled as lambda dependent.
+Use a common source revision on both devices and a fresh campaign directory
+under `benchmark-results/ai7-selfplay`. The Node version must meet the repository
+requirements, and Python needs NumPy, Torch and Matplotlib.
 
-Manifest content/opponent hashes/source kernels are fixed before new final
-results. M1 must return an explicit inventory confirmation referencing that exact
-manifest SHA before final new-seed evaluation. Training proceeds independently.
-Secondary tactical diagnostics use only the previously explored Stage2 400
-positions, both orientations; the reserved 100+100 bank is never read.
+1. Run the bounded correctness pilot. It compares A0 with the original GAE095
+   trainer and checks exact resume for A1, A2 and A3. Its verification file
+   pins the training source. The three other tests are synthetic and require
+   no game data.
 
-Factorial contrasts: A2−A0, A3−A1, A1−A0, A3−A2, and interaction
-(A3−A2)−(A1−A0). Score, win/loss/NO_PROGRESS, length, tactical quality and
-common-reference MSE remain separate. Report each training seed; conditional
-paired-deck bootstrap (10000, seed19) and paired-position bootstrap (4000,
-seed91023) differ from exploratory n=3 training-seed t95 intervals. No multiplicity
-adjustment or universal-mechanism claim. There is no new lambda1 control arm.
+   ```sh
+   python -B -m unittest scripts.ai7_4a.tests.CorrectnessTests -v
+   ```
 
-Correctness gates cover synthetic .95/.80 GAE, exact policy/trunk/logits/PPO/RNG
-invariance during extra passes, real-Core A0 equivalence, exact A1/A2/A3 resume,
-mask/public-input and terminal/truncation behavior. Pilots use bounded transitions
-for correctness, never held-out score for selection. All artifacts and reports
-are under `benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/`.
+2. Pass the pilot's `verification.json` and an explicitly selected shared
+   evaluation manifest to the training supervisor. Preparation copies the
+   manifest and records its hash. The supervisor runs one trainer at a time.
+   Re-running it in the same campaign directory resumes eligible jobs.
 
-Entry points (existing Intel Python3.11 environment and Node26 on PATH):
+   ```sh
+   python -B -m scripts.ai7_4a.campaign prepare --output "$RUN" --pilot "$PILOT" --manifest "$MANIFEST"
+   python -B -m scripts.ai7_4a.campaign run --output "$RUN"
+   ```
 
-```sh
-.venv-intel/bin/python -B -m unittest scripts.ai7_4a.tests.CorrectnessTests -v
-.venv-intel/bin/python -B -m scripts.ai7_4a.campaign prepare
-.venv-intel/bin/python -B -m scripts.ai7_4a.campaign run
-```
+3. Authorize and freeze final evaluation separately with both machines. Use the
+   agreed evaluator and record checkpoint, opponent, runtime and manifest hashes.
+   For this design, supply 256 distinct decks with both seats, temperature-1
+   masked categorical sampling, the frozen opponents and scoring 1/.5/0. The
+   established evaluator uses actor seed `deck_seed ^ 0x13579` and opponent seed
+   `actor_seed ^ 0x5A5A5A5A`. The completed 21M test is already exposed.
 
-The supervisor produces per-run logs/status/checkpoints, factorial CSV/JSON,
-learning curves, common-value calibration, research-report.md and next-decision.md.
-Without the M1 inventory response it records the evaluation as pending rather
-than inventing results. Failed/short runs are retained and excluded from complete
-factorial comparisons. Original results are never overwritten.
+4. Generate a report from existing outputs, using a fresh report directory.
+   `--games-dir` accepts the original joint 21M per-match JSON layout.
+
+   ```sh
+   python -B -m scripts.ai7_4a.report --campaign "$RUN" --games-dir "$GAMES" --output "$REPORT"
+   ```
+
+The Intel branch source archive at `a644eea` preserves the original combined supervisor,
+22M calibration implementation and joint 21M evaluator for reproducibility.
+The portable supervisor ends after training and reporting on available results.
