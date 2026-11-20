@@ -37,13 +37,13 @@ def versions(np, torch):
             "torch": str(torch.__version__), "numpy": np.__version__, "device": "cpu"}
 
 
-def pinned_runtime(checkout, commit=None):
+def pinned_runtime(checkout, commit=None, extra_files=()):
     checkout = checkout.resolve()
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=checkout, text=True).strip()
     if commit is not None:
         require(revision == commit, f"Checkout {commit} for the pilot runtime, got {revision}")
     hashes = {}
-    for name in SOURCE_FILES:
+    for name in (*SOURCE_FILES, *extra_files):
         data = (checkout / name).read_bytes()
         committed = subprocess.check_output(["git", "show", f"HEAD:{name}"], cwd=checkout)
         require(data == committed, f"Uncommitted runtime input: {name}")
@@ -149,11 +149,13 @@ def verify(args):
         require(sha(data) == manifest["files"][name], f"Member SHA-256 mismatch: {name}")
     require(sha(payload["final.pt"]) == manifest["checkpoint_sha256"], "Original checkpoint SHA-256 mismatch")
     require(manifest["fixture"]["tolerance_abs"] == TOLERANCE, "Fixture tolerance differs")
-    runtime, revision, source_hashes = pinned_runtime(args.source_worktree, manifest["source_commit"])
+    architecture = manifest["model_config"]["architecture"]
+    extra = ("scripts/ai7/relational_head.py",) if architecture in ("e2b_g", "e2b_l") else ()
+    runtime, revision, source_hashes = pinned_runtime(args.source_worktree, manifest["source_commit"], extra)
     require(source_hashes == manifest["runtime_source_sha256"], "Runtime source SHA-256 mismatch")
     require(runtime.CORE_REVISION == manifest["core_revision"]
             and runtime.OBSERVATION_VERSION == manifest["observation_version"], "Core or observation version mismatch")
-    runtime.seed_all(91001, 2)
+    runtime.seed_all(manifest["training_seed"], 2)
     model = runtime.make_policy(manifest["model_config"])
     with np.load(io.BytesIO(payload["weights.npz"]), allow_pickle=False) as weights:
         expected = model.state_dict()

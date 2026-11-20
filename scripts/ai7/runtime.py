@@ -30,6 +30,8 @@ ARCHITECTURES = {
     "critic": "public-separate-critic-v1",
     "cnn": "public-board-cnn-v1",
     "e2a_g": "public-geometry-tied-mlp128-v1",
+    "e2b_g": "public-relational-geometry-mlp128-v1",
+    "e2b_l": "public-relational-local-mlp128-v1",
 }
 _EYES = {count: np.eye(count, dtype=np.float32) for count in [2, 3, 16, 33]}
 
@@ -139,6 +141,9 @@ def make_policy(config=None):
     if architecture == "e2a_g":
         from .geometry_head import GeometryPolicy
         return GeometryPolicy(**config)
+    if architecture in ("e2b_g", "e2b_l"):
+        from .relational_head import RelationalPolicy
+        return RelationalPolicy(**config)
     raise ValueError(f"Unknown architecture: {architecture}")
 
 
