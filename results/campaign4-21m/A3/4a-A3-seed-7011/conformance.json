@@ -1,0 +1,150 @@
+{
+  "passed": true,
+  "at": "2026-11-17T01:57:56.127174+08:00",
+  "manifest_sha256": "a890517417e4828b32aaa1089e5d4375831c9d8e9ccd451a879e6f921c3f1592",
+  "final_checkpoints": [
+    {
+      "id": "A0-seed-7011",
+      "treatment": "A0",
+      "seed": 7011,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A0-seed-7011/final.pt",
+      "sha256": "8e560a536594d298599968dd96f9c0daf4ea02facd512d2d3cb73812dd03caf3"
+    },
+    {
+      "id": "A1-seed-7011",
+      "treatment": "A1",
+      "seed": 7011,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A1-seed-7011/final.pt",
+      "sha256": "23b86fca3b5e8f9243ad6fde0539a5423d059fa44082447a917732649fe23d55"
+    },
+    {
+      "id": "A2-seed-7011",
+      "treatment": "A2",
+      "seed": 7011,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A2-seed-7011/final.pt",
+      "sha256": "5a7c701f2fec57b869b52ef81894bfa38236a8e75bd67e332e02eff350b95874"
+    },
+    {
+      "id": "A3-seed-7011",
+      "treatment": "A3",
+      "seed": 7011,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A3-seed-7011/final.pt",
+      "sha256": "d2a72ec7b98267593aebe8be5a09dbecaf46d21e61cbe871322b33a919432e78"
+    },
+    {
+      "id": "A1-seed-7023",
+      "treatment": "A1",
+      "seed": 7023,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A1-seed-7023/final.pt",
+      "sha256": "8ff73ff40d5881edbaf6a22b5d12bbd25d476c1428b70956ac4e7f3103ce677a"
+    },
+    {
+      "id": "A2-seed-7023",
+      "treatment": "A2",
+      "seed": 7023,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A2-seed-7023/final.pt",
+      "sha256": "a1fd877a4109b9291a5fda458e6277c274648013fa6c2d4d64c8b43f52a68be9"
+    },
+    {
+      "id": "A3-seed-7023",
+      "treatment": "A3",
+      "seed": 7023,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A3-seed-7023/final.pt",
+      "sha256": "f984e52a5e38306717a3418a3c2417105d83db8fa7fddd9470a7bbd19f6c7405"
+    },
+    {
+      "id": "A0-seed-7023",
+      "treatment": "A0",
+      "seed": 7023,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A0-seed-7023/final.pt",
+      "sha256": "246faaad2ff8eb554a7c5dad54810d366338328a3691d6d4b22948c5394418cc"
+    },
+    {
+      "id": "A2-seed-7037",
+      "treatment": "A2",
+      "seed": 7037,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A2-seed-7037/final.pt",
+      "sha256": "b659a1b2c6d83a811098e7975de6d38838d1368ef7452bf78570e879f6119dbd"
+    },
+    {
+      "id": "A3-seed-7037",
+      "treatment": "A3",
+      "seed": 7037,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A3-seed-7037/final.pt",
+      "sha256": "45b4f4f52e465c35cd0a81c456fec674d649fc2fe2913bcf827f70b6d93fbdbe"
+    },
+    {
+      "id": "A0-seed-7037",
+      "treatment": "A0",
+      "seed": 7037,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A0-seed-7037/final.pt",
+      "sha256": "123336c0493f906b513985d24f18f9652f3d304a8dd2be18d03b1ca3a347cb1b"
+    },
+    {
+      "id": "A1-seed-7037",
+      "treatment": "A1",
+      "seed": 7037,
+      "endpoint": "final",
+      "env_steps": 3640000,
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/gae-critic-factorial-20261115/runs/A1-seed-7037/final.pt",
+      "sha256": "fa92b747a5f07a18560b2c4dcc67e7181bda17f81ed5bcfb079461be9530f083"
+    }
+  ],
+  "opponents": [
+    {
+      "name": "m1_exp2_baseline_4023",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-p0/20261115-v1/imports/intel-evaluation-bundle/historical-opponent/baseline-seed-4023-step-3640000.pt",
+      "sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "model_config": {
+        "architecture": "baseline",
+        "input_dim": 2163,
+        "width": 128
+      },
+      "observation_version": "public-v1",
+      "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d"
+    },
+    {
+      "name": "intel_gae095_seed6011",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6011/final.pt",
+      "sha256": "0206ee8acf78a23ce9bb0e0e1e7eb6521b56f0b960de72a624a598fa36729d7e",
+      "model_config": {
+        "architecture": "baseline",
+        "input_dim": 2163,
+        "width": 128
+      },
+      "observation_version": "public-v1",
+      "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d"
+    }
+  ],
+  "registered_source_count": 159,
+  "current_versions": {
+    "torch": "2.2.2",
+    "numpy": "1.26.4"
+  },
+  "M1_fixture_error": 8.940696716308594e-08,
+  "RNG_fixture": "32 mocked choices, no complete game or new21M outcome",
+  "bootstrap_fixture": "passed",
+  "no22M": true
+}
