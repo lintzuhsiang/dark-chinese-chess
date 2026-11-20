@@ -1,5 +1,8 @@
 # AI-7 results on the shared Git branch
 
+Run the tools from `experiment/selfplay-zero`. They sync and publish experiment
+records in a separate `experiment/shared-evaluation` worktree.
+
 ## Existing infrastructure audit
 
 | Function | Inspected implementation | Classification | Decision |

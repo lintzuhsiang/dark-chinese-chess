@@ -65,6 +65,6 @@ requirements, and Python needs NumPy, Torch and Matplotlib.
    python -B -m scripts.ai7_4a.report --campaign "$RUN" --games-dir "$GAMES" --output "$REPORT"
    ```
 
-The Intel source archive at `6b628e3` preserves the original combined supervisor,
+The Intel branch source archive at `a644eea` preserves the original combined supervisor,
 22M calibration implementation and joint 21M evaluator for reproducibility.
 The portable supervisor ends after training and reporting on available results.
