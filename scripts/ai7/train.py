@@ -13,7 +13,7 @@ import numpy as np
 import torch
 
 from .runtime import (
-    Bridge, ROOT, advantages, collect, guard_artifacts, load_checkpoint, make_policy,
+    ARCHITECTURES, Bridge, ROOT, advantages, collect, guard_artifacts, load_checkpoint, make_policy,
     provenance, save_checkpoint, seed_all, summarize, write_json, capture_rng, restore_rng,
     restore_training_checkpoint,
 )
@@ -162,7 +162,7 @@ def parse_args(argv=None):
     parser.add_argument("--audit-max-bytes", type=int)
     parser.add_argument("--instrumentation", choices=["off", "basic", "detailed"])
     parser.add_argument("--gradient-sample-every-updates", type=int)
-    parser.add_argument("--architecture", choices=["baseline", "critic", "cnn"])
+    parser.add_argument("--architecture", choices=ARCHITECTURES)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--training-seconds", type=float)
     parser.add_argument("--deadline-epoch", type=float, help="Absolute campaign deadline; cannot be extended on resume")

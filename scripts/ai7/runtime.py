@@ -28,6 +28,7 @@ ARCHITECTURES = {
     "baseline": ARCHITECTURE,
     "critic": "public-separate-critic-v1",
     "cnn": "public-board-cnn-v1",
+    "e2a_g": "public-geometry-tied-mlp128-v1",
 }
 _EYES = {count: np.eye(count, dtype=np.float32) for count in [2, 3, 16, 33]}
 
@@ -134,6 +135,9 @@ def make_policy(config=None):
     if architecture == "cnn":
         from .cnn import BoardCNNPolicy
         return BoardCNNPolicy(**config)
+    if architecture == "e2a_g":
+        from .geometry_head import GeometryPolicy
+        return GeometryPolicy(**config)
     raise ValueError(f"Unknown architecture: {architecture}")
 
 
