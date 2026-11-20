@@ -1,0 +1,25 @@
+{
+  "bundle_sha256": "e67705ce63811da02e082ce93a0c8aaec35cbd3dd8ed7c5ddcdd6c3e488be07f",
+  "checkpoint_sha256": "75c823d844d295782c72b960c45037ff34751c1b2f80006056cc5cf73f174d7b",
+  "machine_id": "intel",
+  "max_abs_errors": {
+    "probabilities": 5.960464477539062e-07,
+    "small_batch_probabilities": 1.1622905731201172e-06,
+    "value": 3.520399332046509e-07
+  },
+  "observations": 80,
+  "pilot_id": "e2a-g-m1-seed-91001-100k",
+  "portable_weights_sha256": "df2c3b5dfc1665be07256155d8060dd129f06303996c477f5a25864d540af99d",
+  "runtime": {
+    "device": "cpu",
+    "numpy": "1.26.4",
+    "platform": "macOS-15.7.9-x86_64-i386-64bit",
+    "python": "3.11.15",
+    "torch": "2.2.2"
+  },
+  "schema_version": 1,
+  "source_commit": "10275a68cfffd3f943acda028a4d0ca4ffbb0a10",
+  "status": "passed",
+  "tolerance_abs": 1e-05,
+  "validation_scope": "fixed-vector frozen inference with portable final-policy tensors"
+}
