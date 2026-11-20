@@ -1,0 +1,109 @@
+{
+  "alternate_arm_order": true,
+  "ambiguous_hit": "92007 was an episode deck in three prior seed-4023 training logs, duplicated in an export. It was not a model initialization seed. No overlap with the 23M confirmation decks.",
+  "archive": {
+    "max_seed": 800511,
+    "min_seed": 800000,
+    "sha256": "7bc7885f86d83c7bb3054d3672bdaf3531f55e012f190b0d3a9f5dcaf7b7fb71",
+    "source_games": 512
+  },
+  "as_of": "2026-11-21",
+  "assigned_master_seed_hits": 0,
+  "audit_script_sha256": "dc63a24bdd6b2e4266df643ff61b932d87f02548ac24f8485f8b6e71ca94ab15",
+  "both_arms_per_seed": true,
+  "dataset_id": "decks-192065355d7db9ce87f397e40e28714d6f7ccf324b224f528e0cd36c67722ac2",
+  "decision": "M1 confirms the proposed 256 confirmation deck IDs are unused within the audited inventories and acknowledges the 6/6 allocation for joint freeze.",
+  "deck_count": 256,
+  "deck_first": 23000000,
+  "deck_id_hits": 0,
+  "deck_last": 23000255,
+  "first_pair_order": {
+    "intel": [
+      "L",
+      "G"
+    ],
+    "m1": [
+      "G",
+      "L"
+    ]
+  },
+  "intel_order": [
+    92002,
+    92004,
+    92006,
+    92008,
+    92010,
+    92012
+  ],
+  "inventory_files": 12228,
+  "ledger_sha256": "b106d1fabc72c6d29c3dca830158a7ba10efe48c607359cb04d6591d8be25b68",
+  "m1_order": [
+    92001,
+    92003,
+    92005,
+    92007,
+    92009,
+    92011
+  ],
+  "machine_id": "m1",
+  "manifest_files": 570,
+  "matched_intel_protocol_sha256": "f84a2ce0abe5b780ae117fb89b90c772b6e6b249ce3d2d7e6efa17b832029290",
+  "runtime_source_files_verified": 21,
+  "scope": "M1 project benchmark inventories, nested E2b pilot and shared results checkout at d0f732f. Scanned JSON, JSONL, CSV and decompressed results JSONL.GZ for candidate IDs, inspected run configs and validation ranges. Includes repeated exports. No assertion about unlogged or external activity. Protected datasets excluded.",
+  "source_commit": "71d4850a9a89bf8c3fdcbd42e7d49f519717dd7a",
+  "study_id": "e2b-gl-364m-v1",
+  "test_activity": "No new evaluation, training or pilot during audit.",
+  "training_game_logs": 410,
+  "training_master_seed_values": [
+    7,
+    11,
+    23,
+    37,
+    101,
+    1011,
+    2027,
+    3037,
+    4011,
+    4023,
+    4037,
+    4242,
+    5011,
+    5023,
+    5037,
+    7011,
+    7023,
+    7037,
+    9081,
+    9181,
+    87019,
+    87041,
+    91001,
+    91002
+  ],
+  "validation_start_and_count": [
+    [
+      1000000,
+      0
+    ],
+    [
+      1100000,
+      2
+    ],
+    [
+      1100000,
+      8
+    ],
+    [
+      1200000,
+      8
+    ],
+    [
+      1300000,
+      32
+    ],
+    [
+      1500000,
+      16
+    ]
+  ]
+}
