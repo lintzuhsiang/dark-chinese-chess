@@ -1,0 +1,231 @@
+{
+  "tactical_final_means": {
+    "baseline": {
+      "win": {
+        "target_probability": 0.10878533156925187,
+        "top1_accuracy": 0.105,
+        "best_target_rank": 5.733333333333333,
+        "probability_over_uniform": 1.033917309311061,
+        "probability_excess_over_uniform": 0.003634509760341825,
+        "symmetry_gap": 0.1258288401460959,
+        "equivariance_tv": 0.6158656972150008,
+        "uniform_mass": 0.10515082180891006,
+        "original_mass": 0.10680341650988945,
+        "rotated_mass": 0.11076724662861429,
+        "original_top1": 0.10833333333333334,
+        "rotated_top1": 0.10166666666666667,
+        "orientation_minimum_mass": 0.04587091149620392
+      },
+      "defense": {
+        "target_probability": 0.5778969701375657,
+        "top1_accuracy": 0.5766666666666667,
+        "best_target_rank": 1.525,
+        "probability_over_uniform": 0.9944411200682064,
+        "probability_excess_over_uniform": -0.001519696529100942,
+        "symmetry_gap": 0.28931548304933435,
+        "equivariance_tv": 0.47167699347560604,
+        "uniform_mass": 0.5794166666666666,
+        "original_mass": 0.5684584761496323,
+        "rotated_mass": 0.5873354641254991,
+        "original_top1": 0.5616666666666666,
+        "rotated_top1": 0.5916666666666667,
+        "orientation_minimum_mass": 0.43323922861289854
+      }
+    },
+    "gae_lambda_095": {
+      "win": {
+        "target_probability": 0.1353681457517314,
+        "top1_accuracy": 0.14666666666666667,
+        "best_target_rank": 5.351666666666667,
+        "probability_over_uniform": 1.3177779158154437,
+        "probability_excess_over_uniform": 0.03021732394282135,
+        "symmetry_gap": 0.1830903817233563,
+        "equivariance_tv": 0.7007010690619548,
+        "uniform_mass": 0.10515082180891006,
+        "original_mass": 0.1383288971901705,
+        "rotated_mass": 0.13240739431329226,
+        "original_top1": 0.15166666666666667,
+        "rotated_top1": 0.14166666666666666,
+        "orientation_minimum_mass": 0.04382295489005325
+      },
+      "defense": {
+        "target_probability": 0.5774001535561789,
+        "top1_accuracy": 0.5666666666666667,
+        "best_target_rank": 1.5275,
+        "probability_over_uniform": 1.0028687087436265,
+        "probability_excess_over_uniform": -0.002016513110487706,
+        "symmetry_gap": 0.3188700087744898,
+        "equivariance_tv": 0.5081617047785161,
+        "uniform_mass": 0.5794166666666666,
+        "original_mass": 0.5820826501007347,
+        "rotated_mass": 0.5727176570116231,
+        "original_top1": 0.5833333333333334,
+        "rotated_top1": 0.55,
+        "orientation_minimum_mass": 0.41796514916893407
+      }
+    },
+    "chain_lite": {
+      "win": {
+        "target_probability": 0.10847712716194413,
+        "top1_accuracy": 0.11166666666666666,
+        "best_target_rank": 5.723333333333334,
+        "probability_over_uniform": 1.025181387672201,
+        "probability_excess_over_uniform": 0.003326305353034087,
+        "symmetry_gap": 0.10521089232390901,
+        "equivariance_tv": 0.5390122121075789,
+        "uniform_mass": 0.10515082180891006,
+        "original_mass": 0.10776840286678635,
+        "rotated_mass": 0.10918585145710191,
+        "original_top1": 0.10666666666666666,
+        "rotated_top1": 0.11666666666666667,
+        "orientation_minimum_mass": 0.05587168099998962
+      },
+      "defense": {
+        "target_probability": 0.589059267246242,
+        "top1_accuracy": 0.5925,
+        "best_target_rank": 1.5008333333333332,
+        "probability_over_uniform": 1.0225418673719588,
+        "probability_excess_over_uniform": 0.00964260057957534,
+        "symmetry_gap": 0.29424049736233426,
+        "equivariance_tv": 0.44140874562940247,
+        "uniform_mass": 0.5794166666666666,
+        "original_mass": 0.588468180121854,
+        "rotated_mass": 0.5896503543706301,
+        "original_top1": 0.5816666666666667,
+        "rotated_top1": 0.6033333333333333,
+        "orientation_minimum_mass": 0.44193901856507484
+      }
+    }
+  },
+  "game_benchmarks": {
+    "random": {
+      "baseline": {
+        "wins": 256,
+        "draws": 1167,
+        "losses": 113,
+        "completed": 1536,
+        "win_rate": 0.16666666666666666,
+        "draw_rate": 0.759765625,
+        "loss_rate": 0.07356770833333333,
+        "score": 0.5465494791666666,
+        "no_progress_rate": 0.7584635416666666,
+        "terminal_reasons": {
+          "NO_PIECES": 363,
+          "NO_LEGAL_ACTION": 6,
+          "NO_PROGRESS": 1165,
+          "CHASE_STALEMATE": 2
+        },
+        "mean_plies": 253.17252604166666,
+        "median_plies": 249.0,
+        "mean_repetitions": 6.027994791666667,
+        "mean_reversals": 31.895833333333332
+      },
+      "gae_lambda_095": {
+        "wins": 717,
+        "draws": 766,
+        "losses": 53,
+        "completed": 1536,
+        "win_rate": 0.466796875,
+        "draw_rate": 0.4986979166666667,
+        "loss_rate": 0.034505208333333336,
+        "score": 0.7161458333333334,
+        "no_progress_rate": 0.4986979166666667,
+        "terminal_reasons": {
+          "NO_PIECES": 767,
+          "NO_PROGRESS": 766,
+          "NO_LEGAL_ACTION": 3
+        },
+        "mean_plies": 213.244140625,
+        "median_plies": 212.0,
+        "mean_repetitions": 5.998046875,
+        "mean_reversals": 27.18359375
+      },
+      "chain_lite": {
+        "wins": 317,
+        "draws": 1101,
+        "losses": 118,
+        "completed": 1536,
+        "win_rate": 0.20638020833333334,
+        "draw_rate": 0.716796875,
+        "loss_rate": 0.07682291666666667,
+        "score": 0.5647786458333334,
+        "no_progress_rate": 0.7161458333333334,
+        "terminal_reasons": {
+          "NO_PIECES": 430,
+          "NO_LEGAL_ACTION": 5,
+          "NO_PROGRESS": 1100,
+          "CHASE_STALEMATE": 1
+        },
+        "mean_plies": 248.52799479166666,
+        "median_plies": 244.0,
+        "mean_repetitions": 5.878255208333333,
+        "mean_reversals": 30.247395833333332
+      }
+    },
+    "m1_exp2_baseline_4023": {
+      "baseline": {
+        "wins": 148,
+        "draws": 1162,
+        "losses": 226,
+        "completed": 1536,
+        "win_rate": 0.09635416666666667,
+        "draw_rate": 0.7565104166666666,
+        "loss_rate": 0.14713541666666666,
+        "score": 0.474609375,
+        "no_progress_rate": 0.755859375,
+        "terminal_reasons": {
+          "NO_PIECES": 373,
+          "NO_PROGRESS": 1161,
+          "NO_LEGAL_ACTION": 1,
+          "CHASE_STALEMATE": 1
+        },
+        "mean_plies": 254.31510416666666,
+        "median_plies": 251.0,
+        "mean_repetitions": 10.277994791666666,
+        "mean_reversals": 41.137369791666664
+      },
+      "gae_lambda_095": {
+        "wins": 506,
+        "draws": 940,
+        "losses": 90,
+        "completed": 1536,
+        "win_rate": 0.3294270833333333,
+        "draw_rate": 0.6119791666666666,
+        "loss_rate": 0.05859375,
+        "score": 0.6354166666666666,
+        "no_progress_rate": 0.60546875,
+        "terminal_reasons": {
+          "NO_PIECES": 590,
+          "NO_LEGAL_ACTION": 6,
+          "NO_PROGRESS": 930,
+          "CHASE_STALEMATE": 10
+        },
+        "mean_plies": 234.08333333333334,
+        "median_plies": 232.0,
+        "mean_repetitions": 10.225260416666666,
+        "mean_reversals": 38.759765625
+      },
+      "chain_lite": {
+        "wins": 176,
+        "draws": 1142,
+        "losses": 218,
+        "completed": 1536,
+        "win_rate": 0.11458333333333333,
+        "draw_rate": 0.7434895833333334,
+        "loss_rate": 0.14192708333333334,
+        "score": 0.486328125,
+        "no_progress_rate": 0.7428385416666666,
+        "terminal_reasons": {
+          "NO_PIECES": 392,
+          "NO_PROGRESS": 1141,
+          "CHASE_STALEMATE": 1,
+          "NO_LEGAL_ACTION": 2
+        },
+        "mean_plies": 246.77018229166666,
+        "median_plies": 241.0,
+        "mean_repetitions": 9.375,
+        "mean_reversals": 38.116536458333336
+      }
+    }
+  }
+}

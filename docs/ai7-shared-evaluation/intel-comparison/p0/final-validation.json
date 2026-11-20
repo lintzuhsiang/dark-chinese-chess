@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "checked_epoch": 1794712401.479464,
+  "evaluation_accounting": {
+    "planned": 9216,
+    "attempted": 9216,
+    "completed": 9216,
+    "skipped": 0,
+    "incomplete": 0,
+    "errors": 0
+  },
+  "tactical_checkpoints": 45,
+  "tactical_positions": 400,
+  "oriented_model_position_evaluations": 36000,
+  "all_game_outcomes_and_pair_scores_recomputed": true,
+  "shared_manifest_unchanged": true,
+  "P0_source_snapshot_unchanged": true,
+  "original_Intel_input_artifacts_unchanged": 56,
+  "original_checkpoints_unchanged": 45,
+  "original_Intel_sources_unchanged": true,
+  "M1_imported_static_files_unchanged": 126,
+  "reserved_access": false,
+  "training_or_finetuning_performed": false,
+  "required_outputs": [
+    "tactical-generalization-report.md",
+    "tactical-results.json",
+    "historical-opponent-report.md",
+    "shared-evaluation-manifest.json",
+    "shared-opponent-results.json",
+    "cross-machine-performance.md",
+    "combined-research-conclusion.md"
+  ],
+  "all_action_rotation_ids_verified": 1056
+}

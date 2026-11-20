@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "typescript_tests": 844,
+  "typescript_test_files": 50,
+  "python_regression_tests": 41,
+  "additional_protocol_tests": 4,
+  "checks": [
+    "pnpm lint",
+    "pnpm format:check",
+    "pnpm typecheck",
+    "pnpm test --maxWorkers=2",
+    "pnpm build",
+    "Python baseline equivalence, GAE math, KL masks and gradients, exact resume",
+    "shared evaluator correctness: 256 completed games, both seats, 128 pairs, zero errors or incomplete games on separate 8M smoke decks"
+  ],
+  "pilots": "32768 transitions per treatment, all completed, exact reload and identical initial models verified",
+  "versions": "actual versions recorded in intel-source-evidence.json",
+  "no_held_out_tuning": true
+}

@@ -1,0 +1,765 @@
+{
+  "machine_id": "intel",
+  "cohort_id": "intel-learning-3640000-6011-6023-6037-v1",
+  "env_steps": 3640000,
+  "training_seeds": [
+    6011,
+    6023,
+    6037
+  ],
+  "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568",
+  "source_artifact": {
+    "path": "benchmark-results/ai7-selfplay/intel-p0/20261115-v1/shared-opponent-results.json",
+    "sha256": "9c8d8a451e273614e3d4e644922c489fbfc1fb16967783accd8c7ec618de21f3"
+  },
+  "reports": [
+    {
+      "method": "baseline",
+      "training_seed": 6011,
+      "checkpoint_sha256": "1fc90036c755eb8c788312318908a5c75b0d208f17a24f927e2c7a61288d439a",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 90,
+      "draws": 382,
+      "losses": 40,
+      "score": 0.548828125,
+      "terminal_reason_counts": {
+        "NO_PIECES": 127,
+        "NO_LEGAL_ACTION": 3,
+        "NO_PROGRESS": 381,
+        "CHASE_STALEMATE": 1
+      },
+      "no_progress_rate": 0.744140625,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6011,
+      "checkpoint_sha256": "1fc90036c755eb8c788312318908a5c75b0d208f17a24f927e2c7a61288d439a",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 45,
+      "draws": 364,
+      "losses": 103,
+      "score": 0.443359375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 148,
+        "NO_LEGAL_ACTION": 0,
+        "NO_PROGRESS": 364,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.7109375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6023,
+      "checkpoint_sha256": "e8d048157705ecc25fcb1983ff00db1357f689f69cf92946ae7dbd8d748eda10",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 74,
+      "draws": 409,
+      "losses": 29,
+      "score": 0.5439453125,
+      "terminal_reason_counts": {
+        "NO_PIECES": 102,
+        "NO_LEGAL_ACTION": 1,
+        "NO_PROGRESS": 408,
+        "CHASE_STALEMATE": 1
+      },
+      "no_progress_rate": 0.796875,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6023,
+      "checkpoint_sha256": "e8d048157705ecc25fcb1983ff00db1357f689f69cf92946ae7dbd8d748eda10",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 53,
+      "draws": 390,
+      "losses": 69,
+      "score": 0.484375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 121,
+        "NO_LEGAL_ACTION": 1,
+        "NO_PROGRESS": 390,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.76171875,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6037,
+      "checkpoint_sha256": "3005da7140303844f9dfad6c64f7ab8bd51517ca89b901b2ff3c896440499721",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 92,
+      "draws": 376,
+      "losses": 44,
+      "score": 0.546875,
+      "terminal_reason_counts": {
+        "NO_PIECES": 134,
+        "NO_LEGAL_ACTION": 2,
+        "NO_PROGRESS": 376,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.734375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6037,
+      "checkpoint_sha256": "3005da7140303844f9dfad6c64f7ab8bd51517ca89b901b2ff3c896440499721",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 50,
+      "draws": 408,
+      "losses": 54,
+      "score": 0.49609375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 104,
+        "NO_LEGAL_ACTION": 0,
+        "NO_PROGRESS": 407,
+        "CHASE_STALEMATE": 1
+      },
+      "no_progress_rate": 0.794921875,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "checkpoint_sha256": "0206ee8acf78a23ce9bb0e0e1e7eb6521b56f0b960de72a624a598fa36729d7e",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 219,
+      "draws": 268,
+      "losses": 25,
+      "score": 0.689453125,
+      "terminal_reason_counts": {
+        "NO_PIECES": 244,
+        "NO_LEGAL_ACTION": 0,
+        "NO_PROGRESS": 268,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.5234375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "checkpoint_sha256": "0206ee8acf78a23ce9bb0e0e1e7eb6521b56f0b960de72a624a598fa36729d7e",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 155,
+      "draws": 329,
+      "losses": 28,
+      "score": 0.6240234375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 181,
+        "NO_LEGAL_ACTION": 2,
+        "NO_PROGRESS": 323,
+        "CHASE_STALEMATE": 6
+      },
+      "no_progress_rate": 0.630859375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "checkpoint_sha256": "bd4c90064e5ebac138d253abd99601b9b0ff8bb0ebc90eb17e02fcd050ad4168",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 254,
+      "draws": 243,
+      "losses": 15,
+      "score": 0.7333984375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 267,
+        "NO_LEGAL_ACTION": 2,
+        "NO_PROGRESS": 243,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.474609375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "checkpoint_sha256": "bd4c90064e5ebac138d253abd99601b9b0ff8bb0ebc90eb17e02fcd050ad4168",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 205,
+      "draws": 268,
+      "losses": 39,
+      "score": 0.662109375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 240,
+        "NO_LEGAL_ACTION": 4,
+        "NO_PROGRESS": 267,
+        "CHASE_STALEMATE": 1
+      },
+      "no_progress_rate": 0.521484375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "checkpoint_sha256": "df07532442fbf8ef36b996243db5425ed0a57afab4bc7ec0abc7a47970866c49",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 244,
+      "draws": 255,
+      "losses": 13,
+      "score": 0.7255859375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 256,
+        "NO_LEGAL_ACTION": 1,
+        "NO_PROGRESS": 255,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.498046875,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "checkpoint_sha256": "df07532442fbf8ef36b996243db5425ed0a57afab4bc7ec0abc7a47970866c49",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 146,
+      "draws": 343,
+      "losses": 23,
+      "score": 0.6201171875,
+      "terminal_reason_counts": {
+        "NO_PIECES": 169,
+        "NO_LEGAL_ACTION": 0,
+        "NO_PROGRESS": 340,
+        "CHASE_STALEMATE": 3
+      },
+      "no_progress_rate": 0.6640625,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "checkpoint_sha256": "9a12a796f9164f7143a6c6674d0222673306878c325b56cfe1c54dd9224631d0",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 96,
+      "draws": 375,
+      "losses": 41,
+      "score": 0.5537109375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 135,
+        "NO_LEGAL_ACTION": 2,
+        "NO_PROGRESS": 375,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.732421875,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "checkpoint_sha256": "9a12a796f9164f7143a6c6674d0222673306878c325b56cfe1c54dd9224631d0",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 53,
+      "draws": 414,
+      "losses": 45,
+      "score": 0.5078125,
+      "terminal_reason_counts": {
+        "NO_PIECES": 98,
+        "NO_LEGAL_ACTION": 0,
+        "NO_PROGRESS": 413,
+        "CHASE_STALEMATE": 1
+      },
+      "no_progress_rate": 0.806640625,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "checkpoint_sha256": "4e5241576762e084b789be03e7feaedf1e300a2bcb02317303f832d82f958de3",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 96,
+      "draws": 377,
+      "losses": 39,
+      "score": 0.5556640625,
+      "terminal_reason_counts": {
+        "NO_PIECES": 135,
+        "NO_LEGAL_ACTION": 0,
+        "NO_PROGRESS": 376,
+        "CHASE_STALEMATE": 1
+      },
+      "no_progress_rate": 0.734375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "checkpoint_sha256": "4e5241576762e084b789be03e7feaedf1e300a2bcb02317303f832d82f958de3",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 63,
+      "draws": 362,
+      "losses": 87,
+      "score": 0.4765625,
+      "terminal_reason_counts": {
+        "NO_PIECES": 148,
+        "NO_LEGAL_ACTION": 2,
+        "NO_PROGRESS": 362,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.70703125,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "checkpoint_sha256": "2ba1c13c9abb5a5dc9fb72d9cd763bbe73c292d8b9dc28dcdcdc1f824828634f",
+      "opponent": "random",
+      "opponent_identity_sha256": "1b84119bf4a41c440c5696d28d998625e2126dd1d2ec4b043fd85095b37fe041",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 125,
+      "draws": 349,
+      "losses": 38,
+      "score": 0.5849609375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 160,
+        "NO_LEGAL_ACTION": 3,
+        "NO_PROGRESS": 349,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.681640625,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "checkpoint_sha256": "2ba1c13c9abb5a5dc9fb72d9cd763bbe73c292d8b9dc28dcdcdc1f824828634f",
+      "opponent": "m1_exp2_baseline_4023",
+      "opponent_identity_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+      "planned": 512,
+      "attempted": 512,
+      "incomplete": 0,
+      "completed": 512,
+      "wins": 60,
+      "draws": 366,
+      "losses": 86,
+      "score": 0.474609375,
+      "terminal_reason_counts": {
+        "NO_PIECES": 146,
+        "NO_LEGAL_ACTION": 0,
+        "NO_PROGRESS": 366,
+        "CHASE_STALEMATE": 0
+      },
+      "no_progress_rate": 0.71484375,
+      "errors": 0,
+      "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    }
+  ],
+  "matched_seed_contrasts": [
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "opponent": "random",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.140625,
+        "bootstrap95": [
+          0.107421875,
+          0.1748046875
+        ],
+        "hoeffding95": [
+          -0.029137689467577443,
+          0.31038768946757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.251953125,
+        "draws": -0.22265625,
+        "losses": -0.029296875
+      },
+      "no_progress_rate_difference": -0.220703125
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "opponent": "random",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.0048828125,
+        "bootstrap95": [
+          -0.02734375,
+          0.037109375
+        ],
+        "hoeffding95": [
+          -0.16487987696757744,
+          0.17464550196757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.01171875,
+        "draws": -0.013671875,
+        "losses": 0.001953125
+      },
+      "no_progress_rate_difference": -0.01171875
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "opponent": "random",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.189453125,
+        "bootstrap95": [
+          0.1591796875,
+          0.2197265625
+        ],
+        "hoeffding95": [
+          0.019690435532422557,
+          0.35921581446757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.3515625,
+        "draws": -0.32421875,
+        "losses": -0.02734375
+      },
+      "no_progress_rate_difference": -0.322265625
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "opponent": "random",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.01171875,
+        "bootstrap95": [
+          -0.0185546875,
+          0.0419921875
+        ],
+        "hoeffding95": [
+          -0.15804393946757744,
+          0.18148143946757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.04296875,
+        "draws": -0.0625,
+        "losses": 0.01953125
+      },
+      "no_progress_rate_difference": -0.0625
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "opponent": "random",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.1787109375,
+        "bootstrap95": [
+          0.14453125,
+          0.2119140625
+        ],
+        "hoeffding95": [
+          0.008948248032422557,
+          0.34847362696757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.296875,
+        "draws": -0.236328125,
+        "losses": -0.060546875
+      },
+      "no_progress_rate_difference": -0.236328125
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "opponent": "random",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.0380859375,
+        "bootstrap95": [
+          0.00390625,
+          0.072265625
+        ],
+        "hoeffding95": [
+          -0.13167675196757744,
+          0.20784862696757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.064453125,
+        "draws": -0.052734375,
+        "losses": -0.01171875
+      },
+      "no_progress_rate_difference": -0.052734375
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "opponent": "m1_exp2_baseline_4023",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.1806640625,
+        "bootstrap95": [
+          0.1474609375,
+          0.21484375
+        ],
+        "hoeffding95": [
+          0.010901373032422557,
+          0.35042675196757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.21484375,
+        "draws": -0.068359375,
+        "losses": -0.146484375
+      },
+      "no_progress_rate_difference": -0.080078125
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "opponent": "m1_exp2_baseline_4023",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.064453125,
+        "bootstrap95": [
+          0.03515625,
+          0.0947265625
+        ],
+        "hoeffding95": [
+          -0.10530956446757744,
+          0.23421581446757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.015625,
+        "draws": 0.09765625,
+        "losses": -0.11328125
+      },
+      "no_progress_rate_difference": 0.095703125
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "opponent": "m1_exp2_baseline_4023",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.177734375,
+        "bootstrap95": [
+          0.142578125,
+          0.212890625
+        ],
+        "hoeffding95": [
+          0.007971685532422557,
+          0.34749706446757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.296875,
+        "draws": -0.23828125,
+        "losses": -0.05859375
+      },
+      "no_progress_rate_difference": -0.240234375
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "opponent": "m1_exp2_baseline_4023",
+      "score_difference": {
+        "pairs": 256,
+        "difference": -0.0078125,
+        "bootstrap95": [
+          -0.0380859375,
+          0.021484375
+        ],
+        "hoeffding95": [
+          -0.17757518946757744,
+          0.16195018946757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.01953125,
+        "draws": -0.0546875,
+        "losses": 0.03515625
+      },
+      "no_progress_rate_difference": -0.0546875
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "opponent": "m1_exp2_baseline_4023",
+      "score_difference": {
+        "pairs": 256,
+        "difference": 0.1240234375,
+        "bootstrap95": [
+          0.0947265625,
+          0.15234375
+        ],
+        "hoeffding95": [
+          -0.04573925196757744,
+          0.29378612696757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.1875,
+        "draws": -0.126953125,
+        "losses": -0.060546875
+      },
+      "no_progress_rate_difference": -0.130859375
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "opponent": "m1_exp2_baseline_4023",
+      "score_difference": {
+        "pairs": 256,
+        "difference": -0.021484375,
+        "bootstrap95": [
+          -0.052734375,
+          0.0087890625
+        ],
+        "hoeffding95": [
+          -0.19124706446757744,
+          0.14827831446757744
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "rate_differences": {
+        "wins": 0.01953125,
+        "draws": -0.08203125,
+        "losses": 0.0625
+      },
+      "no_progress_rate_difference": -0.080078125
+    }
+  ],
+  "replication_unit": "training seed, n=3; deck bootstrap is conditional on trained policies",
+  "qualification": "Compact copy of existing completed Intel P0 results; no new games, bootstrap or training. M1 2M is a different training cohort."
+}

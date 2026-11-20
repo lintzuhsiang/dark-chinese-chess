@@ -1,0 +1,16 @@
+{
+  "verified_epoch": 1794679785.387271,
+  "supervisor_pid": 92388,
+  "supervisor_parent_pid_observed": 1,
+  "trainer_pid": 92454,
+  "active_run": "baseline-seed-6011",
+  "env_steps": 164950,
+  "earlier_env_steps": 51602,
+  "progress_observed": true,
+  "updates": 39,
+  "target_env_steps": 3640000,
+  "latest_checkpoint_exists": true,
+  "config_sha256": "3cdf7472bb014bf0fba0acebfc86adaecd7b5ac8082c34d3e02845233c374190",
+  "idle_sleep_assertion_verified": "pmset confirmed caffeinate pid 92389 PreventUserIdleSystemSleep",
+  "launch_nice_warning": "sandbox denied initial priority adjustment; live supervisor, caffeinate, trainer and Core child were successfully reniced to 10 without restart"
+}

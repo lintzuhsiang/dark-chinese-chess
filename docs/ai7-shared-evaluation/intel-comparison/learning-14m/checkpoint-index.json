@@ -1,0 +1,1037 @@
+[
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6011,
+    "endpoint": "initial",
+    "relative_path": "runs/baseline-seed-6011/initial.pt",
+    "sha256": "2a3a9a29012c504b916f9dbc5a9d5b1a941e9ff48249acd0d3f058df825a9590",
+    "file_stamp": [
+      3536419,
+      1794679686539912185
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6011,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/baseline-seed-6011/step-000910000.pt",
+    "sha256": "c91ca2f9ea14fac943d416064be46872e827f34d201d3ed478291a3cb4ff2422",
+    "file_stamp": [
+      8703747,
+      1794680176469064998
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6011,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/baseline-seed-6011/step-001820000.pt",
+    "sha256": "dd124c70c099306a1e8accf15a3c7240a78a8ae35bab9b80de32feb556fbd8b6",
+    "file_stamp": [
+      10425771,
+      1794680667835399262
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6011,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/baseline-seed-6011/step-002730000.pt",
+    "sha256": "79f4cfc535ce37ee7ea86747a43aab998453248b444ebc912b58758ef38e8d1d",
+    "file_stamp": [
+      12147795,
+      1794681159036309225
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6011,
+    "endpoint": "final",
+    "relative_path": "runs/baseline-seed-6011/final.pt",
+    "sha256": "1fc90036c755eb8c788312318908a5c75b0d208f17a24f927e2c7a61288d439a",
+    "file_stamp": [
+      13869691,
+      1794681667581266283
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6011,
+    "endpoint": "initial",
+    "relative_path": "runs/gae_lambda_095-seed-6011/initial.pt",
+    "sha256": "66c01edcaba03a06e383f6a292bd78538ec33f7aa24f54e8fea4b66a09121d67",
+    "file_stamp": [
+      3536419,
+      1794681671794812180
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6011,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/gae_lambda_095-seed-6011/step-000910000.pt",
+    "sha256": "d24d3298f669497957c56a79711364fb3134abd45741265685a46002d378390d",
+    "file_stamp": [
+      8703811,
+      1794682155312409294
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6011,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/gae_lambda_095-seed-6011/step-001820000.pt",
+    "sha256": "cb4c46b61b22817f47f8285bafdd7ad3ace3f6d6d1b3eb1bdb8657559f487e39",
+    "file_stamp": [
+      10425771,
+      1794682653235076419
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6011,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/gae_lambda_095-seed-6011/step-002730000.pt",
+    "sha256": "f3b6bdc2b57a882e6e43cf4efa42c8472c2f73256161af8dbc7fdb0eecc02554",
+    "file_stamp": [
+      12147795,
+      1794683156122270839
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6011,
+    "endpoint": "final",
+    "relative_path": "runs/gae_lambda_095-seed-6011/final.pt",
+    "sha256": "0206ee8acf78a23ce9bb0e0e1e7eb6521b56f0b960de72a624a598fa36729d7e",
+    "file_stamp": [
+      13869755,
+      1794683665910581523
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6011,
+    "endpoint": "initial",
+    "relative_path": "runs/chain_lite-seed-6011/initial.pt",
+    "sha256": "65b4e6e4b4008b24f577fc897ff235aa3ec4bf1eb2f0062526e65d0e4b44671e",
+    "file_stamp": [
+      3536419,
+      1794683671063876356
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6011,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/chain_lite-seed-6011/step-000910000.pt",
+    "sha256": "e8a7900478c2d2169ac72880b0b80ffcce41908794445aca43c65a7b09f3969b",
+    "file_stamp": [
+      8703747,
+      1794684206837626630
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6011,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/chain_lite-seed-6011/step-001820000.pt",
+    "sha256": "9a98f0249cb10de11360665de4e398644a460069c50e9b83eb325e50619f11b9",
+    "file_stamp": [
+      10425771,
+      1794684754931416103
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6011,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/chain_lite-seed-6011/step-002730000.pt",
+    "sha256": "5b932bf986f98350ae761ba3dbddb7c2760c8ff3d8f914aeed45aebf5284fbad",
+    "file_stamp": [
+      12147795,
+      1794685312505971261
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6011,
+    "endpoint": "final",
+    "relative_path": "runs/chain_lite-seed-6011/final.pt",
+    "sha256": "9a12a796f9164f7143a6c6674d0222673306878c325b56cfe1c54dd9224631d0",
+    "file_stamp": [
+      13869691,
+      1794685882832201539
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6023,
+    "endpoint": "initial",
+    "relative_path": "runs/gae_lambda_095-seed-6023/initial.pt",
+    "sha256": "323ed87a437d3bbf0a39995e05fb69500f5d5d921a08b8d6cd3394e4db01cbc4",
+    "file_stamp": [
+      3536483,
+      1794685886799804453
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6023,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/gae_lambda_095-seed-6023/step-000910000.pt",
+    "sha256": "91754ad1a3932e99e1a4459ceae59fb4b075037b18635946336b995df683ad70",
+    "file_stamp": [
+      8703811,
+      1794686392619889592
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6023,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/gae_lambda_095-seed-6023/step-001820000.pt",
+    "sha256": "8b80dd26f9235e22cca576db45c99bfcd4285e5711f46a31ff9d5e7c7aefa90d",
+    "file_stamp": [
+      10425835,
+      1794686906632785778
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6023,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/gae_lambda_095-seed-6023/step-002730000.pt",
+    "sha256": "cee6618c1d2138fb8be9b9f25f29c8befcb602caa67cf23f07cf2e835a8ac801",
+    "file_stamp": [
+      12147859,
+      1794687422587517940
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6023,
+    "endpoint": "final",
+    "relative_path": "runs/gae_lambda_095-seed-6023/final.pt",
+    "sha256": "bd4c90064e5ebac138d253abd99601b9b0ff8bb0ebc90eb17e02fcd050ad4168",
+    "file_stamp": [
+      13869755,
+      1794687947255751387
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6023,
+    "endpoint": "initial",
+    "relative_path": "runs/chain_lite-seed-6023/initial.pt",
+    "sha256": "b6348308660703341495e2d990821b222071592bbbcce5e100a72da52b54e129",
+    "file_stamp": [
+      3536419,
+      1794687952341704501
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6023,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/chain_lite-seed-6023/step-000910000.pt",
+    "sha256": "32fddac50b922e3d42fb468fb10149b57dd760b982855a166a5d649e3ed9e203",
+    "file_stamp": [
+      8703811,
+      1794688493095769996
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6023,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/chain_lite-seed-6023/step-001820000.pt",
+    "sha256": "f55698de3779d81d2ac573d3c1a87dc7b35b8305f30630568d1d95af092c8c93",
+    "file_stamp": [
+      10425835,
+      1794689044968663804
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6023,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/chain_lite-seed-6023/step-002730000.pt",
+    "sha256": "f3424a64e95bdb33b0cd54c69f4d654010211ceaeebc42e206f5a241c4862bc3",
+    "file_stamp": [
+      12147859,
+      1794689610894267771
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6023,
+    "endpoint": "final",
+    "relative_path": "runs/chain_lite-seed-6023/final.pt",
+    "sha256": "4e5241576762e084b789be03e7feaedf1e300a2bcb02317303f832d82f958de3",
+    "file_stamp": [
+      13869755,
+      1794690184102216587
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6023,
+    "endpoint": "initial",
+    "relative_path": "runs/baseline-seed-6023/initial.pt",
+    "sha256": "3690fd117d6753c5f9da9a5a687140383efed248dfed727d8c00dc1069a7b591",
+    "file_stamp": [
+      3536419,
+      1794690188334284575
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6023,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/baseline-seed-6023/step-000910000.pt",
+    "sha256": "8c39766e02ff9fc9a4640fa9b13ab0c13373ba3752cb2e5aeb1076acd88060a5",
+    "file_stamp": [
+      8703811,
+      1794690689436677464
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6023,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/baseline-seed-6023/step-001820000.pt",
+    "sha256": "ef3b6c26e16ec6c0ebdb976810908e8064ed8d8f5c6adac08c29d609313740c0",
+    "file_stamp": [
+      10425835,
+      1794691201540009355
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6023,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/baseline-seed-6023/step-002730000.pt",
+    "sha256": "07f17569347c2488f11744f91c09f434e3f09373b0cf5bc68f910939faacd99d",
+    "file_stamp": [
+      12147859,
+      1794691720133037351
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6023,
+    "endpoint": "final",
+    "relative_path": "runs/baseline-seed-6023/final.pt",
+    "sha256": "e8d048157705ecc25fcb1983ff00db1357f689f69cf92946ae7dbd8d748eda10",
+    "file_stamp": [
+      13869755,
+      1794692248253922879
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6037,
+    "endpoint": "initial",
+    "relative_path": "runs/chain_lite-seed-6037/initial.pt",
+    "sha256": "0b080edb265d0bbf4cf9368671467d2229023a1eb82e5e928b55e9263d7bb5bd",
+    "file_stamp": [
+      3536483,
+      1794692253766863505
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6037,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/chain_lite-seed-6037/step-000910000.pt",
+    "sha256": "86e838b8b45b04f0e2f9b69a5e122590789eba33212d42c0460ec3111b4efc3d",
+    "file_stamp": [
+      8703811,
+      1794692806361779792
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6037,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/chain_lite-seed-6037/step-001820000.pt",
+    "sha256": "46463326ed49c794a7a1de0a141add89a2b491c5fab0e2fa8e118f72fe82d807",
+    "file_stamp": [
+      10425835,
+      1794693370195051637
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6037,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/chain_lite-seed-6037/step-002730000.pt",
+    "sha256": "416c8a488ae3ba9b452ae85a7a383ecae366e7a1d18431318df1bee87626d40a",
+    "file_stamp": [
+      12147859,
+      1794693948619181600
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "chain_lite",
+    "training_seed": 6037,
+    "endpoint": "final",
+    "relative_path": "runs/chain_lite-seed-6037/final.pt",
+    "sha256": "2ba1c13c9abb5a5dc9fb72d9cd763bbe73c292d8b9dc28dcdcdc1f824828634f",
+    "file_stamp": [
+      13869755,
+      1794694531867398966
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6037,
+    "endpoint": "initial",
+    "relative_path": "runs/baseline-seed-6037/initial.pt",
+    "sha256": "d2e9036d8fa9581aeaadd4b5f1c87c56546e57520b01947f4bb2273c0b8660be",
+    "file_stamp": [
+      3536419,
+      1794694535429381517
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6037,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/baseline-seed-6037/step-000910000.pt",
+    "sha256": "1b70edec1264cd7bcb49fb67acf1f6a1521fcf810e80ff88138391650ec245d8",
+    "file_stamp": [
+      8703811,
+      1794695037140679949
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6037,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/baseline-seed-6037/step-001820000.pt",
+    "sha256": "932d2d955ce3e7ac351032ad3eb1cc9d9e99451c93f96ba0a6e7f0b9596acc22",
+    "file_stamp": [
+      10425835,
+      1794695550891184388
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6037,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/baseline-seed-6037/step-002730000.pt",
+    "sha256": "3352123f0171fe0d09736e4480a723c6afb46649dfd8414154ad6b71bba473f1",
+    "file_stamp": [
+      12147859,
+      1794696071386545916
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "baseline",
+    "training_seed": 6037,
+    "endpoint": "final",
+    "relative_path": "runs/baseline-seed-6037/final.pt",
+    "sha256": "3005da7140303844f9dfad6c64f7ab8bd51517ca89b901b2ff3c896440499721",
+    "file_stamp": [
+      13869755,
+      1794696602825295788
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6037,
+    "endpoint": "initial",
+    "relative_path": "runs/gae_lambda_095-seed-6037/initial.pt",
+    "sha256": "c58a071a2c86ce584d116c3808ef8237144e829ee8fe4720b66238933764a028",
+    "file_stamp": [
+      3536483,
+      1794696607176265978
+    ],
+    "env_steps": 0,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6037,
+    "endpoint": "step-000910000",
+    "relative_path": "runs/gae_lambda_095-seed-6037/step-000910000.pt",
+    "sha256": "3ae1afde2d879a26c470dd055ffabfc75afd8e4228e0c0fa2b540b96ad9fc8a2",
+    "file_stamp": [
+      8703811,
+      1794697115093405156
+    ],
+    "env_steps": 910000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6037,
+    "endpoint": "step-001820000",
+    "relative_path": "runs/gae_lambda_095-seed-6037/step-001820000.pt",
+    "sha256": "d4b3a65386e968c49ccb6150160a3f90a30ed0d52130ea6c68f799f364f37f83",
+    "file_stamp": [
+      10425835,
+      1794697631884800246
+    ],
+    "env_steps": 1820000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6037,
+    "endpoint": "step-002730000",
+    "relative_path": "runs/gae_lambda_095-seed-6037/step-002730000.pt",
+    "sha256": "469894607e2162ac58bdc331c754dcd83f3b10daadf78d8b38fe5a0381e8f3f3",
+    "file_stamp": [
+      12147859,
+      1794698153695590109
+    ],
+    "env_steps": 2730000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  },
+  {
+    "machine": "intel",
+    "campaign_id": "20261115-v1",
+    "treatment": "gae_lambda_095",
+    "training_seed": 6037,
+    "endpoint": "final",
+    "relative_path": "runs/gae_lambda_095-seed-6037/final.pt",
+    "sha256": "df07532442fbf8ef36b996243db5425ed0a57afab4bc7ec0abc7a47970866c49",
+    "file_stamp": [
+      13869755,
+      1794698680078062130
+    ],
+    "env_steps": 3640000,
+    "model_config": {
+      "architecture": "baseline",
+      "input_dim": 2163,
+      "width": 128
+    },
+    "architecture": "public-mlp128-v1",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "training_source_manifest_sha256": "988f5384cce8a58e8532a057bd9dd653d5bf40136d5af534f257d65de4a20c9e"
+  }
+]

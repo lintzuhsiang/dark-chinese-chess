@@ -1,0 +1,1075 @@
+{
+  "rows": [
+    {
+      "run_id": "baseline-seed-6011",
+      "method": "baseline",
+      "seed": 6011,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 1981.7669703360007,
+      "final_completed": 256,
+      "initial_wins": 40,
+      "initial_draws": 185,
+      "initial_losses": 31,
+      "final_wins": 48,
+      "final_draws": 188,
+      "final_losses": 20,
+      "initial_score": 0.517578125,
+      "final_score": 0.5546875,
+      "final_no_progress": 188,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": -0.02448803186416626,
+        "highest_flip_risk": -0.07416737079620361,
+        "immediate_capture": 0.4706565231084824,
+        "immediate_loss_risky": 0.02448807160059613,
+        "immediate_win": 0.5586442252000172,
+        "lowest_flip_risk": 0.525803342461586,
+        "repeated_position": -0.16095639020204544,
+        "repetition_winning_break": 0.5220444798469543
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.037109375,
+          "bootstrap95": [
+            -0.001953125,
+            0.076171875
+          ],
+          "hoeffding95": [
+            -0.20297132282998018,
+            0.2771900728299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "gae_lambda_095-seed-6011",
+      "method": "gae_lambda_095",
+      "seed": 6011,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 1994.8974600469955,
+      "final_completed": 256,
+      "initial_wins": 40,
+      "initial_draws": 185,
+      "initial_losses": 31,
+      "final_wins": 113,
+      "final_draws": 132,
+      "final_losses": 11,
+      "initial_score": 0.517578125,
+      "final_score": 0.69921875,
+      "final_no_progress": 132,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": 0.16372837622960412,
+        "highest_flip_risk": 0.12449479103088379,
+        "immediate_capture": -0.09264049194753171,
+        "immediate_loss_risky": -0.16372837126255033,
+        "immediate_win": -0.09514382543663186,
+        "lowest_flip_risk": -0.1572701446712017,
+        "repeated_position": 0.22426053881645203,
+        "repetition_winning_break": -0.23793215490877628
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.181640625,
+          "bootstrap95": [
+            0.134765625,
+            0.228515625
+          ],
+          "hoeffding95": [
+            -0.05844007282998018,
+            0.4217213228299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "chain_lite-seed-6011",
+      "method": "chain_lite",
+      "seed": 6011,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 2212.566635634008,
+      "final_completed": 256,
+      "initial_wins": 40,
+      "initial_draws": 185,
+      "initial_losses": 31,
+      "final_wins": 57,
+      "final_draws": 176,
+      "final_losses": 23,
+      "initial_score": 0.517578125,
+      "final_score": 0.56640625,
+      "final_no_progress": 175,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": 0.05680563052495324,
+        "highest_flip_risk": 0.053880512714385986,
+        "immediate_capture": 0.01122442856431008,
+        "immediate_loss_risky": -0.056805580854415894,
+        "immediate_win": 0.05751249690850574,
+        "lowest_flip_risk": -0.024312734603881836,
+        "repeated_position": -0.04940621554851532,
+        "repetition_winning_break": 0.15209639072418213
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.048828125,
+          "bootstrap95": [
+            0.005859375,
+            0.09375
+          ],
+          "hoeffding95": [
+            -0.19125257282998018,
+            0.2889088228299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "gae_lambda_095-seed-6023",
+      "method": "gae_lambda_095",
+      "seed": 6023,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 2061.203022882997,
+      "final_completed": 256,
+      "initial_wins": 45,
+      "initial_draws": 176,
+      "initial_losses": 35,
+      "final_wins": 125,
+      "final_draws": 127,
+      "final_losses": 4,
+      "initial_score": 0.51953125,
+      "final_score": 0.736328125,
+      "final_no_progress": 126,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": -0.07562213142712904,
+        "highest_flip_risk": -0.0010490268468856812,
+        "immediate_capture": -0.06410106960684062,
+        "immediate_loss_risky": 0.07562211404244107,
+        "immediate_win": -0.01456217591961223,
+        "lowest_flip_risk": -0.14437463134527206,
+        "repeated_position": 0.01726210117340088,
+        "repetition_winning_break": 0.44066211581230164
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.216796875,
+          "bootstrap95": [
+            0.169921875,
+            0.26171875
+          ],
+          "hoeffding95": [
+            -0.023283822829980177,
+            0.4568775728299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "chain_lite-seed-6023",
+      "method": "chain_lite",
+      "seed": 6023,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 2232.4916877650103,
+      "final_completed": 256,
+      "initial_wins": 45,
+      "initial_draws": 176,
+      "initial_losses": 35,
+      "final_wins": 47,
+      "final_draws": 186,
+      "final_losses": 23,
+      "initial_score": 0.51953125,
+      "final_score": 0.546875,
+      "final_no_progress": 186,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": -0.01300923029581702,
+        "highest_flip_risk": 0.14854003489017487,
+        "immediate_capture": -0.11101622804999352,
+        "immediate_loss_risky": 0.013009205460548401,
+        "immediate_win": -0.1267881877720356,
+        "lowest_flip_risk": 0.003875240683555603,
+        "repeated_position": -0.12349186837673187,
+        "repetition_winning_break": -0.12638645619153976
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.02734375,
+          "bootstrap95": [
+            -0.01171875,
+            0.064453125
+          ],
+          "hoeffding95": [
+            -0.21273694782998018,
+            0.2674244478299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "baseline-seed-6023",
+      "method": "baseline",
+      "seed": 6023,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 2060.632988237994,
+      "final_completed": 256,
+      "initial_wins": 45,
+      "initial_draws": 176,
+      "initial_losses": 35,
+      "final_wins": 40,
+      "final_draws": 196,
+      "final_losses": 20,
+      "initial_score": 0.51953125,
+      "final_score": 0.5390625,
+      "final_no_progress": 196,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": -0.1425120234489441,
+        "highest_flip_risk": 0.02858269214630127,
+        "immediate_capture": 0.2789434403181076,
+        "immediate_loss_risky": 0.14251204331715905,
+        "immediate_win": 0.2640932500362397,
+        "lowest_flip_risk": 0.19492675364017487,
+        "repeated_position": 0.21234837174415588,
+        "repetition_winning_break": 0.11799991130828857
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.01953125,
+          "bootstrap95": [
+            -0.021484375,
+            0.064453125
+          ],
+          "hoeffding95": [
+            -0.22054944782998018,
+            0.2596119478299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "chain_lite-seed-6037",
+      "method": "chain_lite",
+      "seed": 6037,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 2278.7687276959914,
+      "final_completed": 256,
+      "initial_wins": 44,
+      "initial_draws": 181,
+      "initial_losses": 31,
+      "final_wins": 66,
+      "final_draws": 174,
+      "final_losses": 16,
+      "initial_score": 0.525390625,
+      "final_score": 0.59765625,
+      "final_no_progress": 174,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": 0.05573795239130652,
+        "highest_flip_risk": 0.08888073265552521,
+        "immediate_capture": 0.04527987241744996,
+        "immediate_loss_risky": -0.055737972259521484,
+        "immediate_win": 0.07151304682095844,
+        "lowest_flip_risk": -0.051349058747291565,
+        "repeated_position": -0.21527322754263878,
+        "repetition_winning_break": 0.1028037965297699
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.072265625,
+          "bootstrap95": [
+            0.029296875,
+            0.11328125
+          ],
+          "hoeffding95": [
+            -0.16781507282998018,
+            0.3123463228299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "baseline-seed-6037",
+      "method": "baseline",
+      "seed": 6037,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 2068.007252689,
+      "final_completed": 256,
+      "initial_wins": 44,
+      "initial_draws": 181,
+      "initial_losses": 31,
+      "final_wins": 52,
+      "final_draws": 188,
+      "final_losses": 16,
+      "initial_score": 0.525390625,
+      "final_score": 0.5703125,
+      "final_no_progress": 188,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": 0.06290533145268751,
+        "highest_flip_risk": -0.10693258047103882,
+        "immediate_capture": 0.1285021215677261,
+        "immediate_loss_risky": -0.06290539602438605,
+        "immediate_win": 0.16820456584294635,
+        "lowest_flip_risk": 0.15203970670700073,
+        "repeated_position": -0.23063528165221214,
+        "repetition_winning_break": 0.19564059376716614
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.044921875,
+          "bootstrap95": [
+            0.00390625,
+            0.0859375
+          ],
+          "hoeffding95": [
+            -0.19515882282998018,
+            0.2850025728299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    },
+    {
+      "run_id": "gae_lambda_095-seed-6037",
+      "method": "gae_lambda_095",
+      "seed": 6037,
+      "training_status": "completed",
+      "env_steps": 3640000,
+      "training_seconds": 2073.664717930995,
+      "final_completed": 256,
+      "initial_wins": 44,
+      "initial_draws": 181,
+      "initial_losses": 31,
+      "final_wins": 109,
+      "final_draws": 140,
+      "final_losses": 7,
+      "initial_score": 0.525390625,
+      "final_score": 0.69921875,
+      "final_no_progress": 139,
+      "diagnostic_probe_delta": {
+        "avoid_immediate_loss": 0.10239997506141663,
+        "highest_flip_risk": -0.19398141093552113,
+        "immediate_capture": 0.5866493195295335,
+        "immediate_loss_risky": -0.10240000300109384,
+        "immediate_win": 0.5262968838214874,
+        "lowest_flip_risk": 0.7161794602870941,
+        "repeated_position": -0.23966567404568195,
+        "repetition_winning_break": 0.15621009469032288
+      },
+      "initial_final_paired_comparisons": [
+        {
+          "pairs": 128,
+          "difference": 0.173828125,
+          "bootstrap95": [
+            0.130859375,
+            0.216796875
+          ],
+          "hoeffding95": [
+            -0.06625257282998018,
+            0.4139088228299802
+          ],
+          "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+          "bootstrap_seed": 19,
+          "training_seeds": 1
+        }
+      ]
+    }
+  ],
+  "matched_contrasts": [
+    {
+      "method": "gae_lambda_095",
+      "seed": 6011,
+      "score": {
+        "pairs": 128,
+        "difference": 0.14453125,
+        "bootstrap95": [
+          0.095703125,
+          0.1953125
+        ],
+        "hoeffding95": [
+          -0.09554944782998018,
+          0.3846119478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.25390625,
+      "draw_rate_delta": -0.21875,
+      "loss_rate_delta": -0.03515625
+    },
+    {
+      "method": "gae_lambda_095",
+      "seed": 6023,
+      "score": {
+        "pairs": 128,
+        "difference": 0.197265625,
+        "bootstrap95": [
+          0.15234375,
+          0.2421875
+        ],
+        "hoeffding95": [
+          -0.04281507282998018,
+          0.4373463228299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.33203125,
+      "draw_rate_delta": -0.26953125,
+      "loss_rate_delta": -0.0625
+    },
+    {
+      "method": "gae_lambda_095",
+      "seed": 6037,
+      "score": {
+        "pairs": 128,
+        "difference": 0.12890625,
+        "bootstrap95": [
+          0.083984375,
+          0.173828125
+        ],
+        "hoeffding95": [
+          -0.11117444782998018,
+          0.3689869478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.22265625,
+      "draw_rate_delta": -0.1875,
+      "loss_rate_delta": -0.03515625
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seeds": 3,
+      "win_rate_delta_mean": 0.26953125,
+      "exploratory_t95": [
+        0.12958303288526613,
+        0.4094794671147339
+      ],
+      "qualification": "n=3, normality fragile; unadjusted multiple comparisons; deck games are not training replications"
+    },
+    {
+      "method": "chain_lite",
+      "seed": 6011,
+      "score": {
+        "pairs": 128,
+        "difference": 0.01171875,
+        "bootstrap95": [
+          -0.037109375,
+          0.05859375
+        ],
+        "hoeffding95": [
+          -0.22836194782998018,
+          0.2517994478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.03515625,
+      "draw_rate_delta": -0.046875,
+      "loss_rate_delta": 0.01171875
+    },
+    {
+      "method": "chain_lite",
+      "seed": 6023,
+      "score": {
+        "pairs": 128,
+        "difference": 0.0078125,
+        "bootstrap95": [
+          -0.037109375,
+          0.05078125
+        ],
+        "hoeffding95": [
+          -0.23226819782998018,
+          0.24789319782998018
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.02734375,
+      "draw_rate_delta": -0.0390625,
+      "loss_rate_delta": 0.01171875
+    },
+    {
+      "method": "chain_lite",
+      "seed": 6037,
+      "score": {
+        "pairs": 128,
+        "difference": 0.02734375,
+        "bootstrap95": [
+          -0.01171875,
+          0.06640625
+        ],
+        "hoeffding95": [
+          -0.21273694782998018,
+          0.2674244478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.0546875,
+      "draw_rate_delta": -0.0546875,
+      "loss_rate_delta": 0.0
+    },
+    {
+      "method": "chain_lite",
+      "training_seeds": 3,
+      "win_rate_delta_mean": 0.0390625,
+      "exploratory_t95": [
+        0.004075445721316531,
+        0.07404955427868347
+      ],
+      "qualification": "n=3, normality fragile; unadjusted multiple comparisons; deck games are not training replications"
+    }
+  ],
+  "head_to_head": [
+    {
+      "run_id": "chain_lite-seed-6011",
+      "kind": "head_to_head",
+      "reports": [
+        {
+          "checkpoint": "final",
+          "opponent": "matched_baseline",
+          "planned": 256,
+          "skipped": 0,
+          "attempted": 256,
+          "incomplete": 0,
+          "completed": 256,
+          "wins": 40,
+          "draws": 183,
+          "losses": 33,
+          "no_progress_rate": 0.71484375,
+          "chase_stalemate_rate": 0.0,
+          "mean_plies": 253.9375,
+          "mean_captures": 26.81640625,
+          "mean_flips": 31.90625,
+          "mean_hidden": 0.09375,
+          "mean_reversals": 40.53125,
+          "mean_repetitions": 10.203125,
+          "ever_public_count_lead": {
+            "wins": 40,
+            "draws": 175,
+            "losses": 31
+          },
+          "paired_score": {
+            "pairs": 128,
+            "score": 0.513671875,
+            "lower": 0.39363152608500995,
+            "upper": 0.63371222391499,
+            "confidence": 0.95,
+            "method": "hoeffding-independent-deck-pairs"
+          },
+          "seconds": 22.100922003010055,
+          "score": 0.513671875,
+          "terminal_reason_counts": {
+            "NO_PIECES": 72,
+            "NO_LEGAL_ACTION": 1,
+            "NO_PROGRESS": 183,
+            "CHASE_STALEMATE": 0
+          },
+          "per_seat": {
+            "0": {
+              "completed": 128,
+              "wins": 25,
+              "draws": 84,
+              "losses": 19,
+              "score": 0.5234375,
+              "terminal_reason_counts": {
+                "NO_PIECES": 44,
+                "NO_LEGAL_ACTION": 0,
+                "NO_PROGRESS": 84,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.65625,
+              "chase_stalemate_rate": 0.0
+            },
+            "1": {
+              "completed": 128,
+              "wins": 15,
+              "draws": 99,
+              "losses": 14,
+              "score": 0.50390625,
+              "terminal_reason_counts": {
+                "NO_PIECES": 28,
+                "NO_LEGAL_ACTION": 1,
+                "NO_PROGRESS": 99,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.7734375,
+              "chase_stalemate_rate": 0.0
+            }
+          },
+          "errors": 0,
+          "checkpoint_sha256": "9a12a796f9164f7143a6c6674d0222673306878c325b56cfe1c54dd9224631d0",
+          "env_steps": 3640000,
+          "training_seed": 6011,
+          "learning_method": "chain_lite"
+        }
+      ],
+      "initial_final_paired_comparisons": []
+    },
+    {
+      "run_id": "chain_lite-seed-6023",
+      "kind": "head_to_head",
+      "reports": [
+        {
+          "checkpoint": "final",
+          "opponent": "matched_baseline",
+          "planned": 256,
+          "skipped": 0,
+          "attempted": 256,
+          "incomplete": 0,
+          "completed": 256,
+          "wins": 40,
+          "draws": 186,
+          "losses": 30,
+          "no_progress_rate": 0.71875,
+          "chase_stalemate_rate": 0.0078125,
+          "mean_plies": 248.04296875,
+          "mean_captures": 26.60546875,
+          "mean_flips": 31.95703125,
+          "mean_hidden": 0.04296875,
+          "mean_reversals": 40.0625,
+          "mean_repetitions": 10.87109375,
+          "ever_public_count_lead": {
+            "wins": 40,
+            "draws": 185,
+            "losses": 30
+          },
+          "paired_score": {
+            "pairs": 128,
+            "score": 0.51953125,
+            "lower": 0.39949090108500995,
+            "upper": 0.63957159891499,
+            "confidence": 0.95,
+            "method": "hoeffding-independent-deck-pairs"
+          },
+          "seconds": 20.444639162000385,
+          "score": 0.51953125,
+          "terminal_reason_counts": {
+            "NO_PIECES": 70,
+            "NO_LEGAL_ACTION": 0,
+            "NO_PROGRESS": 184,
+            "CHASE_STALEMATE": 2
+          },
+          "per_seat": {
+            "0": {
+              "completed": 128,
+              "wins": 20,
+              "draws": 92,
+              "losses": 16,
+              "score": 0.515625,
+              "terminal_reason_counts": {
+                "NO_PIECES": 36,
+                "NO_LEGAL_ACTION": 0,
+                "NO_PROGRESS": 92,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.71875,
+              "chase_stalemate_rate": 0.0
+            },
+            "1": {
+              "completed": 128,
+              "wins": 20,
+              "draws": 94,
+              "losses": 14,
+              "score": 0.5234375,
+              "terminal_reason_counts": {
+                "NO_PIECES": 34,
+                "NO_LEGAL_ACTION": 0,
+                "NO_PROGRESS": 92,
+                "CHASE_STALEMATE": 2
+              },
+              "no_progress_rate": 0.71875,
+              "chase_stalemate_rate": 0.015625
+            }
+          },
+          "errors": 0,
+          "checkpoint_sha256": "4e5241576762e084b789be03e7feaedf1e300a2bcb02317303f832d82f958de3",
+          "env_steps": 3640000,
+          "training_seed": 6023,
+          "learning_method": "chain_lite"
+        }
+      ],
+      "initial_final_paired_comparisons": []
+    },
+    {
+      "run_id": "chain_lite-seed-6037",
+      "kind": "head_to_head",
+      "reports": [
+        {
+          "checkpoint": "final",
+          "opponent": "matched_baseline",
+          "planned": 256,
+          "skipped": 0,
+          "attempted": 256,
+          "incomplete": 0,
+          "completed": 256,
+          "wins": 34,
+          "draws": 196,
+          "losses": 26,
+          "no_progress_rate": 0.765625,
+          "chase_stalemate_rate": 0.0,
+          "mean_plies": 244.6875,
+          "mean_captures": 26.33203125,
+          "mean_flips": 31.99609375,
+          "mean_hidden": 0.00390625,
+          "mean_reversals": 36.60546875,
+          "mean_repetitions": 8.58984375,
+          "ever_public_count_lead": {
+            "wins": 34,
+            "draws": 194,
+            "losses": 25
+          },
+          "paired_score": {
+            "pairs": 128,
+            "score": 0.515625,
+            "lower": 0.39558465108500995,
+            "upper": 0.63566534891499,
+            "confidence": 0.95,
+            "method": "hoeffding-independent-deck-pairs"
+          },
+          "seconds": 21.603718106009183,
+          "score": 0.515625,
+          "terminal_reason_counts": {
+            "NO_PIECES": 59,
+            "NO_LEGAL_ACTION": 1,
+            "NO_PROGRESS": 196,
+            "CHASE_STALEMATE": 0
+          },
+          "per_seat": {
+            "0": {
+              "completed": 128,
+              "wins": 18,
+              "draws": 91,
+              "losses": 19,
+              "score": 0.49609375,
+              "terminal_reason_counts": {
+                "NO_PIECES": 37,
+                "NO_LEGAL_ACTION": 0,
+                "NO_PROGRESS": 91,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.7109375,
+              "chase_stalemate_rate": 0.0
+            },
+            "1": {
+              "completed": 128,
+              "wins": 16,
+              "draws": 105,
+              "losses": 7,
+              "score": 0.53515625,
+              "terminal_reason_counts": {
+                "NO_PIECES": 22,
+                "NO_LEGAL_ACTION": 1,
+                "NO_PROGRESS": 105,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.8203125,
+              "chase_stalemate_rate": 0.0
+            }
+          },
+          "errors": 0,
+          "checkpoint_sha256": "2ba1c13c9abb5a5dc9fb72d9cd763bbe73c292d8b9dc28dcdcdc1f824828634f",
+          "env_steps": 3640000,
+          "training_seed": 6037,
+          "learning_method": "chain_lite"
+        }
+      ],
+      "initial_final_paired_comparisons": []
+    },
+    {
+      "run_id": "gae_lambda_095-seed-6011",
+      "kind": "head_to_head",
+      "reports": [
+        {
+          "checkpoint": "final",
+          "opponent": "matched_baseline",
+          "planned": 256,
+          "skipped": 0,
+          "attempted": 256,
+          "incomplete": 0,
+          "completed": 256,
+          "wins": 74,
+          "draws": 159,
+          "losses": 23,
+          "no_progress_rate": 0.62109375,
+          "chase_stalemate_rate": 0.0,
+          "mean_plies": 243.56640625,
+          "mean_captures": 26.6640625,
+          "mean_flips": 31.93359375,
+          "mean_hidden": 0.06640625,
+          "mean_reversals": 41.67578125,
+          "mean_repetitions": 10.86328125,
+          "ever_public_count_lead": {
+            "wins": 74,
+            "draws": 158,
+            "losses": 23
+          },
+          "paired_score": {
+            "pairs": 128,
+            "score": 0.599609375,
+            "lower": 0.47956902608500995,
+            "upper": 0.71964972391499,
+            "confidence": 0.95,
+            "method": "hoeffding-independent-deck-pairs"
+          },
+          "seconds": 20.02095767701394,
+          "score": 0.599609375,
+          "terminal_reason_counts": {
+            "NO_PIECES": 94,
+            "NO_LEGAL_ACTION": 3,
+            "NO_PROGRESS": 159,
+            "CHASE_STALEMATE": 0
+          },
+          "per_seat": {
+            "0": {
+              "completed": 128,
+              "wins": 36,
+              "draws": 82,
+              "losses": 10,
+              "score": 0.6015625,
+              "terminal_reason_counts": {
+                "NO_PIECES": 44,
+                "NO_LEGAL_ACTION": 2,
+                "NO_PROGRESS": 82,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.640625,
+              "chase_stalemate_rate": 0.0
+            },
+            "1": {
+              "completed": 128,
+              "wins": 38,
+              "draws": 77,
+              "losses": 13,
+              "score": 0.59765625,
+              "terminal_reason_counts": {
+                "NO_PIECES": 50,
+                "NO_LEGAL_ACTION": 1,
+                "NO_PROGRESS": 77,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.6015625,
+              "chase_stalemate_rate": 0.0
+            }
+          },
+          "errors": 0,
+          "checkpoint_sha256": "0206ee8acf78a23ce9bb0e0e1e7eb6521b56f0b960de72a624a598fa36729d7e",
+          "env_steps": 3640000,
+          "training_seed": 6011,
+          "learning_method": "gae_lambda_095"
+        }
+      ],
+      "initial_final_paired_comparisons": []
+    },
+    {
+      "run_id": "gae_lambda_095-seed-6023",
+      "kind": "head_to_head",
+      "reports": [
+        {
+          "checkpoint": "final",
+          "opponent": "matched_baseline",
+          "planned": 256,
+          "skipped": 0,
+          "attempted": 256,
+          "incomplete": 0,
+          "completed": 256,
+          "wins": 89,
+          "draws": 158,
+          "losses": 9,
+          "no_progress_rate": 0.6171875,
+          "chase_stalemate_rate": 0.0,
+          "mean_plies": 228.05078125,
+          "mean_captures": 25.953125,
+          "mean_flips": 31.921875,
+          "mean_hidden": 0.078125,
+          "mean_reversals": 39.66796875,
+          "mean_repetitions": 11.8515625,
+          "ever_public_count_lead": {
+            "wins": 89,
+            "draws": 158,
+            "losses": 9
+          },
+          "paired_score": {
+            "pairs": 128,
+            "score": 0.65625,
+            "lower": 0.53620965108501,
+            "upper": 0.77629034891499,
+            "confidence": 0.95,
+            "method": "hoeffding-independent-deck-pairs"
+          },
+          "seconds": 19.97202213399578,
+          "score": 0.65625,
+          "terminal_reason_counts": {
+            "NO_PIECES": 97,
+            "NO_LEGAL_ACTION": 1,
+            "NO_PROGRESS": 158,
+            "CHASE_STALEMATE": 0
+          },
+          "per_seat": {
+            "0": {
+              "completed": 128,
+              "wins": 48,
+              "draws": 77,
+              "losses": 3,
+              "score": 0.67578125,
+              "terminal_reason_counts": {
+                "NO_PIECES": 51,
+                "NO_LEGAL_ACTION": 0,
+                "NO_PROGRESS": 77,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.6015625,
+              "chase_stalemate_rate": 0.0
+            },
+            "1": {
+              "completed": 128,
+              "wins": 41,
+              "draws": 81,
+              "losses": 6,
+              "score": 0.63671875,
+              "terminal_reason_counts": {
+                "NO_PIECES": 46,
+                "NO_LEGAL_ACTION": 1,
+                "NO_PROGRESS": 81,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.6328125,
+              "chase_stalemate_rate": 0.0
+            }
+          },
+          "errors": 0,
+          "checkpoint_sha256": "bd4c90064e5ebac138d253abd99601b9b0ff8bb0ebc90eb17e02fcd050ad4168",
+          "env_steps": 3640000,
+          "training_seed": 6023,
+          "learning_method": "gae_lambda_095"
+        }
+      ],
+      "initial_final_paired_comparisons": []
+    },
+    {
+      "run_id": "gae_lambda_095-seed-6037",
+      "kind": "head_to_head",
+      "reports": [
+        {
+          "checkpoint": "final",
+          "opponent": "matched_baseline",
+          "planned": 256,
+          "skipped": 0,
+          "attempted": 256,
+          "incomplete": 0,
+          "completed": 256,
+          "wins": 103,
+          "draws": 143,
+          "losses": 10,
+          "no_progress_rate": 0.55859375,
+          "chase_stalemate_rate": 0.0,
+          "mean_plies": 229.48046875,
+          "mean_captures": 26.32421875,
+          "mean_flips": 31.90625,
+          "mean_hidden": 0.09375,
+          "mean_reversals": 36.51171875,
+          "mean_repetitions": 9.265625,
+          "ever_public_count_lead": {
+            "wins": 103,
+            "draws": 142,
+            "losses": 10
+          },
+          "paired_score": {
+            "pairs": 128,
+            "score": 0.681640625,
+            "lower": 0.56160027608501,
+            "upper": 0.80168097391499,
+            "confidence": 0.95,
+            "method": "hoeffding-independent-deck-pairs"
+          },
+          "seconds": 20.07046025400632,
+          "score": 0.681640625,
+          "terminal_reason_counts": {
+            "NO_PIECES": 111,
+            "NO_LEGAL_ACTION": 2,
+            "NO_PROGRESS": 143,
+            "CHASE_STALEMATE": 0
+          },
+          "per_seat": {
+            "0": {
+              "completed": 128,
+              "wins": 58,
+              "draws": 63,
+              "losses": 7,
+              "score": 0.69921875,
+              "terminal_reason_counts": {
+                "NO_PIECES": 63,
+                "NO_LEGAL_ACTION": 2,
+                "NO_PROGRESS": 63,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.4921875,
+              "chase_stalemate_rate": 0.0
+            },
+            "1": {
+              "completed": 128,
+              "wins": 45,
+              "draws": 80,
+              "losses": 3,
+              "score": 0.6640625,
+              "terminal_reason_counts": {
+                "NO_PIECES": 48,
+                "NO_LEGAL_ACTION": 0,
+                "NO_PROGRESS": 80,
+                "CHASE_STALEMATE": 0
+              },
+              "no_progress_rate": 0.625,
+              "chase_stalemate_rate": 0.0
+            }
+          },
+          "errors": 0,
+          "checkpoint_sha256": "df07532442fbf8ef36b996243db5425ed0a57afab4bc7ec0abc7a47970866c49",
+          "env_steps": 3640000,
+          "training_seed": 6037,
+          "learning_method": "gae_lambda_095"
+        }
+      ],
+      "initial_final_paired_comparisons": []
+    }
+  ]
+}

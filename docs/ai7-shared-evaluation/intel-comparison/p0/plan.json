@@ -1,0 +1,402 @@
+{
+  "evaluation_only": true,
+  "training_allowed": false,
+  "bundle_manifest_sha256": "77b7ef2e3cb13a5ce9e3ec771cea807d614834001449ff998f5c76472f66bc88",
+  "bank_sha256": "970fa685171b61d3b9a43c515e5cbfdd47801885ef259ca65aa3b345bc603d27",
+  "checkpoint_manifest": [
+    {
+      "method": "baseline",
+      "training_seed": 6011,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6011/initial.pt",
+      "sha256": "2a3a9a29012c504b916f9dbc5a9d5b1a941e9ff48249acd0d3f058df825a9590",
+      "env_steps": 0
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6011,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6011/step-000910000.pt",
+      "sha256": "c91ca2f9ea14fac943d416064be46872e827f34d201d3ed478291a3cb4ff2422",
+      "env_steps": 910000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6011,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6011/step-001820000.pt",
+      "sha256": "dd124c70c099306a1e8accf15a3c7240a78a8ae35bab9b80de32feb556fbd8b6",
+      "env_steps": 1820000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6011,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6011/step-002730000.pt",
+      "sha256": "79f4cfc535ce37ee7ea86747a43aab998453248b444ebc912b58758ef38e8d1d",
+      "env_steps": 2730000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6011,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6011/final.pt",
+      "sha256": "1fc90036c755eb8c788312318908a5c75b0d208f17a24f927e2c7a61288d439a",
+      "env_steps": 3640000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6023,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6023/initial.pt",
+      "sha256": "3690fd117d6753c5f9da9a5a687140383efed248dfed727d8c00dc1069a7b591",
+      "env_steps": 0
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6023,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6023/step-000910000.pt",
+      "sha256": "8c39766e02ff9fc9a4640fa9b13ab0c13373ba3752cb2e5aeb1076acd88060a5",
+      "env_steps": 910000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6023,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6023/step-001820000.pt",
+      "sha256": "ef3b6c26e16ec6c0ebdb976810908e8064ed8d8f5c6adac08c29d609313740c0",
+      "env_steps": 1820000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6023,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6023/step-002730000.pt",
+      "sha256": "07f17569347c2488f11744f91c09f434e3f09373b0cf5bc68f910939faacd99d",
+      "env_steps": 2730000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6023,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6023/final.pt",
+      "sha256": "e8d048157705ecc25fcb1983ff00db1357f689f69cf92946ae7dbd8d748eda10",
+      "env_steps": 3640000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6037,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6037/initial.pt",
+      "sha256": "d2e9036d8fa9581aeaadd4b5f1c87c56546e57520b01947f4bb2273c0b8660be",
+      "env_steps": 0
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6037,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6037/step-000910000.pt",
+      "sha256": "1b70edec1264cd7bcb49fb67acf1f6a1521fcf810e80ff88138391650ec245d8",
+      "env_steps": 910000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6037,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6037/step-001820000.pt",
+      "sha256": "932d2d955ce3e7ac351032ad3eb1cc9d9e99451c93f96ba0a6e7f0b9596acc22",
+      "env_steps": 1820000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6037,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6037/step-002730000.pt",
+      "sha256": "3352123f0171fe0d09736e4480a723c6afb46649dfd8414154ad6b71bba473f1",
+      "env_steps": 2730000
+    },
+    {
+      "method": "baseline",
+      "training_seed": 6037,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/baseline-seed-6037/final.pt",
+      "sha256": "3005da7140303844f9dfad6c64f7ab8bd51517ca89b901b2ff3c896440499721",
+      "env_steps": 3640000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6011/initial.pt",
+      "sha256": "66c01edcaba03a06e383f6a292bd78538ec33f7aa24f54e8fea4b66a09121d67",
+      "env_steps": 0
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6011/step-000910000.pt",
+      "sha256": "d24d3298f669497957c56a79711364fb3134abd45741265685a46002d378390d",
+      "env_steps": 910000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6011/step-001820000.pt",
+      "sha256": "cb4c46b61b22817f47f8285bafdd7ad3ace3f6d6d1b3eb1bdb8657559f487e39",
+      "env_steps": 1820000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6011/step-002730000.pt",
+      "sha256": "f3b6bdc2b57a882e6e43cf4efa42c8472c2f73256161af8dbc7fdb0eecc02554",
+      "env_steps": 2730000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6011,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6011/final.pt",
+      "sha256": "0206ee8acf78a23ce9bb0e0e1e7eb6521b56f0b960de72a624a598fa36729d7e",
+      "env_steps": 3640000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6023/initial.pt",
+      "sha256": "323ed87a437d3bbf0a39995e05fb69500f5d5d921a08b8d6cd3394e4db01cbc4",
+      "env_steps": 0
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6023/step-000910000.pt",
+      "sha256": "91754ad1a3932e99e1a4459ceae59fb4b075037b18635946336b995df683ad70",
+      "env_steps": 910000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6023/step-001820000.pt",
+      "sha256": "8b80dd26f9235e22cca576db45c99bfcd4285e5711f46a31ff9d5e7c7aefa90d",
+      "env_steps": 1820000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6023/step-002730000.pt",
+      "sha256": "cee6618c1d2138fb8be9b9f25f29c8befcb602caa67cf23f07cf2e835a8ac801",
+      "env_steps": 2730000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6023,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6023/final.pt",
+      "sha256": "bd4c90064e5ebac138d253abd99601b9b0ff8bb0ebc90eb17e02fcd050ad4168",
+      "env_steps": 3640000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6037/initial.pt",
+      "sha256": "c58a071a2c86ce584d116c3808ef8237144e829ee8fe4720b66238933764a028",
+      "env_steps": 0
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6037/step-000910000.pt",
+      "sha256": "3ae1afde2d879a26c470dd055ffabfc75afd8e4228e0c0fa2b540b96ad9fc8a2",
+      "env_steps": 910000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6037/step-001820000.pt",
+      "sha256": "d4b3a65386e968c49ccb6150160a3f90a30ed0d52130ea6c68f799f364f37f83",
+      "env_steps": 1820000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6037/step-002730000.pt",
+      "sha256": "469894607e2162ac58bdc331c754dcd83f3b10daadf78d8b38fe5a0381e8f3f3",
+      "env_steps": 2730000
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seed": 6037,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/gae_lambda_095-seed-6037/final.pt",
+      "sha256": "df07532442fbf8ef36b996243db5425ed0a57afab4bc7ec0abc7a47970866c49",
+      "env_steps": 3640000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6011/initial.pt",
+      "sha256": "65b4e6e4b4008b24f577fc897ff235aa3ec4bf1eb2f0062526e65d0e4b44671e",
+      "env_steps": 0
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6011/step-000910000.pt",
+      "sha256": "e8a7900478c2d2169ac72880b0b80ffcce41908794445aca43c65a7b09f3969b",
+      "env_steps": 910000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6011/step-001820000.pt",
+      "sha256": "9a98f0249cb10de11360665de4e398644a460069c50e9b83eb325e50619f11b9",
+      "env_steps": 1820000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6011/step-002730000.pt",
+      "sha256": "5b932bf986f98350ae761ba3dbddb7c2760c8ff3d8f914aeed45aebf5284fbad",
+      "env_steps": 2730000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6011,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6011/final.pt",
+      "sha256": "9a12a796f9164f7143a6c6674d0222673306878c325b56cfe1c54dd9224631d0",
+      "env_steps": 3640000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6023/initial.pt",
+      "sha256": "b6348308660703341495e2d990821b222071592bbbcce5e100a72da52b54e129",
+      "env_steps": 0
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6023/step-000910000.pt",
+      "sha256": "32fddac50b922e3d42fb468fb10149b57dd760b982855a166a5d649e3ed9e203",
+      "env_steps": 910000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6023/step-001820000.pt",
+      "sha256": "f55698de3779d81d2ac573d3c1a87dc7b35b8305f30630568d1d95af092c8c93",
+      "env_steps": 1820000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6023/step-002730000.pt",
+      "sha256": "f3424a64e95bdb33b0cd54c69f4d654010211ceaeebc42e206f5a241c4862bc3",
+      "env_steps": 2730000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6023,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6023/final.pt",
+      "sha256": "4e5241576762e084b789be03e7feaedf1e300a2bcb02317303f832d82f958de3",
+      "env_steps": 3640000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "endpoint": "initial",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6037/initial.pt",
+      "sha256": "0b080edb265d0bbf4cf9368671467d2229023a1eb82e5e928b55e9263d7bb5bd",
+      "env_steps": 0
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "endpoint": "step-000910000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6037/step-000910000.pt",
+      "sha256": "86e838b8b45b04f0e2f9b69a5e122590789eba33212d42c0460ec3111b4efc3d",
+      "env_steps": 910000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "endpoint": "step-001820000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6037/step-001820000.pt",
+      "sha256": "46463326ed49c794a7a1de0a141add89a2b491c5fab0e2fa8e118f72fe82d807",
+      "env_steps": 1820000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "endpoint": "step-002730000",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6037/step-002730000.pt",
+      "sha256": "416c8a488ae3ba9b452ae85a7a383ecae366e7a1d18431318df1bee87626d40a",
+      "env_steps": 2730000
+    },
+    {
+      "method": "chain_lite",
+      "training_seed": 6037,
+      "endpoint": "final",
+      "path": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/benchmark-results/ai7-selfplay/intel-learning/20261115-v1/runs/chain_lite-seed-6037/final.pt",
+      "sha256": "2ba1c13c9abb5a5dc9fb72d9cd763bbe73c292d8b9dc28dcdcdc1f824828634f",
+      "env_steps": 3640000
+    }
+  ],
+  "shared_evaluation_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568",
+  "historical_checkpoint_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+  "evaluation_sources": {
+    "scripts/ai7_p0/common.py": "1d00d3f2479cae8068ab6c89ba402aec513847626d286fb746252726f9513a53",
+    "scripts/ai7_p0/games.py": "adccc3d25ddedbab435ab018b7d315cab717fc7987ad8e51ca1ecfd23265df88",
+    "scripts/ai7_p0/import_bundle.py": "2d6e1625917cbd3c550bf84650a6a9f67c437bf94f8d311eb0def421cb58a494",
+    "scripts/ai7_p0/prepare.py": "5d6f432c8cdd31bc3e48b6a6b11b5153210d171f3bf59393ebe30b43f17bf18b",
+    "scripts/ai7_p0/reports.py": "baae82aefe7c2e5bfd5d3cd69933fdc3fbac2f642410ecec9fe3b866fc0e66fd",
+    "scripts/ai7_p0/tactical.py": "d5722fe7d560c0509800c3580a1faa885a292f1a51624f2623bb194b771cc024",
+    "scripts/ai7_p0/tests/test_metrics.py": "e5b580b9f2e5c94fb0feff5f1ce0ed05231d9a0d10dc7289fd524d7d584409fc"
+  },
+  "tactical_protocol": {
+    "position_counts": {
+      "win": 200,
+      "defense": 200
+    },
+    "orientations": "paired original/180-degree rotation; no seat/color swap",
+    "bootstrap_resamples": 4000,
+    "bootstrap_seed": 91023,
+    "inference_batch": 128,
+    "top1_ties": "smallest numeric legal action ID",
+    "target_rank": "1 + number of legal actions with strictly larger probability than best correct action",
+    "multiple_targets": "sum all correct action probabilities; top1 membership in full correct set",
+    "replication_unit": "training seed; position bootstrap is conditional on fixed trained checkpoints",
+    "reserved_bank_access": false,
+    "endpoints": [
+      "initial",
+      "step-000910000",
+      "step-001820000",
+      "step-002730000",
+      "final"
+    ],
+    "endpoint_selection": "final at 3640000; all intermediate diagnostics retained, never selected by score"
+  }
+}

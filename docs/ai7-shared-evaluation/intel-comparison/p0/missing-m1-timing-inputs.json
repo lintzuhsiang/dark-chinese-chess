@@ -1,0 +1,26 @@
+{
+  "observed_original_baseline_directories": [
+    "benchmark-results/ai7-selfplay/exp3/20261115-m1/runs/baseline-seed-5011",
+    "benchmark-results/ai7-selfplay/exp3/20261115-m1/runs/baseline-seed-5023",
+    "benchmark-results/ai7-selfplay/exp3/20261115-m1/runs/baseline-seed-5037",
+    "benchmark-results/ai7-selfplay/overnight-comparison/20261114-v1/runs/baseline-seed-11",
+    "benchmark-results/ai7-selfplay/overnight-comparison/20261114-v1/runs/baseline-seed-23",
+    "benchmark-results/ai7-selfplay/overnight-comparison/20261114-v1/runs/baseline-seed-37",
+    "benchmark-results/ai7-selfplay/p1p2-comparison/20261114-v1/runs/baseline-seed-4011",
+    "benchmark-results/ai7-selfplay/p1p2-comparison/20261114-v1/runs/baseline-seed-4023",
+    "benchmark-results/ai7-selfplay/p1p2-comparison/20261114-v1/runs/baseline-seed-4037"
+  ],
+  "requested_per_directory": [
+    "manifest.json",
+    "summary.json",
+    "metrics.jsonl"
+  ],
+  "requested_campaign_files": [
+    "config.json",
+    "run-status.json",
+    "source-provenance.json",
+    "actual dependency freeze and instrumentation/thread/validation settings"
+  ],
+  "reason": "one historical checkpoint timing state is available; complete matched baseline timing logs are not included",
+  "reserved_bank_requested": false
+}

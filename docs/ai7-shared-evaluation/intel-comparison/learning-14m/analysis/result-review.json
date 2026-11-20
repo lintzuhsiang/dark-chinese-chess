@@ -1,0 +1,517 @@
+{
+  "analysis": "post-training read-only review; no new model evaluations or tuning",
+  "timing": {
+    "started_epoch": "2026-11-15T02:08:03.950910+08:00",
+    "finished_epoch": "2026-11-15T07:33:06.970132+08:00"
+  },
+  "integrity": {
+    "config_hash_matches": true,
+    "frozen_source_files_unchanged": 145,
+    "verified_checkpoint_files": 45,
+    "equal_matched_initial_games": true,
+    "evaluation_accounting": {
+      "planned": 6144,
+      "attempted": 6144,
+      "completed": 6144,
+      "skipped": 0,
+      "incomplete": 0,
+      "errors": 0
+    }
+  },
+  "initial_control": {
+    "wins": 129,
+    "draws": 542,
+    "losses": 97,
+    "completed": 768,
+    "win_rate": 0.16796875,
+    "draw_rate": 0.7057291666666666,
+    "loss_rate": 0.12630208333333334,
+    "score": 0.5208333333333334,
+    "terminal_reason_counts": {
+      "NO_PIECES": 226,
+      "NO_PROGRESS": 542
+    }
+  },
+  "final_vs_random": {
+    "baseline": {
+      "wins": 140,
+      "draws": 572,
+      "losses": 56,
+      "completed": 768,
+      "win_rate": 0.18229166666666666,
+      "draw_rate": 0.7447916666666666,
+      "loss_rate": 0.07291666666666667,
+      "score": 0.5546875,
+      "terminal_reason_counts": {
+        "NO_PIECES": 196,
+        "NO_PROGRESS": 572
+      }
+    },
+    "gae_lambda_095": {
+      "wins": 347,
+      "draws": 399,
+      "losses": 22,
+      "completed": 768,
+      "win_rate": 0.4518229166666667,
+      "draw_rate": 0.51953125,
+      "loss_rate": 0.028645833333333332,
+      "score": 0.7115885416666666,
+      "terminal_reason_counts": {
+        "NO_PIECES": 367,
+        "NO_PROGRESS": 397,
+        "CHASE_STALEMATE": 2,
+        "NO_LEGAL_ACTION": 2
+      }
+    },
+    "chain_lite": {
+      "wins": 170,
+      "draws": 536,
+      "losses": 62,
+      "completed": 768,
+      "win_rate": 0.22135416666666666,
+      "draw_rate": 0.6979166666666666,
+      "loss_rate": 0.08072916666666667,
+      "score": 0.5703125,
+      "terminal_reason_counts": {
+        "NO_PIECES": 230,
+        "NO_LEGAL_ACTION": 2,
+        "NO_PROGRESS": 535,
+        "CHASE_STALEMATE": 1
+      }
+    }
+  },
+  "direct_vs_matched_baseline": {
+    "gae_lambda_095": {
+      "wins": 266,
+      "draws": 460,
+      "losses": 42,
+      "completed": 768,
+      "win_rate": 0.3463541666666667,
+      "draw_rate": 0.5989583333333334,
+      "loss_rate": 0.0546875,
+      "score": 0.6458333333333334,
+      "terminal_reason_counts": {
+        "NO_PIECES": 302,
+        "NO_LEGAL_ACTION": 6,
+        "NO_PROGRESS": 460
+      }
+    },
+    "chain_lite": {
+      "wins": 114,
+      "draws": 565,
+      "losses": 89,
+      "completed": 768,
+      "win_rate": 0.1484375,
+      "draw_rate": 0.7356770833333334,
+      "loss_rate": 0.11588541666666667,
+      "score": 0.5162760416666666,
+      "terminal_reason_counts": {
+        "NO_PIECES": 201,
+        "NO_LEGAL_ACTION": 2,
+        "NO_PROGRESS": 563,
+        "CHASE_STALEMATE": 2
+      }
+    }
+  },
+  "paired_same_deck_seat_outcomes": {
+    "gae_lambda_095": {
+      "D->D": 304,
+      "D->W": 256,
+      "L->D": 29,
+      "W->W": 66,
+      "L->W": 25,
+      "D->L": 12,
+      "W->D": 66,
+      "W->L": 8,
+      "L->L": 2
+    },
+    "chain_lite": {
+      "D->D": 393,
+      "D->W": 134,
+      "D->L": 45,
+      "L->L": 4,
+      "W->W": 27,
+      "L->D": 43,
+      "W->D": 100,
+      "W->L": 13,
+      "L->W": 9
+    }
+  },
+  "matched_contrasts": [
+    {
+      "method": "gae_lambda_095",
+      "seed": 6011,
+      "score": {
+        "pairs": 128,
+        "difference": 0.14453125,
+        "bootstrap95": [
+          0.095703125,
+          0.1953125
+        ],
+        "hoeffding95": [
+          -0.09554944782998018,
+          0.3846119478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.25390625,
+      "draw_rate_delta": -0.21875,
+      "loss_rate_delta": -0.03515625
+    },
+    {
+      "method": "gae_lambda_095",
+      "seed": 6023,
+      "score": {
+        "pairs": 128,
+        "difference": 0.197265625,
+        "bootstrap95": [
+          0.15234375,
+          0.2421875
+        ],
+        "hoeffding95": [
+          -0.04281507282998018,
+          0.4373463228299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.33203125,
+      "draw_rate_delta": -0.26953125,
+      "loss_rate_delta": -0.0625
+    },
+    {
+      "method": "gae_lambda_095",
+      "seed": 6037,
+      "score": {
+        "pairs": 128,
+        "difference": 0.12890625,
+        "bootstrap95": [
+          0.083984375,
+          0.173828125
+        ],
+        "hoeffding95": [
+          -0.11117444782998018,
+          0.3689869478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.22265625,
+      "draw_rate_delta": -0.1875,
+      "loss_rate_delta": -0.03515625
+    },
+    {
+      "method": "gae_lambda_095",
+      "training_seeds": 3,
+      "win_rate_delta_mean": 0.26953125,
+      "exploratory_t95": [
+        0.12958303288526613,
+        0.4094794671147339
+      ],
+      "qualification": "n=3, normality fragile; unadjusted multiple comparisons; deck games are not training replications"
+    },
+    {
+      "method": "chain_lite",
+      "seed": 6011,
+      "score": {
+        "pairs": 128,
+        "difference": 0.01171875,
+        "bootstrap95": [
+          -0.037109375,
+          0.05859375
+        ],
+        "hoeffding95": [
+          -0.22836194782998018,
+          0.2517994478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.03515625,
+      "draw_rate_delta": -0.046875,
+      "loss_rate_delta": 0.01171875
+    },
+    {
+      "method": "chain_lite",
+      "seed": 6023,
+      "score": {
+        "pairs": 128,
+        "difference": 0.0078125,
+        "bootstrap95": [
+          -0.037109375,
+          0.05078125
+        ],
+        "hoeffding95": [
+          -0.23226819782998018,
+          0.24789319782998018
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.02734375,
+      "draw_rate_delta": -0.0390625,
+      "loss_rate_delta": 0.01171875
+    },
+    {
+      "method": "chain_lite",
+      "seed": 6037,
+      "score": {
+        "pairs": 128,
+        "difference": 0.02734375,
+        "bootstrap95": [
+          -0.01171875,
+          0.06640625
+        ],
+        "hoeffding95": [
+          -0.21273694782998018,
+          0.2674244478299802
+        ],
+        "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+        "bootstrap_seed": 19,
+        "training_seeds": 1
+      },
+      "win_rate_delta": 0.0546875,
+      "draw_rate_delta": -0.0546875,
+      "loss_rate_delta": 0.0
+    },
+    {
+      "method": "chain_lite",
+      "training_seeds": 3,
+      "win_rate_delta_mean": 0.0390625,
+      "exploratory_t95": [
+        0.004075445721316531,
+        0.07404955427868347
+      ],
+      "qualification": "n=3, normality fragile; unadjusted multiple comparisons; deck games are not training replications"
+    }
+  ],
+  "direct_paired_deck_intervals": {
+    "gae_lambda_095-6011": {
+      "mean": 0.599609375,
+      "paired_deck_percentile95": [
+        0.56640625,
+        0.6328125
+      ],
+      "hoeffding95": [
+        0.47956902608500995,
+        0.71964972391499
+      ],
+      "qualification": "128 independent deck pairs, conditional on this fixed trained model; not training-replication uncertainty"
+    },
+    "gae_lambda_095-6023": {
+      "mean": 0.65625,
+      "paired_deck_percentile95": [
+        0.625,
+        0.6875
+      ],
+      "hoeffding95": [
+        0.53620965108501,
+        0.77629034891499
+      ],
+      "qualification": "128 independent deck pairs, conditional on this fixed trained model; not training-replication uncertainty"
+    },
+    "gae_lambda_095-6037": {
+      "mean": 0.681640625,
+      "paired_deck_percentile95": [
+        0.6484375,
+        0.71484375
+      ],
+      "hoeffding95": [
+        0.56160027608501,
+        0.80168097391499
+      ],
+      "qualification": "128 independent deck pairs, conditional on this fixed trained model; not training-replication uncertainty"
+    },
+    "chain_lite-6011": {
+      "mean": 0.513671875,
+      "paired_deck_percentile95": [
+        0.478515625,
+        0.548828125
+      ],
+      "hoeffding95": [
+        0.39363152608500995,
+        0.63371222391499
+      ],
+      "qualification": "128 independent deck pairs, conditional on this fixed trained model; not training-replication uncertainty"
+    },
+    "chain_lite-6023": {
+      "mean": 0.51953125,
+      "paired_deck_percentile95": [
+        0.48828125,
+        0.55078125
+      ],
+      "hoeffding95": [
+        0.39949090108500995,
+        0.63957159891499
+      ],
+      "qualification": "128 independent deck pairs, conditional on this fixed trained model; not training-replication uncertainty"
+    },
+    "chain_lite-6037": {
+      "mean": 0.515625,
+      "paired_deck_percentile95": [
+        0.486328125,
+        0.544921875
+      ],
+      "hoeffding95": [
+        0.39558465108500995,
+        0.63566534891499
+      ],
+      "qualification": "128 independent deck pairs, conditional on this fixed trained model; not training-replication uncertainty"
+    }
+  },
+  "diagnostics": {
+    "baseline": {
+      "final_probe_probabilities": {
+        "immediate_win": 0.5806888010766771,
+        "avoid_immediate_loss": 0.648523317443,
+        "repetition_winning_break": 0.5289599994818369
+      },
+      "last100_means": {
+        "explained_variance": -0.18971232709289587,
+        "value_loss": 0.17580078835424665,
+        "normalized_entropy": 0.7639750914233675,
+        "approx_kl": 0.008327285849326642,
+        "clip_fraction": 0.11745115449937325
+      },
+      "evaluation_behavior": {
+        "mean_plies": 252.26302083333334,
+        "mean_repetitions": 5.990885416666667,
+        "mean_reversals": 31.614583333333332
+      }
+    },
+    "gae_lambda_095": {
+      "final_probe_probabilities": {
+        "immediate_win": 0.38923841487202376,
+        "avoid_immediate_loss": 0.7467236320177715,
+        "repetition_winning_break": 0.37004502303898335
+      },
+      "last100_means": {
+        "explained_variance": 0.5608754835590767,
+        "value_loss": 0.02895411134933484,
+        "normalized_entropy": 0.6364126977374419,
+        "approx_kl": 0.009680101417594008,
+        "clip_fraction": 0.13125373722229428
+      },
+      "evaluation_behavior": {
+        "mean_plies": 219.02734375,
+        "mean_repetitions": 6.653645833333333,
+        "mean_reversals": 29.015625
+      }
+    },
+    "chain_lite": {
+      "final_probe_probabilities": {
+        "immediate_win": 0.25112057270275223,
+        "avoid_immediate_loss": 0.7163996762699552,
+        "repetition_winning_break": 0.29323624819517136
+      },
+      "last100_means": {
+        "explained_variance": -0.1586864780931629,
+        "value_loss": 0.17352259252567412,
+        "normalized_entropy": 0.727953698081429,
+        "approx_kl": 0.007684926010709486,
+        "clip_fraction": 0.10670059222735288,
+        "chain_reference_kl": 0.006777468591645943,
+        "chain_penalty": 0.0006777468591645943
+      },
+      "evaluation_behavior": {
+        "mean_plies": 246.96484375,
+        "mean_repetitions": 5.764322916666667,
+        "mean_reversals": 30.446614583333332
+      }
+    }
+  },
+  "training_cost": {
+    "baseline": {
+      "training_wall_seconds": 2036.8024037543316,
+      "optimization_seconds": 355.860667864404,
+      "updates": 870.3333333333334,
+      "optimizer_steps": 30088.333333333332,
+      "incomplete_games": 57.666666666666664
+    },
+    "gae_lambda_095": {
+      "training_wall_seconds": 2043.2550669536624,
+      "optimization_seconds": 352.2319292130657,
+      "updates": 921.3333333333334,
+      "optimizer_steps": 30150.666666666668,
+      "incomplete_games": 51.333333333333336
+    },
+    "chain_lite": {
+      "training_wall_seconds": 2241.2756836983367,
+      "optimization_seconds": 572.51087479662,
+      "updates": 877.3333333333334,
+      "optimizer_steps": 30125.666666666668,
+      "incomplete_games": 59.666666666666664
+    }
+  },
+  "qualifications": [
+    "768 games per method are descriptive totals from 3 training seeds, not 768 independent training replications",
+    "GAE changes the return target: value explained variance and MSE across lambda settings are not common-ground-truth critic accuracy",
+    "Eight fixed probes; immediate-win and defense summaries each contain just three applicable positions",
+    "Historical opponent, independent M1 tactical bank and cross-machine compatibility remain pending",
+    "Reserved confirmation bank untouched; no files from it were read"
+  ],
+  "input_sha256": {
+    "config.json": "3cdf7472bb014bf0fba0acebfc86adaecd7b5ac8082c34d3e02845233c374190",
+    "run-status.json": "aa6e1a9b7afe8d7c6fa19bde46ad48527e05fb7e556e3407a7a7f4c898be74b0",
+    "checkpoint-index.json": "ff8c330f915b8adca5e8910c12bf60d815f876b91fe9bf8d48d51186ff9f9c0b",
+    "shared-evaluation-manifest.json": "767f23d63f6a7c2b53f4ea622a04131deffad75509c758c374a56d96df251799",
+    "runs/baseline-seed-6011/summary.json": "e65ebbd91163d991060df1c0cc374e8b437be3bd27686b0d1a4f5fb50649408e",
+    "evaluations/baseline-seed-6011/final-vs-random.json": "9f9dc377e5f6fb96e0fda008b7c05aec4bded897213501a21789326138e11f23",
+    "evaluations/baseline-seed-6011/initial-vs-random.json": "4d0f193e00dcdb00155cf9aed4a2198b1dc0f9f8985659b73374c78a4e4c51c8",
+    "probes/baseline-seed-6011.json": "d1fc92cb0d981a64da130fa74fdecbf6b4314f056ae9b191a84978c4592d6394",
+    "runs/baseline-seed-6011/metrics.jsonl": "72b8f55ba67e1327d1212fea5553cd4a9553cd178780bbee4a3b3c2178c16533",
+    "runs/baseline-seed-6023/summary.json": "fd6414516557847c82a0240a034f54b08048f3ad2af4ebfbee789cb0034781b8",
+    "evaluations/baseline-seed-6023/final-vs-random.json": "153b7231d8a00ca99279bc6defc06af078a7dc57f785be6f7818217865c3c5f5",
+    "evaluations/baseline-seed-6023/initial-vs-random.json": "213dbfae9eb2da17e4c2cb536bada465366c8a658b190881ffb0114898ae9483",
+    "probes/baseline-seed-6023.json": "4ec529e8dff1fa1d4f31b3c8aa87a1e9f8f85e5346aed3df91ad8cb5be056d4d",
+    "runs/baseline-seed-6023/metrics.jsonl": "d64540eac6852c753c3bb6f99307544f9b5e457a83987adacd2c3d6a93fe8a8f",
+    "runs/baseline-seed-6037/summary.json": "55e97ca2c45b7c3da057f03fa6480a9a8320bb724ead60e87fc5851f60df67cc",
+    "evaluations/baseline-seed-6037/final-vs-random.json": "7d79fad35d103074faba07248c94633d522743789232605c9117e4afd0da0f5b",
+    "evaluations/baseline-seed-6037/initial-vs-random.json": "5314102aef48274c69f529e9845a386853c2f6575716e0efda26e5ab135237bd",
+    "probes/baseline-seed-6037.json": "0b4909594d25efb09f6259fc07350523d05cbdd0bb2892e10729750bbe51fe6d",
+    "runs/baseline-seed-6037/metrics.jsonl": "26d2281d08e04d9a1a1fbd64e825c8cc044d4db08a0d3ce1873334b903be1a98",
+    "runs/gae_lambda_095-seed-6011/summary.json": "0b6b612510be4ea22836f100171d4c82b3928c30736fad3d8eb9c9da90e5e689",
+    "evaluations/gae_lambda_095-seed-6011/final-vs-random.json": "457e9798c3490bf6335ac6c83844cf918f1b25ecbc6a24e59bb868ae3049d6e0",
+    "evaluations/gae_lambda_095-seed-6011/initial-vs-random.json": "a43132b7ccd40776f887aaeaa9591ae398aeebadafcd8693a06c7703d50e7f15",
+    "probes/gae_lambda_095-seed-6011.json": "d2c83090edb2bed78a12d842622f9ac32e93f2185933428c67d6080245c48317",
+    "runs/gae_lambda_095-seed-6011/metrics.jsonl": "f155a771ef8d7d6e20fc580a81d29e7468c2b207971370ad6c00a22d0df77331",
+    "head-to-head/gae_lambda_095-seed-6011/final-vs-matched_baseline.json": "1c838036e8105dd5a66f0381d997c273c068e0ddbb0cb715a0da75f07cad7a4d",
+    "runs/gae_lambda_095-seed-6023/summary.json": "873447c12d2aa566bf0aad9e7d00f203a4a17556ff114c74384909fa7eace0b9",
+    "evaluations/gae_lambda_095-seed-6023/final-vs-random.json": "f7474cdcd1cd546f9c67b86c7b6c77d6e3eef6c6c961a7064ce67d1ecf665ab5",
+    "evaluations/gae_lambda_095-seed-6023/initial-vs-random.json": "8b2d1f4c056ce65a5250deed888498bd1286b97750f35f2e9440916c165e8eb1",
+    "probes/gae_lambda_095-seed-6023.json": "2af4e6f4f35c6d2f4204d0306a894dcee5306ed641f87c0337e83f64daa0e3bb",
+    "runs/gae_lambda_095-seed-6023/metrics.jsonl": "3a7d14fcf1044caa9fd6c364c2db631bcf7ba319b0e71a23d84eb93b6a0d2990",
+    "head-to-head/gae_lambda_095-seed-6023/final-vs-matched_baseline.json": "907fd1a18b943f23a219497fc0f8a383b0edac5b23a1fc50111d203deb7c005f",
+    "runs/gae_lambda_095-seed-6037/summary.json": "eb1b6e76a183cfc9fd064807c9094bf4ba6802da3cf01dc5c24574bde3e93573",
+    "evaluations/gae_lambda_095-seed-6037/final-vs-random.json": "322cef7e4a6e03f40cee9e95d6dedcb5509f707e90e76da8ec36e8c6ae399e4e",
+    "evaluations/gae_lambda_095-seed-6037/initial-vs-random.json": "df710e9c7dbf9e2ba067af28f55e0a073ba65767ef1d3f6912dc22a8a6e36c78",
+    "probes/gae_lambda_095-seed-6037.json": "a7cf350c3323ac1698aece0479ea4f7852458c999b588a1ca21960d408caabe8",
+    "runs/gae_lambda_095-seed-6037/metrics.jsonl": "fedd2e23ecb3b407b3a6eecc80da91130295dcdc90c75f0b43531f361388b24c",
+    "head-to-head/gae_lambda_095-seed-6037/final-vs-matched_baseline.json": "ae049b9818ff6ab6e331816e29b7f7445c1b8f65e7a10a084843c0a6e62fc9dd",
+    "runs/chain_lite-seed-6011/summary.json": "3043b3ffbf3c9036f2443c12eff7f8a699dc44662f2bc36270456270a76f2af8",
+    "evaluations/chain_lite-seed-6011/final-vs-random.json": "259cfee4e14990888edaefbb776ddde766872a38d58120706f5317e48f25e9fc",
+    "evaluations/chain_lite-seed-6011/initial-vs-random.json": "14115ae3cd52d47a3f8d5a683dcacfb06896cb40c07087c14255ca9b8a307fa0",
+    "probes/chain_lite-seed-6011.json": "c8ad25a08a577cbe19416548d9f6017f37cb2cd86d3a663701ecd1698409dbf4",
+    "runs/chain_lite-seed-6011/metrics.jsonl": "489c4a4227719301572b9da3c19bd82779ac7ec0dd4e1546d875f8885ac68edb",
+    "head-to-head/chain_lite-seed-6011/final-vs-matched_baseline.json": "319e91c217a3e731789931a4bf6b651b5c61d4a8d913bf6e1e00935a78e67a25",
+    "runs/chain_lite-seed-6023/summary.json": "cd832cefb39b35de95c8a58d892678651abc0427aeeb636539af04452d79b113",
+    "evaluations/chain_lite-seed-6023/final-vs-random.json": "952d25d907ae1619504b6f8558c08aeafd415647388e8fb94bb44676db12383e",
+    "evaluations/chain_lite-seed-6023/initial-vs-random.json": "d8d84c01f05eee2c9b302bc75d29d7e78b0b7f1c88c54fdd82f772f7af807687",
+    "probes/chain_lite-seed-6023.json": "5c2ba219db1804596f6409c843e4b1abccaf44123fae9b96684829a14c44b0a9",
+    "runs/chain_lite-seed-6023/metrics.jsonl": "54d900048e9084e2e261fb06d9c53ab221a014e84b1c9724d7335eddbe4569df",
+    "head-to-head/chain_lite-seed-6023/final-vs-matched_baseline.json": "f6479d510c39aa906d75403d741cc8a251c9f49dce4bea352b004c019b877ccd",
+    "runs/chain_lite-seed-6037/summary.json": "178287be0b45baa36179956841eb432278d4d8493c2a4e1bca6d9622a249e570",
+    "evaluations/chain_lite-seed-6037/final-vs-random.json": "95f264591900a29adf9bd847d7febb2c48c886295984030b72d5003ee8078a67",
+    "evaluations/chain_lite-seed-6037/initial-vs-random.json": "d3b57cf2a821764a202a5c511431103298825dcae79778fae5bcf50cf72d0732",
+    "probes/chain_lite-seed-6037.json": "73135f7156b6c4fae9176c328372b8e00e9867664edad776d7ae5c7faeefd43e",
+    "runs/chain_lite-seed-6037/metrics.jsonl": "a87cd9937e45fff7702ea939bc19fbe197908abd8ea838f53e6de513a1775319",
+    "head-to-head/chain_lite-seed-6037/final-vs-matched_baseline.json": "f79b169f447cb80b1cf03ebc38eaabac359398dec4d73666d2b56be4a1748993",
+    "comparison.json": "be6c7d607f29755c5c453d0111cf3bf12affd8662725d052ce3dcae6f40e2293"
+  }
+}
