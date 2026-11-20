@@ -1,0 +1,397 @@
+{
+  "per_seed": [
+    {
+      "opponent": "intel_gae095_seed6011",
+      "training_seed": 7011,
+      "pairs": 256,
+      "difference": 0.029296875,
+      "bootstrap95": [-0.009765625, 0.0673828125],
+      "hoeffding95": [-0.14046581446757744, 0.19905956446757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 84,
+        "draws": 323,
+        "losses": 105,
+        "score": 0.4794921875,
+        "terminal_reason_counts": {
+          "NO_PIECES": 187,
+          "NO_LEGAL_ACTION": 2,
+          "NO_PROGRESS": 322,
+          "CHASE_STALEMATE": 1
+        },
+        "no_progress_rate": 0.62890625,
+        "chase_stalemate_rate": 0.001953125
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 106,
+        "draws": 309,
+        "losses": 97,
+        "score": 0.5087890625,
+        "terminal_reason_counts": {
+          "NO_PIECES": 203,
+          "NO_LEGAL_ACTION": 0,
+          "NO_PROGRESS": 309,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.603515625,
+        "chase_stalemate_rate": 0.0
+      }
+    },
+    {
+      "opponent": "intel_gae095_seed6011",
+      "training_seed": 7023,
+      "pairs": 256,
+      "difference": 0.048828125,
+      "bootstrap95": [0.0126953125, 0.0849609375],
+      "hoeffding95": [-0.12093456446757744, 0.21859081446757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 60,
+        "draws": 362,
+        "losses": 90,
+        "score": 0.470703125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 149,
+          "NO_LEGAL_ACTION": 1,
+          "NO_PROGRESS": 362,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.70703125,
+        "chase_stalemate_rate": 0.0
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 105,
+        "draws": 322,
+        "losses": 85,
+        "score": 0.51953125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 186,
+          "NO_LEGAL_ACTION": 4,
+          "NO_PROGRESS": 322,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.62890625,
+        "chase_stalemate_rate": 0.0
+      }
+    },
+    {
+      "opponent": "intel_gae095_seed6011",
+      "training_seed": 7037,
+      "pairs": 256,
+      "difference": 0.0107421875,
+      "bootstrap95": [-0.029296875, 0.0517578125],
+      "hoeffding95": [-0.15902050196757744, 0.18050487696757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 112,
+        "draws": 297,
+        "losses": 103,
+        "score": 0.5087890625,
+        "terminal_reason_counts": {
+          "NO_PIECES": 215,
+          "NO_LEGAL_ACTION": 0,
+          "NO_PROGRESS": 292,
+          "CHASE_STALEMATE": 5
+        },
+        "no_progress_rate": 0.5703125,
+        "chase_stalemate_rate": 0.009765625
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 114,
+        "draws": 304,
+        "losses": 94,
+        "score": 0.51953125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 208,
+          "NO_LEGAL_ACTION": 0,
+          "NO_PROGRESS": 303,
+          "CHASE_STALEMATE": 1
+        },
+        "no_progress_rate": 0.591796875,
+        "chase_stalemate_rate": 0.001953125
+      }
+    },
+    {
+      "opponent": "historical4023",
+      "training_seed": 7011,
+      "pairs": 256,
+      "difference": 0.005859375,
+      "bootstrap95": [-0.025390625, 0.037109375],
+      "hoeffding95": [-0.16390331446757744, 0.17562206446757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 150,
+        "draws": 326,
+        "losses": 36,
+        "score": 0.611328125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 185,
+          "NO_LEGAL_ACTION": 1,
+          "NO_PROGRESS": 323,
+          "CHASE_STALEMATE": 3
+        },
+        "no_progress_rate": 0.630859375,
+        "chase_stalemate_rate": 0.005859375
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 153,
+        "draws": 326,
+        "losses": 33,
+        "score": 0.6171875,
+        "terminal_reason_counts": {
+          "NO_PIECES": 183,
+          "NO_LEGAL_ACTION": 3,
+          "NO_PROGRESS": 324,
+          "CHASE_STALEMATE": 2
+        },
+        "no_progress_rate": 0.6328125,
+        "chase_stalemate_rate": 0.00390625
+      }
+    },
+    {
+      "opponent": "historical4023",
+      "training_seed": 7023,
+      "pairs": 256,
+      "difference": 0.005859375,
+      "bootstrap95": [-0.02734375, 0.0380859375],
+      "hoeffding95": [-0.16390331446757744, 0.17562206446757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 136,
+        "draws": 348,
+        "losses": 28,
+        "score": 0.60546875,
+        "terminal_reason_counts": {
+          "NO_PIECES": 161,
+          "NO_LEGAL_ACTION": 3,
+          "NO_PROGRESS": 348,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.6796875,
+        "chase_stalemate_rate": 0.0
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 155,
+        "draws": 316,
+        "losses": 41,
+        "score": 0.611328125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 193,
+          "NO_LEGAL_ACTION": 3,
+          "NO_PROGRESS": 315,
+          "CHASE_STALEMATE": 1
+        },
+        "no_progress_rate": 0.615234375,
+        "chase_stalemate_rate": 0.001953125
+      }
+    },
+    {
+      "opponent": "historical4023",
+      "training_seed": 7037,
+      "pairs": 256,
+      "difference": 0.001953125,
+      "bootstrap95": [-0.037109375, 0.0400390625],
+      "hoeffding95": [-0.16780956446757744, 0.17171581446757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 160,
+        "draws": 317,
+        "losses": 35,
+        "score": 0.6220703125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 193,
+          "NO_LEGAL_ACTION": 2,
+          "NO_PROGRESS": 317,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.619140625,
+        "chase_stalemate_rate": 0.0
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 179,
+        "draws": 281,
+        "losses": 52,
+        "score": 0.6240234375,
+        "terminal_reason_counts": {
+          "NO_PIECES": 228,
+          "NO_LEGAL_ACTION": 3,
+          "NO_PROGRESS": 279,
+          "CHASE_STALEMATE": 2
+        },
+        "no_progress_rate": 0.544921875,
+        "chase_stalemate_rate": 0.00390625
+      }
+    },
+    {
+      "opponent": "random",
+      "training_seed": 7011,
+      "pairs": 256,
+      "difference": 0.02734375,
+      "bootstrap95": [-0.005859375, 0.059594726562499645],
+      "hoeffding95": [-0.14241893946757744, 0.19710643946757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 199,
+        "draws": 300,
+        "losses": 13,
+        "score": 0.681640625,
+        "terminal_reason_counts": {
+          "NO_PIECES": 212,
+          "NO_LEGAL_ACTION": 0,
+          "NO_PROGRESS": 299,
+          "CHASE_STALEMATE": 1
+        },
+        "no_progress_rate": 0.583984375,
+        "chase_stalemate_rate": 0.001953125
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 230,
+        "draws": 266,
+        "losses": 16,
+        "score": 0.708984375,
+        "terminal_reason_counts": {
+          "NO_PIECES": 245,
+          "NO_LEGAL_ACTION": 1,
+          "NO_PROGRESS": 265,
+          "CHASE_STALEMATE": 1
+        },
+        "no_progress_rate": 0.517578125,
+        "chase_stalemate_rate": 0.001953125
+      }
+    },
+    {
+      "opponent": "random",
+      "training_seed": 7023,
+      "pairs": 256,
+      "difference": 0.0498046875,
+      "bootstrap95": [0.0166015625, 0.083984375],
+      "hoeffding95": [-0.11995800196757744, 0.21956737696757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 197,
+        "draws": 291,
+        "losses": 24,
+        "score": 0.6689453125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 221,
+          "NO_LEGAL_ACTION": 0,
+          "NO_PROGRESS": 291,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.568359375,
+        "chase_stalemate_rate": 0.0
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 243,
+        "draws": 250,
+        "losses": 19,
+        "score": 0.71875,
+        "terminal_reason_counts": {
+          "NO_PIECES": 258,
+          "NO_LEGAL_ACTION": 4,
+          "NO_PROGRESS": 249,
+          "CHASE_STALEMATE": 1
+        },
+        "no_progress_rate": 0.486328125,
+        "chase_stalemate_rate": 0.001953125
+      }
+    },
+    {
+      "opponent": "random",
+      "training_seed": 7037,
+      "pairs": 256,
+      "difference": 0.0078125,
+      "bootstrap95": [-0.0263671875, 0.04296875],
+      "hoeffding95": [-0.16195018946757744, 0.17757518946757744],
+      "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+      "bootstrap_seed": 19,
+      "training_seeds": 1,
+      "B0": {
+        "completed": 512,
+        "wins": 220,
+        "draws": 269,
+        "losses": 23,
+        "score": 0.6923828125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 243,
+          "NO_LEGAL_ACTION": 0,
+          "NO_PROGRESS": 269,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.525390625,
+        "chase_stalemate_rate": 0.0
+      },
+      "B1": {
+        "completed": 512,
+        "wins": 226,
+        "draws": 265,
+        "losses": 21,
+        "score": 0.7001953125,
+        "terminal_reason_counts": {
+          "NO_PIECES": 245,
+          "NO_LEGAL_ACTION": 2,
+          "NO_PROGRESS": 265,
+          "CHASE_STALEMATE": 0
+        },
+        "no_progress_rate": 0.517578125,
+        "chase_stalemate_rate": 0.0
+      }
+    }
+  ],
+  "training_seed_summaries": [
+    {
+      "opponent": "intel_gae095_seed6011",
+      "seed_effects": [0.029296875, 0.048828125, 0.0107421875],
+      "mean": 0.029622395833333332,
+      "seed_t95": [-0.017688144278889543, 0.07693293594555621],
+      "primary": true
+    },
+    {
+      "opponent": "historical4023",
+      "seed_effects": [0.005859375, 0.005859375, 0.001953125],
+      "mean": 0.004557291666666667,
+      "seed_t95": [-0.001045120741861979, 0.010159704075195314],
+      "primary": false
+    },
+    {
+      "opponent": "random",
+      "seed_effects": [0.02734375, 0.0498046875, 0.0078125],
+      "mean": 0.0283203125,
+      "seed_t95": [-0.023879171118484234, 0.08051979611848423],
+      "primary": false
+    }
+  ],
+  "preregistration_sha256": "5de5bc0a170237de460b8a77ac19c196feadbbc1c6452a90037fccf7675ef609"
+}

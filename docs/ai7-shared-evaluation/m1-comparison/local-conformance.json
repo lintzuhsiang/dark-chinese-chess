@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "source_files_verified": 59,
+  "protocol_id": "ai7-intel-p0-common-opponent-256-v1",
+  "shared_manifest_sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568",
+  "checkpoint_sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8",
+  "model_reference_max_abs_probability_error": 0.0,
+  "tolerance": 1e-05,
+  "historical_original_load": "native_original_load_and_all_eight_tensor_values_match",
+  "sampling_trace_steps": 8,
+  "sampling_trace_is_mocked_transport_not_game": true,
+  "existing_Core_prefix_actions_checked": 1,
+  "paired_bootstrap_fixture": "passed",
+  "multiple_target_rank_metric": "passed",
+  "versions": {
+    "python": "3.9.6",
+    "torch": "2.8.0",
+    "numpy": "2.0.2",
+    "node": "v26.10.0",
+    "platform": "macOS-27.2-arm64-arm-64bit"
+  },
+  "node_environment": {
+    "coreRevision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observationVersion": "public-v1",
+    "node": "v26.10.0",
+    "cpu": "Apple M1",
+    "cpuCount": 8,
+    "memoryBytes": 17179869184
+  },
+  "new_full_games": 0,
+  "training_or_optimizer_execution": false,
+  "M1_local_verification_still_required": true
+}

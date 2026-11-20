@@ -1,0 +1,26 @@
+{
+  "provenance": "user-supplied Intel study summary; raw Intel per-game/per-seed tables and checkpoints are not present in M1 import",
+  "training_seeds": [
+    6011,
+    6023,
+    6037
+  ],
+  "steps_reported": 3640000,
+  "GAE095": {
+    "random_win_rate": 0.4668,
+    "historical_win_rate": 0.3294,
+    "historical_score": 0.6354,
+    "historical_no_progress_rate": 0.6055,
+    "immediate_win_mass": 0.1354,
+    "immediate_win_top1": 0.1467,
+    "rotation_policy_TV": 0.7007
+  },
+  "Intel_baseline": {
+    "historical_no_progress_rate": 0.7559,
+    "immediate_win_mass": 0.1088,
+    "immediate_win_top1": 0.105,
+    "rotation_policy_TV": 0.6159
+  },
+  "CHAIN_lite": "tested according to user, numerical results unavailable",
+  "uncertainty": "Intel statistical significance is reported by user, not independently recomputed here; orientation/category aggregation of tactical summary requires raw tables"
+}

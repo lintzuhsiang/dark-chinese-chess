@@ -1,0 +1,280 @@
+{
+  "artifact_root": "/Users/lintzu-ting/Desktop/dark-chinese-chess/experiment/selfplay-zero/benchmark-results/ai7-selfplay/local-analysis/common-20m-2m-v1",
+  "files": [
+    {
+      "path": "analysis-plan.json",
+      "bytes": 665,
+      "sha256": "71447a47af598395bec70fb33d13af1ec39fde6a6db1d041126d7fe0a1a3e9cc"
+    },
+    {
+      "path": "configuration.json",
+      "bytes": 593,
+      "sha256": "aae8e4b3addbe78b199a2d91a628d35ee775a04b2ea1920a025416d606f9a4fb"
+    },
+    {
+      "path": "evaluation-driver.py",
+      "bytes": 5712,
+      "sha256": "25219f3ea143a47933f188339af010b2b82268f9518af668d0dec87cf15ff1ab"
+    },
+    {
+      "path": "exact-sampling-manifest.json",
+      "bytes": 11304,
+      "sha256": "b2076ad8b89ac39eba71ef022c0dbbaa7bbeb7a1c6cfd4f07dc6358860269568"
+    },
+    {
+      "path": "identities/baseline-5011.json",
+      "bytes": 1789,
+      "sha256": "732fa5e6675a31adeecf8c0df7e8ee955ce7158c8a65130d57fd3ed288755e93"
+    },
+    {
+      "path": "identities/baseline-5023.json",
+      "bytes": 1789,
+      "sha256": "6be93b815c3b0b3f4f2e8b9e0920a66342f220c709ee70752cce1ecb6f8a122c"
+    },
+    {
+      "path": "identities/baseline-5037.json",
+      "bytes": 1789,
+      "sha256": "0e9314c01bda183438228c7a456932a7abfa55b926f1c57a9526529415f3f74d"
+    },
+    {
+      "path": "identities/draw_light-5011.json",
+      "bytes": 1795,
+      "sha256": "990016113d27ae53e9ffa97d9e0408466b376acf33bfbd22a4892f524f9f82fe"
+    },
+    {
+      "path": "identities/draw_light-5023.json",
+      "bytes": 1795,
+      "sha256": "3d3dc42e1c1cf9bee72e0e1886b0bae738f3acdbadbb22d1fd519b98d967891d"
+    },
+    {
+      "path": "identities/draw_light-5037.json",
+      "bytes": 1795,
+      "sha256": "50b32201de16e43c8eaf20d09c4ae37f89d8fe8bb9ba140becc31da77a4e7fa3"
+    },
+    {
+      "path": "identities/draw_strong-5011.json",
+      "bytes": 1796,
+      "sha256": "39b1c686e1c9cfa3ad1318845cb4867b7b7d606f198b4875193c2f5583e4a928"
+    },
+    {
+      "path": "identities/draw_strong-5023.json",
+      "bytes": 1796,
+      "sha256": "2861dbf72a9086d986dea40bc8a6d3c5ea8328d681d2cc91f59d96aff6df008e"
+    },
+    {
+      "path": "identities/draw_strong-5037.json",
+      "bytes": 1796,
+      "sha256": "b39afd9c6263152366efe27a1a4fabab06444c6cbc237f327e54b3af7a52646b"
+    },
+    {
+      "path": "identities/symmetry-5011.json",
+      "bytes": 1789,
+      "sha256": "08f2aae3a32453e2badd6635bbd4dffc2f3dc8443ab09968cf512a13e96a09f1"
+    },
+    {
+      "path": "identities/symmetry-5023.json",
+      "bytes": 1789,
+      "sha256": "8303c272d7f9cc5451e6a03e1b059c5b8f010f73b8dca3e7c7d97fbd744d00eb"
+    },
+    {
+      "path": "identities/symmetry-5037.json",
+      "bytes": 1789,
+      "sha256": "048a0237dbb45057c6250d703943d98263c1577cf1a09c67ddee0e0075d65776"
+    },
+    {
+      "path": "intel-reported-summary.json",
+      "bytes": 908,
+      "sha256": "913a4b96c0f0192a250c3fd1b225b7176031df83133d960927d33fc7ae259ab4"
+    },
+    {
+      "path": "local-conformance.json",
+      "bytes": 1174,
+      "sha256": "af9b54c8bc05ca98c0c1c9b9791c08c11e32339e9feebbccdb53b9e92c4f3777"
+    },
+    {
+      "path": "paired-deck-comparisons.json",
+      "bytes": 7948,
+      "sha256": "09f9d8b5bd85be1db75c5ad066a4b127b05545f45006f95777f3368f2e386703"
+    },
+    {
+      "path": "report-generator.py",
+      "bytes": 5843,
+      "sha256": "bd5afec7bf54ee278b537401524972d36a1e730afe588c931945b7abee433c6f"
+    },
+    {
+      "path": "research-review.md",
+      "bytes": 10503,
+      "sha256": "d4e11b4f08ec8faa05a7f8bb9b79e45443aba091b9665a406a5f58c2880db571"
+    },
+    {
+      "path": "runs/baseline-5011/historical.json",
+      "bytes": 241589,
+      "sha256": "fe2db578d43d8bb0339434fa88d0b13f4186eba39aacffb8f45e5e7f2b1b9d07"
+    },
+    {
+      "path": "runs/baseline-5011/random.json",
+      "bytes": 234021,
+      "sha256": "529252e5ce0af0f96616e5e633c186fd64b2123deca75a5df8ea4a6d97eb14ea"
+    },
+    {
+      "path": "runs/baseline-5023/historical.json",
+      "bytes": 242066,
+      "sha256": "38ca65b32de2bb30b67571bb1331840a59e4cfb4b9f76125b636186a4be44ba5"
+    },
+    {
+      "path": "runs/baseline-5023/random.json",
+      "bytes": 234596,
+      "sha256": "eed57150b8b9ee8862b79354e15981c08e0c88ea290386b3cee4bb1559fb7364"
+    },
+    {
+      "path": "runs/baseline-5037/historical.json",
+      "bytes": 241860,
+      "sha256": "63345edb65f3eef706b716aea491cba7604cffabfbfb60cc2d8c2d186d674348"
+    },
+    {
+      "path": "runs/baseline-5037/random.json",
+      "bytes": 234218,
+      "sha256": "b59c080756edf5740509cd04d0bf672b0e8fb1ef782d5b8632139e1ab32bd880"
+    },
+    {
+      "path": "runs/draw_light-5011/historical.json",
+      "bytes": 242482,
+      "sha256": "109956fe0b8d83458bb78f300dee3d28b729ccddb3381cde7c677c6863662be9"
+    },
+    {
+      "path": "runs/draw_light-5011/random.json",
+      "bytes": 234926,
+      "sha256": "8175b674d95a1cb4dfdfac14bce97b1ae4696147e17ebd2bb392ede6e2e7b116"
+    },
+    {
+      "path": "runs/draw_light-5023/historical.json",
+      "bytes": 241984,
+      "sha256": "0b460d843e1c5fca9ac84c2342c0b47f1ace17fe43f01178a99e26ee577e34f0"
+    },
+    {
+      "path": "runs/draw_light-5023/random.json",
+      "bytes": 234867,
+      "sha256": "f95198d3a2b4bdfb63630d841b3626a8f7ca0ad1f73794e4460de2e29781de90"
+    },
+    {
+      "path": "runs/draw_light-5037/historical.json",
+      "bytes": 242383,
+      "sha256": "f0b9c2ea43c671eb000bbabdb6e8473123bf76678b01455d162ef50f4768fb4f"
+    },
+    {
+      "path": "runs/draw_light-5037/random.json",
+      "bytes": 234551,
+      "sha256": "2953f6855e770cd89a614fec911c38f39b0d573725a74ddf5c38ff4d0961b441"
+    },
+    {
+      "path": "runs/draw_strong-5011/historical.json",
+      "bytes": 241507,
+      "sha256": "46a8021d82a50247591be8d604dfc2612646623a147ca956338d6778f0e26dc0"
+    },
+    {
+      "path": "runs/draw_strong-5011/random.json",
+      "bytes": 233900,
+      "sha256": "c6d9da0c99cf12180f74c6d45f3d32a19e4c2f23d01cc3f59ff05340139cc61a"
+    },
+    {
+      "path": "runs/draw_strong-5023/historical.json",
+      "bytes": 242278,
+      "sha256": "e35b2b92f8eb3b0d217b01859ef02f2100839d23cedbf9784f1e5e4896adb337"
+    },
+    {
+      "path": "runs/draw_strong-5023/random.json",
+      "bytes": 235006,
+      "sha256": "61925768d6e1bbec7612fef2e5b79e154a2968823918e114631af2603fccbbf3"
+    },
+    {
+      "path": "runs/draw_strong-5037/historical.json",
+      "bytes": 241742,
+      "sha256": "4957ca5c7ca0287d8681cc4e8ef242e0621501fe7f7946991d2f61b70c5b2e16"
+    },
+    {
+      "path": "runs/draw_strong-5037/random.json",
+      "bytes": 234545,
+      "sha256": "1724a023c0b2740a8f27a1fa8e728e9684cc10e53bb9157d68d2864b5a31d4b1"
+    },
+    {
+      "path": "runs/symmetry-5011/historical.json",
+      "bytes": 242664,
+      "sha256": "e881037596cc3ad075c5eb4b2f01135df8052a35d579b6ecf7aceed8c1b0250e"
+    },
+    {
+      "path": "runs/symmetry-5011/random.json",
+      "bytes": 234143,
+      "sha256": "f28b8fbbe2ad3a120e81ec6dcc4ab6427aa0b7760f4556e866dff2773ccfed0d"
+    },
+    {
+      "path": "runs/symmetry-5023/historical.json",
+      "bytes": 241744,
+      "sha256": "1022c77b52aff8ff0446d90ab31a08437f3a17c82bb3982bcf6d8f684b34d805"
+    },
+    {
+      "path": "runs/symmetry-5023/random.json",
+      "bytes": 234171,
+      "sha256": "0544dce3520d411d52e468dff3271f7c9b5aeded787099d38dc845a4a3a27d83"
+    },
+    {
+      "path": "runs/symmetry-5037/historical.json",
+      "bytes": 243019,
+      "sha256": "d497db4fa2bb9a61bcf1cb6d9d47560dee1cb63fe3f495c6ea43ed75e2074d72"
+    },
+    {
+      "path": "runs/symmetry-5037/random.json",
+      "bytes": 234616,
+      "sha256": "67cd85c4fdc102a4a4181e6e35d3dd4e9c733f128d0dc74154de68e4f4be387d"
+    },
+    {
+      "path": "status.json",
+      "bytes": 388,
+      "sha256": "74ad9e0a4f2204b7e01f6dd424e5b8b6f5818421fe3ee83b5fdd70d56c2a6cf0"
+    },
+    {
+      "path": "summary.csv",
+      "bytes": 641,
+      "sha256": "c47ad8abbaa4008b4938158202173a0fba7d7f3b96fbc6610155222777d1fe4a"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 1705,
+      "sha256": "431c9d802cfc97fcb4729300a9f1b2b595f629b6d69d44b74e8c67fe402e50a2"
+    },
+    {
+      "path": "tactical/paired-position-contrasts.json",
+      "bytes": 21515,
+      "sha256": "b802213b8cff60602fe405489785c178b33cbc8831ef0b6157e22a8ba11cecf3"
+    },
+    {
+      "path": "tactical/per-position-results.json",
+      "bytes": 5377243,
+      "sha256": "218d205e01f0216dcdb091f612b509cafd0bd6500cc3fe4e839a31b03aae57bd"
+    },
+    {
+      "path": "tactical/per-seed-summary.json",
+      "bytes": 60928,
+      "sha256": "5854f866445d29031d6a264ccd1e6f76e7bdbc1c112d6672a4c90b234fc7649d"
+    },
+    {
+      "path": "tactical/summary.csv",
+      "bytes": 5618,
+      "sha256": "fe73a0ceb3f74d0b333370b539c7afac48abab071795f158522f8c86ec35017e"
+    },
+    {
+      "path": "training-seed-contrasts.json",
+      "bytes": 2393,
+      "sha256": "be36440b9cad84696194946b4032ae9a2a3795ee2bdea3c2f0999e97cbac1f77"
+    },
+    {
+      "path": "validation.json",
+      "bytes": 216,
+      "sha256": "2645749e36b8fa5df834c9d6fc2241aa52705f84cd76e2558f0514bb3f451a3a"
+    },
+    {
+      "path": "wdl-comparison.png",
+      "bytes": 47773,
+      "sha256": "d952bd26e58b947070d1d6a32148ed48e580b36659e8a080d25af648cc581459"
+    }
+  ]
+}

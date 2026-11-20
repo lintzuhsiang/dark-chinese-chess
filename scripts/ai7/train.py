@@ -13,7 +13,7 @@ import numpy as np
 import torch
 
 from .runtime import (
-    Bridge, ROOT, advantages, collect, guard_artifacts, load_checkpoint, make_policy,
+    ARCHITECTURES, Bridge, ROOT, advantages, collect, guard_artifacts, load_checkpoint, make_policy,
     provenance, save_checkpoint, seed_all, summarize, write_json, capture_rng, restore_rng,
     restore_training_checkpoint,
 )
@@ -57,6 +57,11 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
                     'normalized_advantage': float(normalized_advantage[row_id])})
                 row_id += 1
     advantage = torch.from_numpy(normalized_advantage).to(device)
+    reference = None
+    chain_alpha = config.get("chain_alpha", 0.)
+    if chain_alpha:
+        from .learning_methods import freeze_reference
+        reference = freeze_reference(model, features, masks, config["chain_reference_states"])
     before = torch.cat([parameter.detach().flatten().cpu() for parameter in model.parameters()])
     measurements = []
     started = time.perf_counter()
@@ -78,6 +83,10 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
             entropy = distribution.entropy().mean()
             normalized_entropy = (distribution.entropy() / masks[subset].sum(-1).float().log().clamp_min(1e-8)).mean()
             loss = policy_loss + config["value_coefficient"] * value_loss - config["entropy_coefficient"] * entropy
+            if reference is not None:
+                from .learning_methods import reference_kl
+                churn_kl = reference_kl(model, reference)
+                loss = loss + chain_alpha * churn_kl
             if not torch.isfinite(loss):
                 raise RuntimeError("Nonfinite PPO loss")
             if diagnostics is not None:
@@ -103,6 +112,7 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
                     "entropy": entropy.item(), "normalized_entropy": normalized_entropy.item(),
                     "approx_kl": kl, "clip_fraction": ((ratio - 1).abs() > config["clip"]).float().mean().item(),
                     "gradient_norm": grad_norm.item(),
+                    **({"chain_reference_kl": churn_kl.item(), "chain_penalty": chain_alpha * churn_kl.item()} if reference is not None else {}),
                 })
             if kl > config["target_kl"]:
                 stop = True
@@ -139,7 +149,16 @@ def sample_opponent(rng, update, history, mixture="standard"):
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--gae-lambda", type=float)
+    parser.add_argument("--restart-probability", type=float)
+    parser.add_argument("--restart-treatment", choices=["B0", "B1", "B2"])
+    parser.add_argument("--restart-archive", type=Path)
+    parser.add_argument("--restart-archive-sha256")
     parser.add_argument("--learning-rate", type=float)
+    parser.add_argument("--learning-method", choices=["baseline", "gae_lambda_095", "chain_lite"])
+    parser.add_argument("--chain-alpha", type=float)
+    parser.add_argument("--until-step-target", action="store_true", default=None,
+                        help="No wall-clock cutoff; retain exact max-env-steps target")
     parser.add_argument("--opponent-mixture", choices=["standard", "random_rich"])
     parser.add_argument('--draw-penalty', type=float)
     parser.add_argument('--rotation', type=int, choices=[0,1])
@@ -150,7 +169,7 @@ def parse_args(argv=None):
     parser.add_argument("--audit-max-bytes", type=int)
     parser.add_argument("--instrumentation", choices=["off", "basic", "detailed"])
     parser.add_argument("--gradient-sample-every-updates", type=int)
-    parser.add_argument("--architecture", choices=["baseline", "critic", "cnn"])
+    parser.add_argument("--architecture", choices=ARCHITECTURES)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--training-seconds", type=float)
     parser.add_argument("--deadline-epoch", type=float, help="Absolute campaign deadline; cannot be extended on resume")
@@ -181,6 +200,9 @@ def configuration(args, previous=None):
         "deadline_epoch": None,
         "max_saved_milestones": 3,
         "gamma": 1.0, "gae_lambda": 1.0, "learning_rate": .0003,
+        "learning_method": "baseline", "chain_alpha": 0., "chain_reference_states": 256,
+        "until_step_target": False,
+        "restart_treatment": None, "restart_archive": None, "restart_archive_sha256": None,
         "epochs": 4, "minibatch": 256, "clip": .2, "target_kl": .03,
         "value_coefficient": .5, "entropy_coefficient": .01, "max_grad_norm": .5,
         "rewards": {"win": 1, "draw": 0, "loss": -1, "intermediate": 0},
@@ -194,10 +216,10 @@ def configuration(args, previous=None):
         if prior_deadline is not None and args.deadline_epoch > prior_deadline:
             raise ValueError("Resume cannot extend the absolute campaign deadline")
         config["deadline_epoch"] = args.deadline_epoch
-    for key in ["draw_penalty", "rotation", "curriculum_pool", "curriculum_rate", "audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
+    for key in ["draw_penalty", "rotation", "curriculum_pool", "curriculum_rate", "learning_method", "chain_alpha", "until_step_target", "audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "training_seconds", "max_env_steps", "max_updates", "batch_games", "checkpoint_every", "checkpoint_every_steps", "max_replays", "threads", "device", "validation_seed_start", "validation_pairs"]:
         value = getattr(args, key)
         if value is not None:
-            if previous and key in ["draw_penalty", "rotation", "curriculum_pool", "curriculum_rate", "audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
+            if previous and key in ["draw_penalty", "rotation", "curriculum_pool", "curriculum_rate", "learning_method", "chain_alpha", "until_step_target", "audit_records", "replay_sample_denominator", "audit_max_bytes", "learning_rate", "opponent_mixture", "instrumentation", "gradient_sample_every_updates", "architecture", "seed", "batch_games", "checkpoint_every", "checkpoint_every_steps", "threads", "device", "validation_seed_start", "validation_pairs"] and value != config[key]:
                 raise ValueError(f"Exact resume cannot change {key}")
             config[key] = value
     if not -.5 <= config['draw_penalty'] <= 0 or not 0 <= config['curriculum_rate'] <= 1: raise ValueError('Invalid treatment')
@@ -205,6 +227,44 @@ def configuration(args, previous=None):
     if config['curriculum_pool']:
         config['curriculum_pool_sha256'] = __import__('hashlib').sha256(Path(config['curriculum_pool']).read_bytes()).hexdigest()
         if previous and previous.get('curriculum_pool_sha256') != config['curriculum_pool_sha256']: raise ValueError('Curriculum changed on resume')
+    if config["curriculum_rate"] and config["restart_treatment"] is not None:
+        raise ValueError("Curriculum and archive restarts are separate treatments")
+    method = config["learning_method"]
+    for key in ["restart_treatment", "restart_archive", "restart_archive_sha256"]:
+        value = getattr(args, key)
+        if isinstance(value, Path):
+            value = str(value.resolve())
+        if value is not None:
+            if previous and value != config[key]:
+                raise ValueError(f"Exact resume cannot change {key}")
+            config[key] = value
+    if config["restart_treatment"] is not None:
+        if method != "gae_lambda_095" or config["architecture"] != "baseline" or config["opponent_mixture"] != "standard":
+            raise ValueError("Restart campaign requires reference GAE095 Baseline and standard opponents")
+        if config["restart_treatment"] != "B0" and (not config["restart_archive"] or not config["restart_archive_sha256"]):
+            raise ValueError("Restart treatment requires a frozen archive and checksum")
+    config["gae_lambda"] = .95 if method == "gae_lambda_095" else 1.
+    if previous:
+        config["gae_lambda"] = previous["gae_lambda"]
+    if args.gae_lambda is not None:
+        if args.gae_lambda not in [.85, .90, .95] or method != "gae_lambda_095":
+            raise ValueError("Campaign lambda override requires GAE095 method and .85/.90/.95")
+        if previous and args.gae_lambda != previous["gae_lambda"]:
+            raise ValueError("Exact resume cannot change lambda")
+        config["gae_lambda"] = args.gae_lambda
+    if args.restart_probability is not None:
+        if config["restart_treatment"] != "B2" or args.restart_probability not in [.3, .5, .7]:
+            raise ValueError("Density override requires B2 and .3/.5/.7")
+        if previous and args.restart_probability != previous.get("restart_probability", .3):
+            raise ValueError("Exact resume cannot change restart probability")
+        config["restart_probability"] = args.restart_probability
+    if method == "chain_lite" and not previous and args.chain_alpha is None:
+        from .learning_methods import CHAIN_ALPHA
+        config["chain_alpha"] = CHAIN_ALPHA
+    if not np.isfinite(config["chain_alpha"]) or config["chain_alpha"] < 0:
+        raise ValueError("CHAIN alpha must be finite and nonnegative")
+    if method != "chain_lite" and config["chain_alpha"] != 0:
+        raise ValueError("Only CHAIN-lite may use policy-churn regularization")
     if config['replay_sample_denominator'] < 1 or config['audit_max_bytes'] < 1:
         raise ValueError('Audit limits must be positive')
     if config['audit_records'] in ['full','windowed']:
@@ -311,12 +371,20 @@ def main(argv=None):
     stop_requested = lambda: stop["requested"]
     started = time.perf_counter()
     previous_seconds = state["training_wall_seconds"]
-    deadline = started + max(0, config["training_seconds"] - previous_seconds)
+    deadline = float("inf") if config["until_step_target"] else started + max(0, config["training_seconds"] - previous_seconds)
     if config["deadline_epoch"] is not None:
         deadline = min(deadline, started + max(0, config["deadline_epoch"] - time.time()))
     status = "running"
     stop_reason = None
     bridge = Bridge(output / "training-replays")
+    sampler = None
+    if config["restart_treatment"] is not None:
+        from .restart_sampling import RestartSampler
+        catalog = [] if config["restart_treatment"] == "B0" else bridge.request(
+            command="load-restarts", path=config["restart_archive"], sha256=config["restart_archive_sha256"])
+        sampler = RestartSampler(catalog, config["restart_archive_sha256"], config["restart_treatment"], config["seed"] ^ 0x4B951, restart_probability=config.get("restart_probability"))
+        if args.resume:
+            sampler.load_state_dict(state["restart_sampler"])
     suite = None
     if config['instrumentation'] != 'off':
         from .instrumentation import UpdateDiagnostics, suite_fingerprint
@@ -342,6 +410,8 @@ def main(argv=None):
         })
     def checkpoint(path):
         state["training_wall_seconds"] = elapsed_total()
+        if sampler is not None:
+            state["restart_sampler"] = sampler.state_dict()
         guard_artifacts(experiment_root, additional=100_000_000)
         save_checkpoint(path, model, optimizer, config, state["updates"], state["env_steps"], rng, history, opponents, state)
     def validate(label):
@@ -369,6 +439,7 @@ def main(argv=None):
             guard_artifacts(experiment_root, additional=100_000_000)
             # All mutable learning/RNG state is recoverable at this exact boundary.
             boundary_rng = capture_rng(rng)
+            boundary_sampler = sampler.state_dict() if sampler is not None else None
             boundary_model = copy.deepcopy(model.state_dict())
             boundary_optimizer = copy.deepcopy(optimizer.state_dict())
             update = state["updates"] + 1
@@ -380,6 +451,8 @@ def main(argv=None):
                     "action_seed": int(rng.integers(0, 2**32)), "opponent": sample_opponent(rng, update, history, config["opponent_mixture"]),
                     **({"archive": f"rollout-{state['rollouts'] + 1:06d}-game-{i:02d}.json"} if archive else {}),
                 })
+                if sampler is not None:
+                    specs[-1].update(sampler.sample())
             for spec in specs:
                 if config['draw_penalty']: spec['draw_penalty']=config['draw_penalty']
                 if config['rotation']: spec['rotation']=bool((spec['action_seed'] >> 17)&1)
@@ -410,8 +483,16 @@ def main(argv=None):
                     if config['instrumentation'] == 'basic':
                         diagnostics.detailed = False
                         diagnostics.record['gradient_sampling'] = 'none'
-                observer_config = {**config, 'audit_records': 'full' if full_window else 'off', 'audit_game_indices':[i for i,g in enumerate(rollout['games']) if g.get('archive')]} if suite is not None else config
-                metrics = optimize(model, optimizer, rollout["trajectories"], observer_config, config["device"], deadline, stop_requested, diagnostics)
+                audit_ids = {g['id'] for g in rollout['games'] if g.get('archive')}
+                audit_indices = [i for i, game_id in enumerate(rollout['trajectory_game_ids']) if game_id in audit_ids]
+                observer_config = {
+                    **config, 'audit_records': 'full' if full_window else 'off', 'audit_game_indices': audit_indices,
+                } if suite is not None else config
+                metrics = optimize(model, optimizer, rollout["trajectories"], observer_config,
+                                   config["device"], deadline, stop_requested, diagnostics)
+                if diagnostics is not None and 'decisions' in diagnostics.record:
+                    for decision in diagnostics.record['decisions']:
+                        decision['game_id'] = rollout['trajectory_game_ids'][decision['game_index']]
                 if diagnostics is not None and not metrics['interrupted']:
                     metrics['diagnostics'] = diagnostics.finish()
                 interrupted = metrics["interrupted"]
@@ -419,6 +500,8 @@ def main(argv=None):
                 model.load_state_dict(boundary_model)
                 optimizer.load_state_dict(boundary_optimizer)
                 restore_rng(boundary_rng, rng)
+                if sampler is not None:
+                    sampler.load_state_dict(boundary_sampler)
                 state["discarded_env_steps_after_interrupt"] += rollout["env_steps"]
                 stop_reason = "signal" if stop_requested() else "time_budget"
                 break
@@ -430,11 +513,19 @@ def main(argv=None):
                     model.load_state_dict(boundary_model)
                     optimizer.load_state_dict(boundary_optimizer)
                     restore_rng(boundary_rng, rng)
+                    if sampler is not None:
+                        sampler.load_state_dict(boundary_sampler)
                     state['discarded_env_steps_after_interrupt'] += rollout['env_steps']
                     stop_reason = 'audit_budget'
                     break
                 state['audit_bytes'] = state.get('audit_bytes', 0) + audit_size
             state["env_steps"] += rollout["env_steps"]
+            for key, value in rollout["transitions_by_start"].items():
+                state[key + "_start_transitions"] = state.get(key + "_start_transitions", 0) + value
+            if sampler is not None:
+                state["restart_sampler"] = sampler.state_dict()
+                state["zero_decision_games"] = state.get("zero_decision_games", 0) + rollout["zero_decision_games"]
+                state["restart_reset_seconds"] = state.get("restart_reset_seconds", 0.) + rollout["reset_seconds"]
             state["rollouts"] += 1
             state["attempted_games"] += rollout["attempted"]
             state["completed_games"] += len(rollout["games"])
@@ -454,6 +545,10 @@ def main(argv=None):
                 "rollout_seconds": rollout["seconds"], "env_steps_per_second": rollout["env_steps"] / max(1e-9, rollout["seconds"]),
                 "inference_ms_per_decision": 1000 * rollout["inference_seconds"] / max(1, rollout["inference_decisions"]),
                 "attempted": rollout["attempted"], "incomplete": rollout["incomplete"],
+                **({"restart_sampler": sampler.state_dict(), "zero_decision_games": rollout["zero_decision_games"],
+                    "reset_seconds": rollout["reset_seconds"],
+                    "mean_continuation_plies": float(np.mean([g.get('continuation_plies',g['plies']) for g in rollout['games']])) if rollout['games'] else None} if sampler is not None else {}),
+                "transitions_by_start": rollout["transitions_by_start"],
                 "training_games": summarize(rollout["games"]),
                 "opponents": {key: summarize([game for game in rollout["games"] if game["opponent"] == key]) for key in sorted({game["opponent"] for game in rollout["games"]})},
             })

@@ -1,0 +1,122 @@
+[
+  {
+    "opponent": "random",
+    "treatment": "draw_light",
+    "seeds": [
+      5011,
+      5023,
+      5037
+    ],
+    "values": [
+      0.01171875,
+      0.0224609375,
+      -0.0244140625
+    ],
+    "mean": 0.0032552083333333335,
+    "t95": [
+      -0.05774744838983847,
+      0.06425786505650513
+    ],
+    "qualification": "exploratory n=3; normality assumed; unadjusted multiple comparisons"
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_strong",
+    "seeds": [
+      5011,
+      5023,
+      5037
+    ],
+    "values": [
+      -0.0107421875,
+      0.044921875,
+      -0.01953125
+    ],
+    "mean": 0.0048828125,
+    "t95": [
+      -0.08194328391119245,
+      0.09170890891119245
+    ],
+    "qualification": "exploratory n=3; normality assumed; unadjusted multiple comparisons"
+  },
+  {
+    "opponent": "random",
+    "treatment": "symmetry",
+    "seeds": [
+      5011,
+      5023,
+      5037
+    ],
+    "values": [
+      0.001953125,
+      -0.0322265625,
+      0.0068359375
+    ],
+    "mean": -0.0078125,
+    "t95": [
+      -0.06068410765312215,
+      0.04505910765312215
+    ],
+    "qualification": "exploratory n=3; normality assumed; unadjusted multiple comparisons"
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_light",
+    "seeds": [
+      5011,
+      5023,
+      5037
+    ],
+    "values": [
+      0.0078125,
+      0.0,
+      -0.0009765625
+    ],
+    "mean": 0.0022786458333333335,
+    "t95": [
+      -0.009688112316987206,
+      0.014245403983653874
+    ],
+    "qualification": "exploratory n=3; normality assumed; unadjusted multiple comparisons"
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_strong",
+    "seeds": [
+      5011,
+      5023,
+      5037
+    ],
+    "values": [
+      0.0,
+      0.01171875,
+      0.013671875
+    ],
+    "mean": 0.008463541666666666,
+    "t95": [
+      -0.009905195811689986,
+      0.02683227914502332
+    ],
+    "qualification": "exploratory n=3; normality assumed; unadjusted multiple comparisons"
+  },
+  {
+    "opponent": "historical",
+    "treatment": "symmetry",
+    "seeds": [
+      5011,
+      5023,
+      5037
+    ],
+    "values": [
+      0.0,
+      -0.0166015625,
+      -0.0087890625
+    ],
+    "mean": -0.008463541666666666,
+    "t95": [
+      -0.02909571372356326,
+      0.01216863039022993
+    ],
+    "qualification": "exploratory n=3; normality assumed; unadjusted multiple comparisons"
+  }
+]

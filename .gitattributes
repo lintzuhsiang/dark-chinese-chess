@@ -1,0 +1,3 @@
+
+# Preserve original CSV evidence, including standard CRLF row endings.
+docs/ai7-shared-evaluation/m1-comparison/*.csv -text whitespace=cr-at-eol

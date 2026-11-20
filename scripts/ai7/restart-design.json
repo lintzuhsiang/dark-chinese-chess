@@ -1,0 +1,46 @@
+{
+  "campaign": "gae-restart-strategies-20261115",
+  "status": "infrastructure-only; Intel training reference and new shared evaluation manifest pending",
+  "training_seeds_provisional": [7011, 7023, 7037],
+  "transitions_per_run": 3640000,
+  "milestones": [0, 910000, 1820000, 2730000, 3640000],
+  "treatments": {
+    "B0": { "restart_probability": 0, "sampling": "none" },
+    "B1": { "restart_probability": 0.3, "sampling": "uniform" },
+    "B2": { "restart_probability": 0.3, "sampling": "endgame" },
+    "B3": { "restart_probability": 0.3, "sampling": "value_error" }
+  },
+  "archive": {
+    "generation_policy_mixture": { "uniform_legal_random_vs_uniform_legal_random": 1 },
+    "source_games": 512,
+    "seed_start": 800000,
+    "candidate_stride": 16,
+    "minimum_ply": 16,
+    "maximum_quiet": 50,
+    "deduplication": "SHA-256 of complete versioned simulator snapshot; first occurrence retained",
+    "stage": { "opening_min_live": 25, "middle_min_live": 13, "endgame_max_live": 12 },
+    "endgame": { "minimum_live": 4, "maximum_live": 12, "maximum_quiet": 30 },
+    "both_sides": "colors assigned, positive public remaining inventory for both colors, active Core state",
+    "source_outcome_selection": false,
+    "evaluation_or_tactical_bank_access": false,
+    "scope": "training-only seeds below 900000; complete source games; fixed before treatment training"
+  },
+  "priority": {
+    "status": "blocked until a verified fixed public-only predictor and replicated training continuations exist",
+    "perspective": "acting player at snapshot, terminal reward +1/0/-1 for that fixed player",
+    "target": "mean of at least 8 independent on-policy outcomes per archive record under a frozen reference policy and opponent protocol",
+    "error": "absolute difference between frozen public-only value prediction and mean outcome",
+    "clipping": [0, 2],
+    "uniform_mixture": 0.2,
+    "priority_exponent": 1,
+    "noise_reporting": "record count, outcome variance, standard error, hidden-layout conditioning; no strategic-difficulty claim from error alone",
+    "hidden_uncertainty_gate": "replicating action RNG on one private layout is insufficient to establish learnable public-state error; training-derived public-equivalent hidden-layout replicates or an explicit limitation are required before B3 full training"
+  },
+  "gates": {
+    "full_training": "import and reconcile verified Intel training reference; correctness and throughput pilots; exact checkpoint/resume",
+    "primary_evaluation": "import Intel Campaign 4 shared manifest and overlap audit; existing 20M set is previously explored",
+    "proposed_evaluation_namespace": 21000000,
+    "reserved_confirmation_bank": "never read",
+    "budget_reduction": "forbidden; interrupted runs stay partial and resume toward exactly 3640000"
+  }
+}

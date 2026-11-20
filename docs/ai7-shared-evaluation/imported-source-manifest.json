@@ -1,0 +1,50 @@
+{
+  "base_commit": "96090e4e10e4f954cce917550b70a35ae3a06e9d",
+  "files": [
+    {
+      "path": "scripts/ai7/evaluate_shared.py",
+      "sha256": "14fad51049cfc29363f16bbf349a8ff7b178874ff56970ee60249c4384019379",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7/shared_protocol.py",
+      "sha256": "fc98f15a639cfc0ae15244e91c80fef85d19c31d24d579e61a2c442b8d88a27f",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7_p0/common.py",
+      "sha256": "1d00d3f2479cae8068ab6c89ba402aec513847626d286fb746252726f9513a53",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7_p0/games.py",
+      "sha256": "adccc3d25ddedbab435ab018b7d315cab717fc7987ad8e51ca1ecfd23265df88",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7_p0/import_bundle.py",
+      "sha256": "2d6e1625917cbd3c550bf84650a6a9f67c437bf94f8d311eb0def421cb58a494",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7_p0/prepare.py",
+      "sha256": "5d6f432c8cdd31bc3e48b6a6b11b5153210d171f3bf59393ebe30b43f17bf18b",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7_p0/reports.py",
+      "sha256": "baae82aefe7c2e5bfd5d3cd69933fdc3fbac2f642410ecec9fe3b866fc0e66fd",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7_p0/tactical.py",
+      "sha256": "d5722fe7d560c0509800c3580a1faa885a292f1a51624f2623bb194b771cc024",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    },
+    {
+      "path": "scripts/ai7_p0/tests/test_metrics.py",
+      "sha256": "e5b580b9f2e5c94fb0feff5f1ce0ed05231d9a0d10dc7289fd524d7d584409fc",
+      "origin": "Intel frozen evaluator-source (unchanged)"
+    }
+  ]
+}

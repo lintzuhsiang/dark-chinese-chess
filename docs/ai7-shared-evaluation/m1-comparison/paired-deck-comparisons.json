@@ -1,0 +1,326 @@
+[
+  {
+    "opponent": "random",
+    "treatment": "draw_light",
+    "seed": 5011,
+    "pairs": 256,
+    "difference": 0.01171875,
+    "bootstrap95": [
+      -0.021508789062499978,
+      0.044921875
+    ],
+    "hoeffding95": [
+      -0.15804393946757744,
+      0.18148143946757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_light",
+    "seed": 5023,
+    "pairs": 256,
+    "difference": 0.0224609375,
+    "bootstrap95": [
+      -0.009765625,
+      0.0556640625
+    ],
+    "hoeffding95": [
+      -0.14730175196757744,
+      0.19222362696757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_light",
+    "seed": 5037,
+    "pairs": 256,
+    "difference": -0.0244140625,
+    "bootstrap95": [
+      -0.0546875,
+      0.005883789062499645
+    ],
+    "hoeffding95": [
+      -0.19417675196757744,
+      0.14534862696757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_strong",
+    "seed": 5011,
+    "pairs": 256,
+    "difference": -0.0107421875,
+    "bootstrap95": [
+      -0.0400390625,
+      0.01953125
+    ],
+    "hoeffding95": [
+      -0.18050487696757744,
+      0.15902050196757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_strong",
+    "seed": 5023,
+    "pairs": 256,
+    "difference": 0.044921875,
+    "bootstrap95": [
+      0.013671875,
+      0.0771484375
+    ],
+    "hoeffding95": [
+      -0.12484081446757744,
+      0.21468456446757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "draw_strong",
+    "seed": 5037,
+    "pairs": 256,
+    "difference": -0.01953125,
+    "bootstrap95": [
+      -0.052734375,
+      0.013671875
+    ],
+    "hoeffding95": [
+      -0.18929393946757744,
+      0.15023143946757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "symmetry",
+    "seed": 5011,
+    "pairs": 256,
+    "difference": 0.001953125,
+    "bootstrap95": [
+      -0.0302734375,
+      0.03515625
+    ],
+    "hoeffding95": [
+      -0.16780956446757744,
+      0.17171581446757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "symmetry",
+    "seed": 5023,
+    "pairs": 256,
+    "difference": -0.0322265625,
+    "bootstrap95": [
+      -0.064453125,
+      -0.0009765625
+    ],
+    "hoeffding95": [
+      -0.20198925196757744,
+      0.13753612696757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "random",
+    "treatment": "symmetry",
+    "seed": 5037,
+    "pairs": 256,
+    "difference": 0.0068359375,
+    "bootstrap95": [
+      -0.025390625,
+      0.0380859375
+    ],
+    "hoeffding95": [
+      -0.16292675196757744,
+      0.17659862696757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_light",
+    "seed": 5011,
+    "pairs": 256,
+    "difference": 0.0078125,
+    "bootstrap95": [
+      -0.0224609375,
+      0.0390625
+    ],
+    "hoeffding95": [
+      -0.16195018946757744,
+      0.17757518946757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_light",
+    "seed": 5023,
+    "pairs": 256,
+    "difference": 0.0,
+    "bootstrap95": [
+      -0.029296875,
+      0.0302734375
+    ],
+    "hoeffding95": [
+      -0.16976268946757744,
+      0.16976268946757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_light",
+    "seed": 5037,
+    "pairs": 256,
+    "difference": -0.0009765625,
+    "bootstrap95": [
+      -0.03127441406249998,
+      0.0302734375
+    ],
+    "hoeffding95": [
+      -0.17073925196757744,
+      0.16878612696757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_strong",
+    "seed": 5011,
+    "pairs": 256,
+    "difference": 0.0,
+    "bootstrap95": [
+      -0.02734375,
+      0.02734375
+    ],
+    "hoeffding95": [
+      -0.16976268946757744,
+      0.16976268946757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_strong",
+    "seed": 5023,
+    "pairs": 256,
+    "difference": 0.01171875,
+    "bootstrap95": [
+      -0.0205078125,
+      0.04296875
+    ],
+    "hoeffding95": [
+      -0.15804393946757744,
+      0.18148143946757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "draw_strong",
+    "seed": 5037,
+    "pairs": 256,
+    "difference": 0.013671875,
+    "bootstrap95": [
+      -0.015625,
+      0.04296875
+    ],
+    "hoeffding95": [
+      -0.15609081446757744,
+      0.18343456446757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "symmetry",
+    "seed": 5011,
+    "pairs": 256,
+    "difference": 0.0,
+    "bootstrap95": [
+      -0.030297851562499978,
+      0.03125
+    ],
+    "hoeffding95": [
+      -0.16976268946757744,
+      0.16976268946757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "symmetry",
+    "seed": 5023,
+    "pairs": 256,
+    "difference": -0.0166015625,
+    "bootstrap95": [
+      -0.046875,
+      0.013671875
+    ],
+    "hoeffding95": [
+      -0.18636425196757744,
+      0.15316112696757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  },
+  {
+    "opponent": "historical",
+    "treatment": "symmetry",
+    "seed": 5037,
+    "pairs": 256,
+    "difference": -0.0087890625,
+    "bootstrap95": [
+      -0.0400390625,
+      0.0224609375
+    ],
+    "hoeffding95": [
+      -0.17855175196757744,
+      0.16097362696757744
+    ],
+    "method": "paired-deck bootstrap (10000 resamples); conservative bounded-pair Hoeffding also reported",
+    "bootstrap_seed": 19,
+    "training_seeds": 1
+  }
+]
