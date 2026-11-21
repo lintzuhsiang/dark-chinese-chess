@@ -1,0 +1,43 @@
+{
+  "study_id": "e2b-board-364m-v1",
+  "purpose": "four-seed matched 2x2 playing-strength screening",
+  "source_commit": "53a54110bb4aa791cc2ee5819e6d8c6fa163bb75",
+  "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+  "arms": {
+    "A": "e2b-mlp-preboard",
+    "B": "e2b-cnn-preboard",
+    "C": "e2b-mlp-afterboard",
+    "D": "e2b-cnn-afterboard"
+  },
+  "assignments": {
+    "m1": [{"seed": 95001, "order": "ABCD"}, {"seed": 95003, "order": "DCBA"}],
+    "intel": [{"seed": 95002, "order": "ABCD"}, {"seed": 95004, "order": "DCBA"}]
+  },
+  "training": {
+    "endpoint_transitions": 3640000,
+    "deadline_seconds_per_machine": 28800,
+    "device": "cpu",
+    "threads": 2,
+    "batch_games": 16,
+    "learning_method": "gae_lambda_095",
+    "opponent_mixture": "standard",
+    "checkpoint_every_steps": 25000,
+    "validation_pairs": 0,
+    "max_replays": 0
+  },
+  "primary_opponent": {
+    "training_seed": 92001,
+    "architecture": "e2b_l",
+    "env_steps": 3640000,
+    "sha256": "a5f00e10ccb885df29a2f60c2154ca2e018b5d5987f000a9b03363d79c95296c"
+  },
+  "evaluation": {
+    "state": "pending joint deck overlap and opponent availability audit",
+    "proposed_deck_seed_start": 24000000,
+    "deck_count": 256,
+    "seats": [0, 1],
+    "games_per_final": 512,
+    "score": {"win": 1, "draw": 0.5, "loss": 0},
+    "contrasts": {"cnn": "((B-A)+(D-C))/2", "afterboard": "((C-A)+(D-B))/2", "interaction": "(D-C)-(B-A)"}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "architecture": "public-relational-local-mlp128-v1",
+  "asset": "e2b-l-m1-seed-92001-364m-final.pt",
+  "bytes": 10132562,
+  "download_url": "https://github.com/lintzuhsiang/dark-chinese-chess/releases/download/ai7-e2b-l-m1-92001-364m-v1/e2b-l-m1-seed-92001-364m-final.pt",
+  "endpoint_transitions": 3640000,
+  "original_name": "final.pt",
+  "release_tag": "ai7-e2b-l-m1-92001-364m-v1",
+  "repository": "lintzuhsiang/dark-chinese-chess",
+  "schema_version": 1,
+  "sha256": "a5f00e10ccb885df29a2f60c2154ca2e018b5d5987f000a9b03363d79c95296c",
+  "training_seed": 92001
+}
