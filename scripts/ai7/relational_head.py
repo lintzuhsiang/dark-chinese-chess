@@ -6,11 +6,11 @@ from torch import nn
 from torch.distributions import Categorical
 
 from .geometry_head import action_geometry
-from .runtime import ACTION_COUNT, Policy
+from .runtime import ACTION_COUNT, BOARD_ARMS, Policy
 
 
 class RelationalHead(nn.Module):
-    def __init__(self, use_local):
+    def __init__(self, use_local, board_timing=None):
         super().__init__()
         self.use_local = use_local
         self.register_buffer("geometry", action_geometry(), persistent=False)
@@ -25,6 +25,17 @@ class RelationalHead(nn.Module):
         nn.init.orthogonal_(self.output.weight, gain=.01)
         nn.init.zeros_(self.output.bias)
 
+        self.board_projection = None
+        if board_timing is not None:
+            from .board_projection import BoardProjection
+            expanded = nn.Linear(199, 128)
+            with torch.no_grad():
+                expanded.weight[:, :167].copy_(self.input.weight)
+                expanded.bias.copy_(self.input.bias)
+                expanded.weight[:, 167:].zero_()
+            self.input = expanded
+            self.board_projection = BoardProjection(board_timing)
+
     def local_features(self, features, rows, ids):
         if not self.use_local:
             return features.new_zeros((ids.numel(), 32))
@@ -35,19 +46,27 @@ class RelationalHead(nn.Module):
 
     def forward(self, hidden, features, masks):
         rows, ids = masks.nonzero(as_tuple=True)
-        inputs = torch.cat((hidden[rows], self.geometry[ids],
-                            self.local_features(features, rows, ids)), dim=-1)
+        parts = [hidden[rows], self.geometry[ids], self.local_features(features, rows, ids)]
+        if self.board_projection is not None:
+            parts.append(self.board_projection(features, rows, ids, self.source[ids], self.target[ids]))
+        inputs = torch.cat(parts, dim=-1)
         scores = self.output(self.input(inputs).tanh()).squeeze(-1)
         return scores.new_full(masks.shape, -torch.inf).index_put((rows, ids), scores)
 
 
 class RelationalPolicy(Policy):
     def __init__(self, input_dim=2163, width=128, architecture="e2b_g"):
-        if (input_dim, width) != (2163, 128) or architecture not in ("e2b_g", "e2b_l"):
-            raise ValueError("E2b v1 requires public-v1, a 128-wide trunk and a G/L arm")
+        if (input_dim, width) != (2163, 128) or architecture not in ("e2b_g", "e2b_l", *BOARD_ARMS):
+            raise ValueError("E2b v1 requires public-v1, a 128-wide trunk and a registered relational architecture")
         super().__init__(input_dim=input_dim, width=width)
         self.config["architecture"] = architecture
-        self.actor = RelationalHead(use_local=architecture == "e2b_l")
+        encoder, timing = BOARD_ARMS.get(architecture, ("mlp", None))
+        self.actor = RelationalHead(use_local=architecture != "e2b_g", board_timing=timing)
+        if encoder == "cnn":
+            from .cnn import SpatialTrunk
+            # Preserve shared actor/value initialization and subsequent sampling RNG.
+            with torch.random.fork_rng(devices=[]):
+                self.body = SpatialTrunk()
 
     def forward(self, features, masks):
         if masks.dtype != torch.bool or masks.shape != (features.shape[0], ACTION_COUNT):

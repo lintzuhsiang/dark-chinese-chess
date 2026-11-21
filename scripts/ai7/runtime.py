@@ -25,6 +25,11 @@ ARCHITECTURE = "public-mlp128-v1"
 OBSERVATION_VERSION = "public-v1"
 ACTION_COUNT = 1056
 HARD_ARTIFACT_BYTES = 5_000_000_000
+# The public checkpoint ID pins the encoder, board timing and v1 tensor layout.
+BOARD_ARMS = {
+    f"e2b-{encoder}-{timing}board": (encoder, timing)
+    for encoder in ("mlp", "cnn") for timing in ("pre", "after")
+}
 ARCHITECTURES = {
     "baseline": ARCHITECTURE,
     "critic": "public-separate-critic-v1",
@@ -32,6 +37,7 @@ ARCHITECTURES = {
     "e2a_g": "public-geometry-tied-mlp128-v1",
     "e2b_g": "public-relational-geometry-mlp128-v1",
     "e2b_l": "public-relational-local-mlp128-v1",
+    **{arm: f"public-{arm}-v1" for arm in BOARD_ARMS},
 }
 _EYES = {count: np.eye(count, dtype=np.float32) for count in [2, 3, 16, 33]}
 
@@ -141,7 +147,7 @@ def make_policy(config=None):
     if architecture == "e2a_g":
         from .geometry_head import GeometryPolicy
         return GeometryPolicy(**config)
-    if architecture in ("e2b_g", "e2b_l"):
+    if architecture in ("e2b_g", "e2b_l") or architecture in BOARD_ARMS:
         from .relational_head import RelationalPolicy
         return RelationalPolicy(**config)
     raise ValueError(f"Unknown architecture: {architecture}")
@@ -389,6 +395,8 @@ def load_checkpoint(path, device="cpu"):
     # Local experiment artifacts only. Torch's pickle loader must not read an untrusted checkpoint.
     checkpoint = torch.load(path, map_location="cpu", weights_only=False)
     architecture = checkpoint["model_config"].get("architecture", "baseline")
+    if checkpoint.get("config", {}).get("architecture", architecture) != architecture:
+        raise ValueError("Checkpoint training/model architecture mismatch")
     if (checkpoint["core_revision"], checkpoint["architecture"], checkpoint["observation_version"]) != (CORE_REVISION, ARCHITECTURES.get(architecture), OBSERVATION_VERSION):
         raise ValueError("Checkpoint rules/architecture mismatch")
     # Inference loading must not perturb a trainer's RNG streams.

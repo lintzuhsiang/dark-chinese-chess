@@ -86,3 +86,18 @@ class BoardCNNPolicy(nn.Module):
         hidden = self.body(combined)
         logits = self.actor(hidden).masked_fill(~masks, -torch.inf)
         return Categorical(logits=logits), self.critic(hidden).squeeze(-1)
+
+
+class SpatialTrunk(nn.Module):
+    """Only the encoder modules from the historical 32-channel Exp1 model."""
+    def __init__(self):
+        super().__init__()
+        historical = BoardCNNPolicy()
+        self.board_encoder = historical.board_encoder
+        self.public_encoder = historical.public_encoder
+        self.fusion = historical.body
+
+    def forward(self, features):
+        board, public = split_public_features(features)
+        combined = torch.cat((self.board_encoder(board), self.public_encoder(public)), dim=-1)
+        return self.fusion(combined)
