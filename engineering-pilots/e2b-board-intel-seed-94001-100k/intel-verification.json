@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "machine": "x86_64",
+  "python": "3.11.15",
+  "numpy": "1.26.4",
+  "torch": "2.2.2",
+  "results": [
+    {
+      "architecture": "e2b-mlp-preboard",
+      "observations": 6,
+      "mask_mismatches": 0,
+      "max_abs_errors": {
+        "probabilities": 0.0,
+        "values": 0.0
+      }
+    },
+    {
+      "architecture": "e2b-cnn-preboard",
+      "observations": 6,
+      "mask_mismatches": 0,
+      "max_abs_errors": {
+        "probabilities": 0.0,
+        "values": 0.0
+      }
+    },
+    {
+      "architecture": "e2b-mlp-afterboard",
+      "observations": 6,
+      "mask_mismatches": 0,
+      "max_abs_errors": {
+        "probabilities": 0.0,
+        "values": 0.0
+      }
+    },
+    {
+      "architecture": "e2b-cnn-afterboard",
+      "observations": 6,
+      "mask_mismatches": 0,
+      "max_abs_errors": {
+        "probabilities": 0.0,
+        "values": 0.0
+      }
+    }
+  ]
+}

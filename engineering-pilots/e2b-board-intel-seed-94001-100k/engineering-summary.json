@@ -1,0 +1,147 @@
+{
+  "status": "PASS",
+  "runtime": {
+    "git_commit": "53a54110bb4aa791cc2ee5819e6d8c6fa163bb75",
+    "core_revision": "973bafe42f66e3414878afb3284e1f54216cbe4d",
+    "observation_version": "public-v1",
+    "architectures": {
+      "e2b-mlp-preboard": "public-e2b-mlp-preboard-v1",
+      "e2b-cnn-preboard": "public-e2b-cnn-preboard-v1",
+      "e2b-mlp-afterboard": "public-e2b-mlp-afterboard-v1",
+      "e2b-cnn-afterboard": "public-e2b-cnn-afterboard-v1"
+    },
+    "machine_id": "intel",
+    "platform": "macOS-15.7.9-x86_64-i386-64bit",
+    "macos": "15.7.9",
+    "python": "3.11.15",
+    "python_executable": "/Users/shinelin/Desktop/dark-chinese-chess/dark-chinese-chess/.venv-intel/bin/python",
+    "torch": "2.2.2",
+    "numpy": "1.26.4",
+    "node": "v26.10.0",
+    "pnpm": "12.18.0",
+    "logical_cpu_count": 12,
+    "clean_checkout": true,
+    "cpu": "Intel(R) Core(TM) i9-8950HK CPU @ 2.90GHz",
+    "ram_bytes": 34359738368,
+    "ram_gib": 32
+  },
+  "preflight": {
+    "python_tests_passed": 24,
+    "pnpm_typecheck": "PASS"
+  },
+  "budget": {
+    "start_epoch": 1795249839,
+    "deadline_epoch": 1795251039,
+    "seed": 94001,
+    "requested_transitions_per_arm": 100000
+  },
+  "finished_at": "2026-11-21T16:36:47.340223+08:00",
+  "elapsed_batch_seconds": 368.34022307395935,
+  "total_transitions": 400000,
+  "same_weight_cross_machine_acceptance": {
+    "status": "PENDING",
+    "reason": "No M1 same-weight fixtures for these four architecture IDs were available",
+    "abs_tolerance_if_supplied": 1e-05
+  },
+  "arms": [
+    {
+      "arm": "A",
+      "architecture": "e2b-mlp-preboard",
+      "status": "completed",
+      "env_steps": 100000,
+      "actual_training_seconds": 73.57352598197758,
+      "transitions_per_second": 1359.1845526677055,
+      "inference_ms_per_decision": 0.2076762392888065,
+      "optimizer_steps": 804,
+      "ppo_updates": 25,
+      "parameter_count": 335778,
+      "checkpoint_exact_reload": true,
+      "artifacts": {
+        "final.pt": {
+          "path": "e2b-mlp-preboard/final.pt",
+          "sha256": "e1d5058f8326a598a6eeb6bdf9f88e93f28d48f9430a3e3358c9ea8476cfc5ff"
+        },
+        "manifest.json": {
+          "path": "e2b-mlp-preboard/manifest.json",
+          "sha256": "f474e6ff37becc7c9458564cd57677b7a107ac319706679ef1d495ac1bb0a7fe"
+        }
+      },
+      "log": "e2b-mlp-preboard.log"
+    },
+    {
+      "arm": "B",
+      "architecture": "e2b-cnn-preboard",
+      "status": "completed",
+      "env_steps": 100000,
+      "actual_training_seconds": 97.98680600299849,
+      "transitions_per_second": 1020.5455619906613,
+      "inference_ms_per_decision": 0.3609061588020234,
+      "optimizer_steps": 796,
+      "ppo_updates": 26,
+      "parameter_count": 306050,
+      "checkpoint_exact_reload": true,
+      "artifacts": {
+        "final.pt": {
+          "path": "e2b-cnn-preboard/final.pt",
+          "sha256": "fa0367d9a08452ee87579a21d017adb2f7c285a0ebb0f33378094d125a885e04"
+        },
+        "manifest.json": {
+          "path": "e2b-cnn-preboard/manifest.json",
+          "sha256": "75d33056204e5a5edda34b0def3bd6e6c631b1f3331fdc5c7c5bc257ce9bbec5"
+        }
+      },
+      "log": "e2b-cnn-preboard.log"
+    },
+    {
+      "arm": "C",
+      "architecture": "e2b-mlp-afterboard",
+      "status": "completed",
+      "env_steps": 100000,
+      "actual_training_seconds": 78.40446872200118,
+      "transitions_per_second": 1275.437505412735,
+      "inference_ms_per_decision": 0.2476730004845043,
+      "optimizer_steps": 776,
+      "ppo_updates": 26,
+      "parameter_count": 335778,
+      "checkpoint_exact_reload": true,
+      "artifacts": {
+        "final.pt": {
+          "path": "e2b-mlp-afterboard/final.pt",
+          "sha256": "d8f7ec3d048b821d75622fe5180cb55ed963401188daf886058dd59a3e26a01a"
+        },
+        "manifest.json": {
+          "path": "e2b-mlp-afterboard/manifest.json",
+          "sha256": "5af10553c20313db35ae505ef358c6e089910c86998769e2f17a49b6f6263216"
+        }
+      },
+      "log": "e2b-mlp-afterboard.log"
+    },
+    {
+      "arm": "D",
+      "architecture": "e2b-cnn-afterboard",
+      "status": "completed",
+      "env_steps": 100000,
+      "actual_training_seconds": 107.34801154502202,
+      "transitions_per_second": 931.5496259384344,
+      "inference_ms_per_decision": 0.43682736784515136,
+      "optimizer_steps": 808,
+      "ppo_updates": 25,
+      "parameter_count": 306050,
+      "checkpoint_exact_reload": true,
+      "artifacts": {
+        "final.pt": {
+          "path": "e2b-cnn-afterboard/final.pt",
+          "sha256": "9e66922bb3fce9dd375a141c3bb2012850def92b56e1a1dada89655d4a0b55e0"
+        },
+        "manifest.json": {
+          "path": "e2b-cnn-afterboard/manifest.json",
+          "sha256": "c2cffe7d77d33d5c2fc1264c74d12e16cfe08982643c6f2da8d580a35af64534"
+        }
+      },
+      "log": "e2b-cnn-afterboard.log"
+    }
+  ],
+  "failed_arms": [],
+  "partial_arms": [],
+  "scope": "Engineering-only. Single seed; no playing-strength inference."
+}
