@@ -32,6 +32,8 @@ BOARD_ARMS = {
 }
 ARCHITECTURES = {
     "baseline": ARCHITECTURE,
+    "e3_joint": "public-spatial-gather-joint-v1",
+    "e3_gate": "public-spatial-gather-gate-v1",
     "critic": "public-separate-critic-v1",
     "cnn": "public-board-cnn-v1",
     "e2a_g": "public-geometry-tied-mlp128-v1",
@@ -136,6 +138,9 @@ class Policy(nn.Module):
 def make_policy(config=None):
     config = dict(config or {})
     architecture = config.setdefault("architecture", "baseline")
+    if architecture in ("e3_joint","e3_gate"):
+        from .e3 import SpatialGather
+        return SpatialGather(**config)
     if architecture == "baseline":
         return Policy(**config)
     if architecture == "critic":

@@ -93,6 +93,16 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
                 diagnostics.gradients(epoch, minibatch, policy_loss, value_loss, entropy, loss, -torch.minimum(unclipped, clipped), outcome_tensor[subset], config)
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
+            e3_metrics = {}
+            if config.get("e3_study"):
+                norms = {"actor":0., "critic":0., "shared":0.}
+                for name,param in model.named_parameters():
+                    if param.grad is not None:
+                        owner = "critic" if name.startswith("critic.") else "shared" if name.split(".")[0] in ("body","board","context") else "actor"
+                        norms[owner] += float(param.grad.detach().norm())**2
+                e3_metrics = {key+"_gradient_norm":v**.5 for key,v in norms.items()}
+                e3_metrics["flip_mass"] = float(distribution.probs[:,:32].sum(1).mean().detach())
+                e3_metrics["move_mass"] = 1-e3_metrics["flip_mass"]
             grad_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), config["max_grad_norm"])
             if not torch.isfinite(grad_norm):
                 raise RuntimeError("Nonfinite PPO gradient")
@@ -112,6 +122,7 @@ def optimize(model, optimizer, trajectories, config, device="cpu", deadline=floa
                     "entropy": entropy.item(), "normalized_entropy": normalized_entropy.item(),
                     "approx_kl": kl, "clip_fraction": ((ratio - 1).abs() > config["clip"]).float().mean().item(),
                     "gradient_norm": grad_norm.item(),
+                    **({**e3_metrics,"gradient_clipped":float(grad_norm>config["max_grad_norm"])} if e3_metrics else {}),
                     **({"chain_reference_kl": churn_kl.item(), "chain_penalty": chain_alpha * churn_kl.item()} if reference is not None else {}),
                 })
             if kl > config["target_kl"]:
@@ -169,6 +180,7 @@ def parse_args(argv=None):
     parser.add_argument("--audit-max-bytes", type=int)
     parser.add_argument("--instrumentation", choices=["off", "basic", "detailed"])
     parser.add_argument("--gradient-sample-every-updates", type=int)
+    parser.add_argument("--e3-study", action="store_true")
     parser.add_argument("--architecture", choices=ARCHITECTURES)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--training-seconds", type=float)
@@ -211,6 +223,12 @@ def configuration(args, previous=None):
         "step_limit_semantics": "exact transition cap; unfinished games are counted and excluded from PPO",
     }
     config = {**defaults, **(previous or {})}
+    if getattr(args,"e3_study",False) or config.get("e3_study"):
+        from .e3 import runtime_hash
+        fingerprint = runtime_hash()
+        if previous and previous.get("e3_source") != fingerprint:
+            raise ValueError("E3 resume source mismatch")
+        config.update(e3_study=True,e3_source=fingerprint)
     if args.deadline_epoch is not None:
         prior_deadline = config.get("deadline_epoch")
         if prior_deadline is not None and args.deadline_epoch > prior_deadline:
@@ -339,6 +357,9 @@ def main(argv=None):
         raise ValueError("Experiment output must be inside benchmark-results/ai7-selfplay")
     resume_checkpoint = None
     if args.resume:
+        if getattr(args, "e3_study", False) or args.resume.with_suffix(".integrity.json").exists():
+            from .e3 import verify_boundary
+            verify_boundary(args.resume, output)
         _, resume_checkpoint = load_checkpoint(args.resume)
     config = configuration(args, resume_checkpoint["config"] if resume_checkpoint else None)
     seed_all(config["seed"], config["threads"])
@@ -414,6 +435,9 @@ def main(argv=None):
             state["restart_sampler"] = sampler.state_dict()
         guard_artifacts(experiment_root, additional=100_000_000)
         save_checkpoint(path, model, optimizer, config, state["updates"], state["env_steps"], rng, history, opponents, state)
+        if config.get("e3_study"):
+            from .e3 import record_boundary
+            record_boundary(path, state)
     def validate(label):
         validation_start = time.perf_counter()
         specs = [{"seed": seed, "seat": seat, "action_seed": seed ^ 0x13579, "opponent": "random"} for seed in config["held_out_validation_seeds"] for seat in [0, 1]]
@@ -444,11 +468,15 @@ def main(argv=None):
             boundary_optimizer = copy.deepcopy(optimizer.state_dict())
             update = state["updates"] + 1
             specs = []
+            deck_rng = seat_rng = action_rng = opponent_rng = rng
+            if config.get("e3_study"):
+                from .e3 import rollout_streams
+                deck_rng, seat_rng, action_rng, opponent_rng = rollout_streams(config["seed"],state["rollouts"])
             for i in range(config["batch_games"]):
                 archive = i == 0 and state["replay_count"] < config["max_replays"] and (state["rollouts"] == 0 or state["env_steps"] // max(1, config["max_env_steps"] // max(1, config["max_replays"])) >= state["replay_count"])
                 specs.append({
-                    "seed": int(rng.integers(0, 900_000)), "seat": int(rng.integers(0, 2)),
-                    "action_seed": int(rng.integers(0, 2**32)), "opponent": sample_opponent(rng, update, history, config["opponent_mixture"]),
+                    "seed": int(deck_rng.integers(0, 900_000)), "seat": int(seat_rng.integers(0, 2)),
+                    "action_seed": int(action_rng.integers(0, 2**32)), "opponent": sample_opponent(opponent_rng, update, history, config["opponent_mixture"]),
                     **({"archive": f"rollout-{state['rollouts'] + 1:06d}-game-{i:02d}.json"} if archive else {}),
                 })
                 if sampler is not None:
