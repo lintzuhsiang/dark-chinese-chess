@@ -1,0 +1,4014 @@
+{
+ "population": {
+  "draw": 1690,
+  "decisive": 3620
+ },
+ "selection": "smallest SHA256(E4-D1b-v1/ + key) within outcome stratum",
+ "positions": "every focal B turn, fully revealed, <=4 pieces; game denominator includes draws with no eligible turn",
+ "depth_plies": 5,
+ "nodes_per_root_action": 256,
+ "labels": "terminal WIN for root seat only. All opponent legal replies must be certified. Incomplete proofs unknown.",
+ "execution": "First positive per game, 8 paired PCG64 continuations per root per arm. T1 and T2 choose highest B mass certified first action; T2 then follows the proof including all opponent replies. Greedy uses earliest legal argmax on every B turn. Same opponent role stream; draw, loss, win and terminal reason retained. D1b evaluates new games on exposed official decks outside D1/replay case decks; not a fresh held-out benchmark.",
+ "games": [
+  {
+   "key": "98059-e3_joint/S1/48000160/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000160,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060889,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 186,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 38,
+    "repetitions": 12,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000119/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000119,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060686,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 177,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 35,
+    "repetitions": 19,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 15
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000074/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000074,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060723,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 149,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 32,
+    "repetitions": 23,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000236/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000236,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060821,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 179,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 29,
+    "repetitions": 6,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000062/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000062,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060743,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 190,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 25,
+    "repetitions": 7,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000107/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000107,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060690,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 299,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 83,
+    "repetitions": 21,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000088/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000088,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060705,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 194,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 58,
+    "repetitions": 40,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000140/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000140,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060917,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 218,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 35,
+    "repetitions": 5,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 8
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000187/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000187,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060866,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 321,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 78,
+    "repetitions": 32,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 7
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000253/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000253,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060804,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 199,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 29,
+    "repetitions": 10,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 10
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000102/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000102,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060703,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 158,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 24,
+    "repetitions": 16,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 12
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000161/1",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000161,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060888,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 249,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 39,
+    "repetitions": 19,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 3
+   }
+  },
+  {
+   "key": "98047-e3_joint/92001/48000102/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000102,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060703,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 158,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 30,
+    "repetitions": 7,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 12
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000077/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000077,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060724,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 204,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 35,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000103/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000103,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060702,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 169,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 35,
+    "repetitions": 16,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000242/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000242,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060811,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 220,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 36,
+    "repetitions": 3,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 4
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000095/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000095,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060710,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 147,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 30,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000023/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000023,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060782,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 167,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 38,
+    "repetitions": 12,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 14
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000137/1",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000137,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060912,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 186,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 30,
+    "repetitions": 9,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 3
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000180/1",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000180,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060877,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 193,
+    "captures": 30,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 38,
+    "repetitions": 18,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000183/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000183,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060878,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 158,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 24,
+    "repetitions": 7,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000137/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000137,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060912,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 250,
+    "captures": 30,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 75,
+    "repetitions": 39,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000058/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000058,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060739,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 218,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 37,
+    "repetitions": 13,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 4
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000110/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000110,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060695,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 204,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 42,
+    "repetitions": 17,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000230/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000230,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060831,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 242,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 34,
+    "repetitions": 13,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000218/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000218,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060835,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 290,
+    "captures": 30,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 58,
+    "repetitions": 25,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 4
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000246/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000246,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060815,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 194,
+    "captures": 30,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 27,
+    "repetitions": 13,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/4023/48000205/0",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000205,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060852,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 134,
+    "captures": 17,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 34,
+    "repetitions": 7,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 10
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000091/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000091,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060706,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 225,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 52,
+    "repetitions": 17,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000066/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000066,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060731,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 192,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 37,
+    "repetitions": 15,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000159/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000159,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060902,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 176,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 52,
+    "repetitions": 13,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000103/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000103,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060702,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 187,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 44,
+    "repetitions": 21,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000089/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000089,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060704,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 204,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 52,
+    "repetitions": 35,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000230/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000230,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060831,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 178,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 38,
+    "repetitions": 26,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 13
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000194/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000194,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060859,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 238,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 36,
+    "repetitions": 6,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000189/0",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000189,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060868,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 168,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 25,
+    "repetitions": 1,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000243/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000243,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060810,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 218,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 39,
+    "repetitions": 17,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000184/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000184,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060865,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 265,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 65,
+    "repetitions": 26,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000245/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000245,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060812,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 229,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 56,
+    "repetitions": 21,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000092/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000092,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060709,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 142,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 25,
+    "repetitions": 16,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000215/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000215,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060846,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 214,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 50,
+    "repetitions": 19,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000054/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000054,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060751,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 210,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 44,
+    "repetitions": 12,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 12
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000251/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000251,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060802,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 211,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 64,
+    "repetitions": 49,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000127/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000127,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060678,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 179,
+    "captures": 24,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 45,
+    "repetitions": 31,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 14
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000059/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000059,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060738,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 177,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 24,
+    "repetitions": 10,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000039/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000039,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060766,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 323,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 66,
+    "repetitions": 29,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000246/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000246,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060815,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 203,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 32,
+    "repetitions": 9,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 12
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000200/0",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000200,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060849,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 202,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 58,
+    "repetitions": 34,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000022/0",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000022,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060783,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 230,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 68,
+    "repetitions": 45,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000171/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000171,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060882,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 163,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 13,
+    "repetitions": 4,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/92001/48000020/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000020,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060781,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 213,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 37,
+    "repetitions": 17,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 9
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000243/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000243,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060810,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 205,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 33,
+    "repetitions": 18,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000128/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000128,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060921,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 171,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 33,
+    "repetitions": 22,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000204/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000204,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060853,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 269,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 70,
+    "repetitions": 26,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000190/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000190,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060871,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 93,
+    "captures": 10,
+    "flips": 14,
+    "hidden": 18,
+    "reversals": 29,
+    "repetitions": 9,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000169/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000169,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060880,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 227,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 47,
+    "repetitions": 15,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000187/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000187,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060866,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 223,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 49,
+    "repetitions": 14,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000074/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000074,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060723,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 150,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 22,
+    "repetitions": 7,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/92001/48000021/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000021,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060780,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 225,
+    "captures": 30,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 38,
+    "repetitions": 22,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 10
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000056/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000056,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060737,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 151,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 15,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 1
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000007/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000007,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060798,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 182,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 40,
+    "repetitions": 20,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000106/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000106,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060691,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 204,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 43,
+    "repetitions": 26,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000054/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000054,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060751,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 250,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 70,
+    "repetitions": 27,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/4023/48000220/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000220,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060837,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 179,
+    "captures": 22,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 38,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 8
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000062/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000062,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060743,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 197,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 53,
+    "repetitions": 33,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000128/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000128,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060921,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 218,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 56,
+    "repetitions": 35,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000120/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000120,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060673,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 226,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 47,
+    "repetitions": 16,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000227/1",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000227,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060826,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 225,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 52,
+    "repetitions": 24,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000108/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000108,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060693,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 192,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 37,
+    "repetitions": 13,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 8
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000184/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000184,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060865,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 199,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 26,
+    "repetitions": 2,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000237/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000237,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060820,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 214,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 34,
+    "repetitions": 8,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000000/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000000,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060793,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 132,
+    "captures": 20,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 27,
+    "repetitions": 18,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000227/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000227,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060826,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 240,
+    "captures": 30,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 64,
+    "repetitions": 47,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 6
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000126/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000126,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060679,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 173,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 36,
+    "repetitions": 25,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/92001/48000027/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000027,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060770,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 263,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 45,
+    "repetitions": 9,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 6
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000157/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000157,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060900,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 153,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 28,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000135/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000135,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060926,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 207,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 40,
+    "repetitions": 15,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000066/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000066,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060731,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 305,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 58,
+    "repetitions": 21,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 4
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000185/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000185,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060864,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 167,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 15,
+    "repetitions": 2,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000177/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000177,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060872,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 208,
+    "captures": 24,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 41,
+    "repetitions": 13,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000139/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000139,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060914,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 163,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 30,
+    "repetitions": 4,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98047-e3_joint/92001/48000183/1",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000183,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060878,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 150,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 32,
+    "repetitions": 15,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 15
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000167/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000167,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060894,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 196,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 35,
+    "repetitions": 8,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000138/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000138,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060915,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 227,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 36,
+    "repetitions": 5,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 4
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000071/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000071,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060734,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 254,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 66,
+    "repetitions": 15,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000170/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000170,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060883,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 165,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 22,
+    "repetitions": 5,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000204/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000204,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060853,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 219,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 38,
+    "repetitions": 9,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000079/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000079,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060726,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 219,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 40,
+    "repetitions": 14,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000146/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000146,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060907,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 154,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 29,
+    "repetitions": 9,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000062/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000062,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060743,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 306,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 81,
+    "repetitions": 50,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000237/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000237,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060820,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 173,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 34,
+    "repetitions": 16,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 11
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000184/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000184,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060865,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 183,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 32,
+    "repetitions": 14,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000159/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000159,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060902,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 142,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 28,
+    "repetitions": 3,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000181/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000181,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060876,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 174,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 22,
+    "repetitions": 6,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 10
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000075/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000075,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060722,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 188,
+    "captures": 24,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 32,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 6
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000133/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000133,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060924,
+    "prefix_plies": 0,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 258,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 47,
+    "repetitions": 9,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 0,
+    "objective_return": 0,
+    "id": 11
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000007/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000007,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060798,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 186,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 36,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000239/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000239,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060822,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 141,
+    "captures": 24,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 24,
+    "repetitions": 4,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000124/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000124,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060677,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 226,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 49,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000191/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000191,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060870,
+    "result": {
+     "type": "DRAW",
+     "reason": "NO_PROGRESS"
+    },
+    "plies": 208,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 57,
+    "repetitions": 20,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000012/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000012,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060789,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 124,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 14,
+    "repetitions": 2,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 9
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000188/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000188,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060869,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 54,
+    "captures": 18,
+    "flips": 30,
+    "hidden": 2,
+    "reversals": 0,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 9
+   }
+  },
+  {
+   "key": "98033-e3_joint/4023/48000160/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000160,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060889,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 103,
+    "captures": 22,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 9,
+    "repetitions": 1,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 0
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000156/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000156,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060901,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 143,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 16,
+    "repetitions": 2,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 8
+   }
+  },
+  {
+   "key": "98071-e3_joint/4023/48000246/0",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000246,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060815,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 97,
+    "captures": 24,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 6,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 12
+   }
+  },
+  {
+   "key": "98059-e3_joint/4023/48000092/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000092,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060709,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 91,
+    "captures": 20,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 3,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 8
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000044/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000044,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060757,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 76,
+    "captures": 24,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 1,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/92001/48000000/0",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000000,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060793,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 151,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 19,
+    "repetitions": 3,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 0
+   }
+  },
+  {
+   "key": "98047-e3_joint/92001/48000009/1",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000009,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060784,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 141,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 21,
+    "repetitions": 7,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": -1,
+    "objective_return": -1,
+    "id": 3
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000219/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000219,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060834,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 115,
+    "captures": 26,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 12,
+    "repetitions": 1,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000193/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000193,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060856,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 86,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 3,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 3
+   }
+  },
+  {
+   "key": "98059-e3_joint/4023/48000171/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000171,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060882,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 118,
+    "captures": 24,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 12,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 7
+   }
+  },
+  {
+   "key": "98059-e3_joint/4023/48000187/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000187,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060866,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 72,
+    "captures": 22,
+    "flips": 30,
+    "hidden": 2,
+    "reversals": 2,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 7
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000198/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000198,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060863,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 64,
+    "captures": 17,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 0,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 13
+   }
+  },
+  {
+   "key": "98071-e3_joint/4023/48000056/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000056,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060737,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 130,
+    "captures": 24,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 16,
+    "repetitions": 4,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 1
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000043/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000043,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060754,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 79,
+    "captures": 22,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 3,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000249/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000249,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060800,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 67,
+    "captures": 20,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 1,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 2
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000214/1",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000214,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060847,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 70,
+    "captures": 24,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 2,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 13
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000178/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000178,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060875,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 118,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 10,
+    "repetitions": 3,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000054/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000054,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060751,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 69,
+    "captures": 21,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 3,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/92001/48000182/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000182,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060879,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 140,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 15,
+    "repetitions": 4,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 13
+   }
+  },
+  {
+   "key": "98071-e3_joint/92001/48000203/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000203,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060850,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 104,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 6,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 7
+   }
+  },
+  {
+   "key": "98059-e3_joint/S1/48000241/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000241,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060808,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 198,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 39,
+    "repetitions": 10,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000132/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000132,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060925,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 183,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 25,
+    "repetitions": 5,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 8
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000043/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000043,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060754,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 135,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 18,
+    "repetitions": 6,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/4023/48000190/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000190,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060871,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 62,
+    "captures": 16,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 1,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 13
+   }
+  },
+  {
+   "key": "98059-e3_joint/4023/48000221/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000221,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060836,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 86,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 9,
+    "repetitions": 3,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 11
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000003/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000003,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060794,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 116,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 13,
+    "repetitions": 2,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 7
+   }
+  },
+  {
+   "key": "98059-e3_joint/4023/48000128/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000128,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060921,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 81,
+    "captures": 19,
+    "flips": 30,
+    "hidden": 2,
+    "reversals": 7,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 0
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000008/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000008,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060785,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 99,
+    "captures": 25,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 10,
+    "repetitions": 1,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 0
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000146/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000146,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060907,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 143,
+    "captures": 23,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 17,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 4
+   }
+  },
+  {
+   "key": "98047-e3_joint/92001/48000059/1",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000059,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060738,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 112,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 12,
+    "repetitions": 2,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 7
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000184/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000184,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060865,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 187,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 31,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 0
+   }
+  },
+  {
+   "key": "98059-e3_joint/4023/48000217/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000217,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060832,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 135,
+    "captures": 22,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 20,
+    "repetitions": 12,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 2
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000169/1",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000169,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060880,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 78,
+    "captures": 26,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 4,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 3
+   }
+  },
+  {
+   "key": "98047-e3_joint/4023/48000102/1",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000102,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060703,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 54,
+    "captures": 18,
+    "flips": 30,
+    "hidden": 2,
+    "reversals": 3,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 13
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000174/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000174,
+    "seat": 0,
+    "opponent": "4023",
+    "action_seed": 48060887,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 127,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 10,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 12
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000091/0",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000091,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060706,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 125,
+    "captures": 22,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 20,
+    "repetitions": 2,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": false
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/S1/48000080/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000080,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060713,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 93,
+    "captures": 22,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 8,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/S1/48000185/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000185,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060864,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 174,
+    "captures": 30,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 27,
+    "repetitions": 8,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98033-e3_joint/92001/48000099/0",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000099,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060698,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 139,
+    "captures": 28,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 17,
+    "repetitions": 4,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 6
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000046/1",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000046,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060759,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 140,
+    "captures": 29,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 28,
+    "repetitions": 13,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000236/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000236,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060821,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 92,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 7,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98071-e3_joint/92001/48000171/1",
+   "model": "98071-e3_joint",
+   "official": {
+    "seed": 48000171,
+    "seat": 1,
+    "opponent": "92001",
+    "action_seed": 48060882,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 104,
+    "captures": 27,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 8,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 7
+   }
+  },
+  {
+   "key": "98033-e3_joint/4023/48000241/1",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000241,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060808,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 142,
+    "captures": 24,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 26,
+    "repetitions": 11,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 3
+   }
+  },
+  {
+   "key": "98021-e3_joint/4023/48000178/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000178,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060875,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 112,
+    "captures": 25,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 9,
+    "repetitions": 1,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 5
+   }
+  },
+  {
+   "key": "98047-e3_joint/S1/48000230/0",
+   "model": "98047-e3_joint",
+   "official": {
+    "seed": 48000230,
+    "seat": 0,
+    "opponent": "S1",
+    "action_seed": 48060831,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 215,
+    "captures": 31,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 53,
+    "repetitions": 24,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  },
+  {
+   "key": "98059-e3_joint/92001/48000167/0",
+   "model": "98059-e3_joint",
+   "official": {
+    "seed": 48000167,
+    "seat": 0,
+    "opponent": "92001",
+    "action_seed": 48060894,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P1",
+     "reason": "NO_PIECES"
+    },
+    "plies": 137,
+    "captures": 28,
+    "flips": 31,
+    "hidden": 1,
+    "reversals": 18,
+    "repetitions": 3,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 14
+   }
+  },
+  {
+   "key": "98033-e3_joint/4023/48000229/1",
+   "model": "98033-e3_joint",
+   "official": {
+    "seed": 48000229,
+    "seat": 1,
+    "opponent": "4023",
+    "action_seed": 48060828,
+    "prefix_plies": 0,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 82,
+    "captures": 21,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 6,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    },
+    "return": 1,
+    "objective_return": 1,
+    "id": 11
+   }
+  },
+  {
+   "key": "98021-e3_joint/S1/48000056/1",
+   "model": "98021-e3_joint",
+   "official": {
+    "seed": 48000056,
+    "seat": 1,
+    "opponent": "S1",
+    "action_seed": 48060737,
+    "result": {
+     "type": "WIN",
+     "winner": "P2",
+     "reason": "NO_PIECES"
+    },
+    "plies": 84,
+    "captures": 23,
+    "flips": 32,
+    "hidden": 0,
+    "reversals": 3,
+    "repetitions": 0,
+    "everPublicCountLead": {
+     "P1": true,
+     "P2": true
+    }
+   }
+  }
+ ],
+ "excluded_decks": [
+  48000001,
+  48000004,
+  48000005,
+  48000006,
+  48000013,
+  48000014,
+  48000018,
+  48000024,
+  48000028,
+  48000029,
+  48000031,
+  48000032,
+  48000034,
+  48000035,
+  48000038,
+  48000040,
+  48000041,
+  48000045,
+  48000047,
+  48000048,
+  48000050,
+  48000055,
+  48000057,
+  48000061,
+  48000063,
+  48000065,
+  48000070,
+  48000072,
+  48000073,
+  48000078,
+  48000084,
+  48000085,
+  48000086,
+  48000087,
+  48000090,
+  48000093,
+  48000096,
+  48000097,
+  48000098,
+  48000100,
+  48000101,
+  48000104,
+  48000105,
+  48000111,
+  48000115,
+  48000117,
+  48000121,
+  48000123,
+  48000125,
+  48000129,
+  48000131,
+  48000142,
+  48000145,
+  48000147,
+  48000149,
+  48000150,
+  48000155,
+  48000162,
+  48000163,
+  48000168,
+  48000172,
+  48000173,
+  48000176,
+  48000201,
+  48000202,
+  48000208,
+  48000210,
+  48000211,
+  48000216,
+  48000223,
+  48000224,
+  48000226,
+  48000231,
+  48000233,
+  48000244,
+  48000247,
+  48000248,
+  48000250,
+  48000255
+ ],
+ "inference": "all 15 finals on every positive root; primary cross-architecture means within state and training seed; separately non-immediate positions. Unknown excluded from claims about failed proof."
+}

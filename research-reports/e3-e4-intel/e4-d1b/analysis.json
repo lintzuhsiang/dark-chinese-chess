@@ -1,0 +1,364 @@
+{
+ "all": {
+  "T0": {
+   "n": 88,
+   "WDL": [
+    51,
+    37,
+    0
+   ],
+   "win_rate": 0.5795454545454546,
+   "first_certified": 37,
+   "NO_PROGRESS": 37,
+   "paired_gains": 0,
+   "paired_losses": 0,
+   "learner_reversals_per_100": 28.115942028985508
+  },
+  "T1": {
+   "n": 88,
+   "WDL": [
+    64,
+    24,
+    0
+   ],
+   "win_rate": 0.7272727272727273,
+   "first_certified": 88,
+   "NO_PROGRESS": 24,
+   "paired_gains": 16,
+   "paired_losses": 3,
+   "learner_reversals_per_100": 27.201565557729943
+  },
+  "T2": {
+   "n": 88,
+   "WDL": [
+    88,
+    0,
+    0
+   ],
+   "win_rate": 1.0,
+   "first_certified": 88,
+   "NO_PROGRESS": 0,
+   "paired_gains": 37,
+   "paired_losses": 0,
+   "learner_reversals_per_100": 0.0
+  },
+  "Greedy": {
+   "n": 88,
+   "WDL": [
+    46,
+    42,
+    0
+   ],
+   "win_rate": 0.5227272727272727,
+   "first_certified": 32,
+   "NO_PROGRESS": 42,
+   "paired_gains": 4,
+   "paired_losses": 9,
+   "learner_reversals_per_100": 69.25246826516221
+  }
+ },
+ "non_immediate": {
+  "T0": {
+   "n": 80,
+   "WDL": [
+    43,
+    37,
+    0
+   ],
+   "win_rate": 0.5375,
+   "first_certified": 29,
+   "NO_PROGRESS": 37,
+   "paired_gains": 0,
+   "paired_losses": 0,
+   "learner_reversals_per_100": 28.279883381924197
+  },
+  "T1": {
+   "n": 80,
+   "WDL": [
+    56,
+    24,
+    0
+   ],
+   "win_rate": 0.7,
+   "first_certified": 80,
+   "NO_PROGRESS": 24,
+   "paired_gains": 16,
+   "paired_losses": 3,
+   "learner_reversals_per_100": 27.416173570019723
+  },
+  "T2": {
+   "n": 80,
+   "WDL": [
+    80,
+    0,
+    0
+   ],
+   "win_rate": 1.0,
+   "first_certified": 80,
+   "NO_PROGRESS": 0,
+   "paired_gains": 37,
+   "paired_losses": 0,
+   "learner_reversals_per_100": 0.0
+  },
+  "Greedy": {
+   "n": 80,
+   "WDL": [
+    38,
+    42,
+    0
+   ],
+   "win_rate": 0.475,
+   "first_certified": 24,
+   "NO_PROGRESS": 42,
+   "paired_gains": 4,
+   "paired_losses": 9,
+   "learner_reversals_per_100": 69.64539007092199
+  }
+ },
+ "original_draw": {
+  "T0": {
+   "n": 40,
+   "WDL": [
+    9,
+    31,
+    0
+   ],
+   "win_rate": 0.225,
+   "first_certified": 9,
+   "NO_PROGRESS": 31,
+   "paired_gains": 0,
+   "paired_losses": 0,
+   "learner_reversals_per_100": 28.341232227488153
+  },
+  "T1": {
+   "n": 40,
+   "WDL": [
+    19,
+    21,
+    0
+   ],
+   "win_rate": 0.475,
+   "first_certified": 40,
+   "NO_PROGRESS": 21,
+   "paired_gains": 13,
+   "paired_losses": 3,
+   "learner_reversals_per_100": 28.940568475452196
+  },
+  "T2": {
+   "n": 40,
+   "WDL": [
+    40,
+    0,
+    0
+   ],
+   "win_rate": 1.0,
+   "first_certified": 40,
+   "NO_PROGRESS": 0,
+   "paired_gains": 31,
+   "paired_losses": 0,
+   "learner_reversals_per_100": 0.0
+  },
+  "Greedy": {
+   "n": 40,
+   "WDL": [
+    1,
+    39,
+    0
+   ],
+   "win_rate": 0.025,
+   "first_certified": 8,
+   "NO_PROGRESS": 39,
+   "paired_gains": 1,
+   "paired_losses": 9,
+   "learner_reversals_per_100": 76.44894204231831
+  }
+ },
+ "case_comparisons": {
+  "98047-e3_joint/S1/48000230/0": {
+   "root_halfmove": 173,
+   "immediate": false,
+   "wins": {
+    "T0": 3,
+    "T1": 5,
+    "T2": 8,
+    "Greedy": 5
+   }
+  },
+  "98047-e3_joint/S1/48000227/1": {
+   "root_halfmove": 172,
+   "immediate": false,
+   "wins": {
+    "T0": 4,
+    "T1": 4,
+    "T2": 8,
+    "Greedy": 1
+   }
+  },
+  "98047-e3_joint/92001/48000059/1": {
+   "root_halfmove": 110,
+   "immediate": false,
+   "wins": {
+    "T0": 8,
+    "T1": 8,
+    "T2": 8,
+    "Greedy": 8
+   }
+  },
+  "98071-e3_joint/S1/48000185/1": {
+   "root_halfmove": 160,
+   "immediate": false,
+   "wins": {
+    "T0": 7,
+    "T1": 8,
+    "T2": 8,
+    "Greedy": 8
+   }
+  },
+  "98059-e3_joint/92001/48000184/0": {
+   "root_halfmove": 187,
+   "immediate": true,
+   "wins": {
+    "T0": 8,
+    "T1": 8,
+    "T2": 8,
+    "Greedy": 8
+   }
+  },
+  "98033-e3_joint/S1/48000204/0": {
+   "root_halfmove": 185,
+   "immediate": false,
+   "wins": {
+    "T0": 0,
+    "T1": 3,
+    "T2": 8,
+    "Greedy": 0
+   }
+  },
+  "98047-e3_joint/S1/48000046/1": {
+   "root_halfmove": 136,
+   "immediate": false,
+   "wins": {
+    "T0": 8,
+    "T1": 8,
+    "T2": 8,
+    "Greedy": 8
+   }
+  },
+  "98059-e3_joint/S1/48000103/1": {
+   "root_halfmove": 124,
+   "immediate": false,
+   "wins": {
+    "T0": 0,
+    "T1": 0,
+    "T2": 8,
+    "Greedy": 0
+   }
+  },
+  "98047-e3_joint/S1/48000157/0": {
+   "root_halfmove": 97,
+   "immediate": false,
+   "wins": {
+    "T0": 5,
+    "T1": 4,
+    "T2": 8,
+    "Greedy": 0
+   }
+  },
+  "98033-e3_joint/92001/48000132/0": {
+   "root_halfmove": 167,
+   "immediate": false,
+   "wins": {
+    "T0": 8,
+    "T1": 8,
+    "T2": 8,
+    "Greedy": 8
+   }
+  },
+  "98033-e3_joint/S1/48000180/1": {
+   "root_halfmove": 134,
+   "immediate": false,
+   "wins": {
+    "T0": 0,
+    "T1": 8,
+    "T2": 8,
+    "Greedy": 0
+   }
+  }
+ },
+ "statewise": {
+  "98021-e2b_l": {
+   "top1": 0.2,
+   "mass": 0.3074119922229253
+  },
+  "98021-e3_gate": {
+   "top1": 0.5714285714285714,
+   "mass": 0.47250254288534976
+  },
+  "98021-e3_joint": {
+   "top1": 0.2571428571428571,
+   "mass": 0.2855925109895178
+  },
+  "98033-e2b_l": {
+   "top1": 0.2857142857142857,
+   "mass": 0.32774426661938033
+  },
+  "98033-e3_gate": {
+   "top1": 0.2571428571428571,
+   "mass": 0.24492729349041237
+  },
+  "98033-e3_joint": {
+   "top1": 0.2571428571428571,
+   "mass": 0.28784792919312435
+  },
+  "98047-e2b_l": {
+   "top1": 0.2571428571428571,
+   "mass": 0.31836170376652057
+  },
+  "98047-e3_gate": {
+   "top1": 0.5428571428571428,
+   "mass": 0.4322835789280344
+  },
+  "98047-e3_joint": {
+   "top1": 0.42857142857142855,
+   "mass": 0.43875778829128687
+  },
+  "98059-e2b_l": {
+   "top1": 0.2571428571428571,
+   "mass": 0.30318694960169157
+  },
+  "98059-e3_gate": {
+   "top1": 0.5142857142857142,
+   "mass": 0.4851803117438566
+  },
+  "98059-e3_joint": {
+   "top1": 0.6285714285714286,
+   "mass": 0.5772068875521292
+  },
+  "98071-e2b_l": {
+   "top1": 0.22857142857142856,
+   "mass": 0.29009490326946263
+  },
+  "98071-e3_gate": {
+   "top1": 0.45714285714285713,
+   "mass": 0.3820313137598135
+  },
+  "98071-e3_joint": {
+   "top1": 0.4857142857142857,
+   "mass": 0.46702808201635726
+  }
+ },
+ "selective_recognition": {
+  "e2b_l vs e3_joint": {
+   "left_only": 7,
+   "right_only": 36,
+   "both": 36,
+   "neither": 96
+  },
+  "e3_gate vs e3_joint": {
+   "left_only": 41,
+   "right_only": 31,
+   "both": 41,
+   "neither": 62
+  }
+ }
+}

@@ -1,0 +1,266 @@
+{
+ "population": {
+  "draw": 2468,
+  "decisive": 5212
+ },
+ "sample": {
+  "draw": 60,
+  "decisive": 30
+ },
+ "eligible_games": 34,
+ "all": {
+  "states": 1172,
+  "positive": 18,
+  "top1": {
+   "unknown": 11,
+   "win": 7
+  },
+  "mass": 0.3489630080100801,
+  "mass_upper": 1.0,
+  "actual_proved": 6
+ },
+ "draw_states": {
+  "states": 1086,
+  "positive": 10,
+  "top1": {
+   "unknown": 8,
+   "win": 2
+  },
+  "mass": 0.1295925542314967,
+  "mass_upper": 1,
+  "actual_proved": 0
+ },
+ "decisive_states": {
+  "states": 86,
+  "positive": 8,
+  "top1": {
+   "win": 5,
+   "unknown": 3
+  },
+  "mass": 0.6231760752333093,
+  "mass_upper": 1.0,
+  "actual_proved": 6
+ },
+ "non_immediate_positive": {
+  "states": 15,
+  "positive": 15,
+  "top1": {
+   "unknown": 11,
+   "win": 4
+  },
+  "mass": 0.2187614539054767,
+  "mass_upper": 1.0,
+  "actual_proved": 3
+ },
+ "draw_class": {
+  "unresolved": 25,
+  "no_eligible_state": 30,
+  "proved_opportunity": 5
+ },
+ "draw_rate": 0.08333333333333333,
+ "action_labels": {
+  "unknown": 6241,
+  "nonwin": 531,
+  "win": 25
+ },
+ "execution": {
+  "origins": 8,
+  "all": {
+   "False": {
+    "D": 43,
+    "W": 21
+   },
+   "True": {
+    "D": 24,
+    "W": 40
+   }
+  },
+  "non_immediate": {
+   "False": {
+    "D": 43,
+    "W": 5
+   },
+   "True": {
+    "D": 24,
+    "W": 24
+   }
+  },
+  "original_draw": {
+   "False": {
+    "D": 37,
+    "W": 3
+   },
+   "True": {
+    "D": 22,
+    "W": 18
+   }
+  }
+ },
+ "draw_examples": [
+  {
+   "key": "98021-e3_joint/S1/48000047/0",
+   "ply0": 172,
+   "quiet": 17,
+   "top": 333,
+   "top_status": "unknown",
+   "actual": 622,
+   "actual_status": "unknown",
+   "wins": [
+    630
+   ],
+   "mass": 0.02451898479888433,
+   "unknown_mass": 0.9754810152011156,
+   "immediate": false,
+   "actual_immediate_reversal": true
+  },
+  {
+   "key": "98033-e3_joint/S1/48000250/0",
+   "ply0": 206,
+   "quiet": 46,
+   "top": 856,
+   "top_status": "unknown",
+   "actual": 856,
+   "actual_status": "unknown",
+   "wins": [
+    858
+   ],
+   "mass": 0.03842049335768655,
+   "unknown_mass": 0.9615795066423135,
+   "immediate": false,
+   "actual_immediate_reversal": false
+  },
+  {
+   "key": "98033-e3_joint/S1/48000250/0",
+   "ply0": 208,
+   "quiet": 48,
+   "top": 828,
+   "top_status": "unknown",
+   "actual": 820,
+   "actual_status": "unknown",
+   "wins": [
+    825
+   ],
+   "mass": 0.09603754401486694,
+   "unknown_mass": 0.903962455985133,
+   "immediate": false,
+   "actual_immediate_reversal": false
+  },
+  {
+   "key": "98047-e3_joint/S1/48000231/1",
+   "ply0": 127,
+   "quiet": 33,
+   "top": 165,
+   "top_status": "unknown",
+   "actual": 165,
+   "actual_status": "unknown",
+   "wins": [
+    922
+   ],
+   "mass": 0.047376073632150476,
+   "unknown_mass": 0.9526239263678495,
+   "immediate": false,
+   "actual_immediate_reversal": false
+  },
+  {
+   "key": "98047-e3_joint/S1/48000231/1",
+   "ply0": 135,
+   "quiet": 41,
+   "top": 165,
+   "top_status": "unknown",
+   "actual": 927,
+   "actual_status": "unknown",
+   "wins": [
+    922
+   ],
+   "mass": 0.041771761178271374,
+   "unknown_mass": 0.9582282388217287,
+   "immediate": false,
+   "actual_immediate_reversal": true
+  },
+  {
+   "key": "98047-e3_joint/S1/48000097/1",
+   "ply0": 159,
+   "quiet": 26,
+   "top": 267,
+   "top_status": "unknown",
+   "actual": 64,
+   "actual_status": "unknown",
+   "wins": [
+    630
+   ],
+   "mass": 0.2351917354507545,
+   "unknown_mass": 0.7648082645492456,
+   "immediate": false,
+   "actual_immediate_reversal": false
+  },
+  {
+   "key": "98047-e3_joint/S1/48000097/1",
+   "ply0": 163,
+   "quiet": 30,
+   "top": 630,
+   "top_status": "win",
+   "actual": 33,
+   "actual_status": "unknown",
+   "wins": [
+    630
+   ],
+   "mass": 0.22796139277623478,
+   "unknown_mass": 0.7720386072237652,
+   "immediate": false,
+   "actual_immediate_reversal": false
+  },
+  {
+   "key": "98047-e3_joint/S1/48000097/1",
+   "ply0": 185,
+   "quiet": 52,
+   "top": 927,
+   "top_status": "unknown",
+   "actual": 927,
+   "actual_status": "unknown",
+   "wins": [
+    922
+   ],
+   "mass": 0.017473753486021423,
+   "unknown_mass": 0.9825262465139786,
+   "immediate": false,
+   "actual_immediate_reversal": true
+  },
+  {
+   "key": "98047-e3_joint/S1/48000104/0",
+   "ply0": 172,
+   "quiet": 24,
+   "top": 726,
+   "top_status": "win",
+   "actual": 198,
+   "actual_status": "unknown",
+   "wins": [
+    726
+   ],
+   "mass": 0.523084082869666,
+   "unknown_mass": 0.47691591713033393,
+   "immediate": false,
+   "actual_immediate_reversal": false
+  },
+  {
+   "key": "98047-e3_joint/S1/48000104/0",
+   "ply0": 180,
+   "quiet": 32,
+   "top": 856,
+   "top_status": "unknown",
+   "actual": 856,
+   "actual_status": "unknown",
+   "wins": [
+    130,
+    135,
+    226,
+    229,
+    231,
+    234
+   ],
+   "mass": 0.044089720750430675,
+   "unknown_mass": 0.9559102792495693,
+   "immediate": false,
+   "actual_immediate_reversal": true
+  }
+ ]
+}

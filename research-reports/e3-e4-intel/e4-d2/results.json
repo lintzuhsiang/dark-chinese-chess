@@ -1,0 +1,207 @@
+{
+ "98021-e3_joint": {
+  "local": {
+   "train_positive": 1905,
+   "test_positive": 952,
+   "eligible_groups": 363,
+   "source_games": 32,
+   "scores": {
+    "policy": 0.7157063752779494,
+    "geometry": 0.5110160464732891,
+    "endpoints": 0.8534788348268154,
+    "context": 0.8536909915048002,
+    "rays": 0.852100004972311
+   }
+  },
+  "far": {
+   "train_positive": 172,
+   "test_positive": 92,
+   "eligible_groups": 70,
+   "source_games": 25,
+   "scores": {
+    "policy": 0.46721669203812066,
+    "geometry": 0.501386926565498,
+    "endpoints": 0.5743594698951842,
+    "context": 0.485391909677624,
+    "rays": 0.6962130329987471
+   }
+  },
+  "opened": {
+   "train_positive": 61,
+   "test_positive": 30,
+   "eligible_groups": 27,
+   "source_games": 19,
+   "scores": {
+    "policy": 0.3824166060277171,
+    "geometry": 0.5716126980015869,
+    "endpoints": 0.642355740966852,
+    "context": 0.6240671365671365,
+    "rays": 0.585792191347747
+   }
+  }
+ },
+ "98033-e3_joint": {
+  "local": {
+   "train_positive": 1905,
+   "test_positive": 952,
+   "eligible_groups": 363,
+   "source_games": 32,
+   "scores": {
+    "policy": 0.7869897560688579,
+    "geometry": 0.5110160464732891,
+    "endpoints": 0.8612048447367885,
+    "context": 0.8589734846266405,
+    "rays": 0.8611925606720019
+   }
+  },
+  "far": {
+   "train_positive": 172,
+   "test_positive": 92,
+   "eligible_groups": 70,
+   "source_games": 25,
+   "scores": {
+    "policy": 0.5105706000348859,
+    "geometry": 0.501386926565498,
+    "endpoints": 0.5796895762967191,
+    "context": 0.5516981431267145,
+    "rays": 0.7143231173588316
+   }
+  },
+  "opened": {
+   "train_positive": 61,
+   "test_positive": 30,
+   "eligible_groups": 27,
+   "source_games": 19,
+   "scores": {
+    "policy": 0.5240101976213087,
+    "geometry": 0.5716126980015869,
+    "endpoints": 0.5121952635841525,
+    "context": 0.5282574421463311,
+    "rays": 0.7739121989121989
+   }
+  }
+ },
+ "98047-e3_joint": {
+  "local": {
+   "train_positive": 1905,
+   "test_positive": 952,
+   "eligible_groups": 363,
+   "source_games": 32,
+   "scores": {
+    "policy": 0.7821461439636594,
+    "geometry": 0.5110160464732891,
+    "endpoints": 0.8445807818529227,
+    "context": 0.846288559511924,
+    "rays": 0.8521459422097701
+   }
+  },
+  "far": {
+   "train_positive": 172,
+   "test_positive": 92,
+   "eligible_groups": 70,
+   "source_games": 25,
+   "scores": {
+    "policy": 0.4906551979766266,
+    "geometry": 0.501386926565498,
+    "endpoints": 0.547273222808937,
+    "context": 0.5247807747807747,
+    "rays": 0.7608679217607788
+   }
+  },
+  "opened": {
+   "train_positive": 61,
+   "test_positive": 30,
+   "eligible_groups": 27,
+   "source_games": 19,
+   "scores": {
+    "policy": 0.44759679620790727,
+    "geometry": 0.5716126980015869,
+    "endpoints": 0.638927379205157,
+    "context": 0.592585655085655,
+    "rays": 0.7185399990955547
+   }
+  }
+ },
+ "98059-e3_joint": {
+  "local": {
+   "train_positive": 1905,
+   "test_positive": 952,
+   "eligible_groups": 363,
+   "source_games": 32,
+   "scores": {
+    "policy": 0.751291551549379,
+    "geometry": 0.5110160464732891,
+    "endpoints": 0.8433899112126537,
+    "context": 0.8433248561748645,
+    "rays": 0.8647860019758021
+   }
+  },
+  "far": {
+   "train_positive": 172,
+   "test_positive": 92,
+   "eligible_groups": 70,
+   "source_games": 25,
+   "scores": {
+    "policy": 0.5489293246436104,
+    "geometry": 0.501386926565498,
+    "endpoints": 0.5835320235320234,
+    "context": 0.562554687376116,
+    "rays": 0.8033225702868559
+   }
+  },
+  "opened": {
+   "train_positive": 61,
+   "test_positive": 30,
+   "eligible_groups": 27,
+   "source_games": 19,
+   "scores": {
+    "policy": 0.4340789868567646,
+    "geometry": 0.5716126980015869,
+    "endpoints": 0.7214874117651896,
+    "context": 0.6414918414918416,
+    "rays": 0.7443401762846208
+   }
+  }
+ },
+ "98071-e3_joint": {
+  "local": {
+   "train_positive": 1905,
+   "test_positive": 952,
+   "eligible_groups": 363,
+   "source_games": 32,
+   "scores": {
+    "policy": 0.7438854095826276,
+    "geometry": 0.5110160464732891,
+    "endpoints": 0.8458709309319443,
+    "context": 0.8479189402913911,
+    "rays": 0.8688505267777905
+   }
+  },
+  "far": {
+   "train_positive": 172,
+   "test_positive": 92,
+   "eligible_groups": 70,
+   "source_games": 25,
+   "scores": {
+    "policy": 0.49779987869273584,
+    "geometry": 0.501386926565498,
+    "endpoints": 0.5732403310974739,
+    "context": 0.560592661306947,
+    "rays": 0.7728229310372168
+   }
+  },
+  "opened": {
+   "train_positive": 61,
+   "test_positive": 30,
+   "eligible_groups": 27,
+   "source_games": 19,
+   "scores": {
+    "policy": 0.4978521992410881,
+    "geometry": 0.5716126980015869,
+    "endpoints": 0.4672052741497186,
+    "context": 0.5089476881143548,
+    "rays": 0.7282542560320339
+   }
+  }
+ }
+}

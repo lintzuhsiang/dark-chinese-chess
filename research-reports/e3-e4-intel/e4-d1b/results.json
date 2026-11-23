@@ -1,0 +1,363 @@
+{
+ "games": 150,
+ "eligible_states": 1831,
+ "positive_states": 35,
+ "positive_games": 11,
+ "continuations": {
+  "T0": {
+   "D": 37,
+   "W": 51,
+   "first_wins": 37,
+   "no_progress": 37
+  },
+  "T1": {
+   "W": 64,
+   "D": 24,
+   "first_wins": 88,
+   "no_progress": 24
+  },
+  "T2": {
+   "W": 88,
+   "first_wins": 88,
+   "no_progress": 0
+  },
+  "Greedy": {
+   "D": 42,
+   "W": 46,
+   "first_wins": 32,
+   "no_progress": 42
+  }
+ },
+ "non_immediate": {
+  "T0": {
+   "D": 37,
+   "W": 43,
+   "first_wins": 29,
+   "no_progress": 37
+  },
+  "T1": {
+   "W": 56,
+   "D": 24,
+   "first_wins": 80,
+   "no_progress": 24
+  },
+  "T2": {
+   "W": 80,
+   "first_wins": 80,
+   "no_progress": 0
+  },
+  "Greedy": {
+   "D": 42,
+   "W": 38,
+   "first_wins": 24,
+   "no_progress": 42
+  }
+ },
+ "by_root": {
+  "98033-e3_joint/S1/48000180/1": {
+   "T0": {
+    "D": 8,
+    "first_wins": 0,
+    "no_progress": 8
+   },
+   "T1": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "D": 8,
+    "first_wins": 0,
+    "no_progress": 8
+   }
+  },
+  "98059-e3_joint/S1/48000103/1": {
+   "T0": {
+    "D": 8,
+    "first_wins": 6,
+    "no_progress": 8
+   },
+   "T1": {
+    "D": 8,
+    "first_wins": 8,
+    "no_progress": 8
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "D": 8,
+    "first_wins": 8,
+    "no_progress": 8
+   }
+  },
+  "98047-e3_joint/S1/48000227/1": {
+   "T0": {
+    "W": 4,
+    "D": 4,
+    "first_wins": 2,
+    "no_progress": 4
+   },
+   "T1": {
+    "W": 4,
+    "D": 4,
+    "first_wins": 8,
+    "no_progress": 4
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "D": 7,
+    "W": 1,
+    "first_wins": 0,
+    "no_progress": 7
+   }
+  },
+  "98047-e3_joint/S1/48000157/0": {
+   "T0": {
+    "D": 3,
+    "W": 5,
+    "first_wins": 0,
+    "no_progress": 3
+   },
+   "T1": {
+    "W": 4,
+    "D": 4,
+    "first_wins": 8,
+    "no_progress": 4
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "D": 8,
+    "first_wins": 0,
+    "no_progress": 8
+   }
+  },
+  "98033-e3_joint/S1/48000204/0": {
+   "T0": {
+    "D": 8,
+    "first_wins": 1,
+    "no_progress": 8
+   },
+   "T1": {
+    "W": 3,
+    "D": 5,
+    "first_wins": 8,
+    "no_progress": 5
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "D": 8,
+    "first_wins": 0,
+    "no_progress": 8
+   }
+  },
+  "98033-e3_joint/92001/48000132/0": {
+   "T0": {
+    "W": 8,
+    "first_wins": 3,
+    "no_progress": 0
+   },
+   "T1": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "W": 8,
+    "first_wins": 0,
+    "no_progress": 0
+   }
+  },
+  "98047-e3_joint/92001/48000059/1": {
+   "T0": {
+    "W": 8,
+    "first_wins": 2,
+    "no_progress": 0
+   },
+   "T1": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "W": 8,
+    "first_wins": 0,
+    "no_progress": 0
+   }
+  },
+  "98059-e3_joint/92001/48000184/0": {
+   "T0": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T1": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   }
+  },
+  "98071-e3_joint/S1/48000185/1": {
+   "T0": {
+    "D": 1,
+    "W": 7,
+    "first_wins": 6,
+    "no_progress": 1
+   },
+   "T1": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   }
+  },
+  "98047-e3_joint/S1/48000046/1": {
+   "T0": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T1": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   }
+  },
+  "98047-e3_joint/S1/48000230/0": {
+   "T0": {
+    "D": 5,
+    "W": 3,
+    "first_wins": 1,
+    "no_progress": 5
+   },
+   "T1": {
+    "D": 3,
+    "W": 5,
+    "first_wins": 8,
+    "no_progress": 3
+   },
+   "T2": {
+    "W": 8,
+    "first_wins": 8,
+    "no_progress": 0
+   },
+   "Greedy": {
+    "D": 3,
+    "W": 5,
+    "first_wins": 0,
+    "no_progress": 3
+   }
+  }
+ },
+ "inference": {
+  "all": {
+   "e2b_l": {
+    "n": 175,
+    "top1": 0.24571428571428572,
+    "mass": 0.30935996309599606
+   },
+   "e3_joint": {
+    "n": 175,
+    "top1": 0.4114285714285714,
+    "mass": 0.4112866396084831
+   },
+   "e3_gate": {
+    "n": 175,
+    "top1": 0.4685714285714286,
+    "mass": 0.4033850081614933
+   }
+  },
+  "non_immediate": {
+   "e2b_l": {
+    "n": 145,
+    "top1": 0.0896551724137931,
+    "mass": 0.1695292908967845
+   },
+   "e3_joint": {
+    "n": 145,
+    "top1": 0.2896551724137931,
+    "mass": 0.28969468004793053
+   },
+   "e3_gate": {
+    "n": 145,
+    "top1": 0.3586206896551724,
+    "mass": 0.28048612461989647
+   }
+  },
+  "matched": {
+   "e2b_l": {
+    "n": 35,
+    "top1": 0.2,
+    "mass": 0.3022917695291386
+   },
+   "e3_joint": {
+    "n": 35,
+    "top1": 0.45714285714285713,
+    "mass": 0.44345050173916684
+   },
+   "e3_gate": {
+    "n": 35,
+    "top1": 0.4,
+    "mass": 0.3709483042271715
+   }
+  }
+ }
+}

@@ -1,0 +1,52 @@
+{
+  "98021-e3_joint": {
+    "pooled_board": -0.010774175835607306,
+    "public_side": 0.9253458716970968,
+    "residual_vs_original_fp32": 6.622347148432794e-08
+  },
+  "98021-e3_gate": {
+    "pooled_board": -0.03127243390648026,
+    "public_side": -0.015725476050026485,
+    "residual_vs_original_fp32": 1.067704626066257e-06
+  },
+  "98033-e3_joint": {
+    "pooled_board": -0.019721690579566638,
+    "public_side": -0.22207409073167608,
+    "residual_vs_original_fp32": 2.4145528568220165e-07
+  },
+  "98033-e3_gate": {
+    "pooled_board": -0.0056118194020635765,
+    "public_side": -0.34165616582273695,
+    "residual_vs_original_fp32": 1.073002738549711e-06
+  },
+  "98047-e3_joint": {
+    "pooled_board": -0.015710251314111346,
+    "public_side": -0.4461514496404171,
+    "residual_vs_original_fp32": 9.05419307861699e-08
+  },
+  "98047-e3_gate": {
+    "pooled_board": -0.05128646608723893,
+    "public_side": 0.32240358172380396,
+    "residual_vs_original_fp32": 9.475161855121428e-08
+  },
+  "98059-e3_joint": {
+    "pooled_board": -0.060884732435205244,
+    "public_side": 0.7864692401879645,
+    "residual_vs_original_fp32": 4.776013921015121e-07
+  },
+  "98059-e3_gate": {
+    "pooled_board": -0.018636424482387393,
+    "public_side": -1.0389937361459027,
+    "residual_vs_original_fp32": 3.783121396150335e-07
+  },
+  "98071-e3_joint": {
+    "pooled_board": -0.0012768556134296794,
+    "public_side": -0.8719081286598931,
+    "residual_vs_original_fp32": 6.503397143031719e-07
+  },
+  "98071-e3_gate": {
+    "pooled_board": -0.012662392721978558,
+    "public_side": -0.9974166951773572,
+    "residual_vs_original_fp32": 2.9595076189714575e-07
+  }
+}
