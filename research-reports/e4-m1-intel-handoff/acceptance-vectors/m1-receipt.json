@@ -1,0 +1,113 @@
+{
+  "checkpoints": [
+    {
+      "arm": "B0",
+      "seed": 1994011,
+      "transitions": 3640000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B2",
+      "seed": 1994011,
+      "transitions": 1500000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B2",
+      "seed": 1994011,
+      "transitions": 3640000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "S0",
+      "seed": 1994011,
+      "transitions": 1700000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "S2",
+      "seed": 1994011,
+      "transitions": 1700000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B0",
+      "seed": 1994023,
+      "transitions": 3640000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B2",
+      "seed": 1994023,
+      "transitions": 1500000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B2",
+      "seed": 1994023,
+      "transitions": 3640000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "S0",
+      "seed": 1994023,
+      "transitions": 1700000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "S2",
+      "seed": 1994023,
+      "transitions": 1700000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B0",
+      "seed": 1994037,
+      "transitions": 3640000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B2",
+      "seed": 1994037,
+      "transitions": 1500000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "B2",
+      "seed": 1994037,
+      "transitions": 3640000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "S0",
+      "seed": 1994037,
+      "transitions": 1700000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    },
+    {
+      "arm": "S2",
+      "seed": 1994037,
+      "transitions": 1700000,
+      "probability_max_abs_error": 0.0,
+      "value_max_abs_error": 0.0
+    }
+  ],
+  "vector_count": 20,
+  "torch": "2.8.0",
+  "numpy": "2.0.2",
+  "tolerance": 1e-05
+}
