@@ -1,0 +1,223 @@
+{
+  "source_base": "f4ccb0d3f3b6ee96e0135ecea549e4bf2f1bb967",
+  "source_patch_sha256": "e87a438e694a8d11c2a322772caa198b87a46da533d0bafd5b5080a08d157863",
+  "checkpoints": [
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994011-B0/final.pt",
+      "seed": 1994011,
+      "arm": "B0",
+      "transitions": 3640000,
+      "sha256": "d473dcdf8021ddbcd85bf356096419e0745a21c8007f026f7b8761343e047efa"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994011-B1/final.pt",
+      "seed": 1994011,
+      "arm": "B1",
+      "transitions": 3640000,
+      "sha256": "4615f946613d98dd7725da10fc2bff4f39f7da00973af99c521c8061a3cd9a76"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994011-B2/final.pt",
+      "seed": 1994011,
+      "arm": "B2",
+      "transitions": 3640000,
+      "sha256": "deb821b90eb8403f648c66fe227ab83299919502e8dd95de5e9f284c6cdc47f3"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994011-B2/step-001500000.pt",
+      "seed": 1994011,
+      "arm": "B2",
+      "transitions": 1500000,
+      "sha256": "f8ea75d1023714ec074cc0b2389737072ca9fb7b360734e3fb85ce8b3d56b559"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994023-B0/final.pt",
+      "seed": 1994023,
+      "arm": "B0",
+      "transitions": 3640000,
+      "sha256": "e89e20e2e3a7eb72d136fac3471fa3674720535988343aa67b9cc033b837e60d"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994023-B1/final.pt",
+      "seed": 1994023,
+      "arm": "B1",
+      "transitions": 3640000,
+      "sha256": "7fba87e156de30ece9671ee3604e196c98f0bb659a1b17735a6ea1a6e05265d4"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994023-B2/final.pt",
+      "seed": 1994023,
+      "arm": "B2",
+      "transitions": 3640000,
+      "sha256": "a608583c51eb7762e781f23a3cf628a0fe24ec8cd08fd23be754a8c7f272afcc"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994023-B2/step-001500000.pt",
+      "seed": 1994023,
+      "arm": "B2",
+      "transitions": 1500000,
+      "sha256": "65e571d3cdab5d47214eebac0ecca51e6ef8323f2716b08e93e349dd3a50135b"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994037-B0/final.pt",
+      "seed": 1994037,
+      "arm": "B0",
+      "transitions": 3640000,
+      "sha256": "b96be47f2eccf72ec3fc3c8c668d5670afee9294c2c8710ef6be5aebd036edc1"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994037-B1/final.pt",
+      "seed": 1994037,
+      "arm": "B1",
+      "transitions": 3640000,
+      "sha256": "20da634cd210f584562990aa86257e5e6d1a379f2dc5ce301ea8f113233214ba"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994037-B2/final.pt",
+      "seed": 1994037,
+      "arm": "B2",
+      "transitions": 3640000,
+      "sha256": "c26dba54be82270ab6eb6edef5baa567dc75bab18713e02643d30199bd39b85a"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994037-B2/step-001500000.pt",
+      "seed": 1994037,
+      "arm": "B2",
+      "transitions": 1500000,
+      "sha256": "d3b96254b610136c3d69e601c37af6f5ac76a09b1fd91412eed7aac60240d743"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994051-B0/final.pt",
+      "seed": 1994051,
+      "arm": "B0",
+      "transitions": 3640000,
+      "sha256": "26645c91f4559120ac05938c10807432c25bf87d2b7b80d9f68746428b49a7fd"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994051-B1/final.pt",
+      "seed": 1994051,
+      "arm": "B1",
+      "transitions": 3640000,
+      "sha256": "88b57b34419b3a7c0b8f27b4b92f2fac23a17209678310bdce66b284f9e85f92"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994051-B2/final.pt",
+      "seed": 1994051,
+      "arm": "B2",
+      "transitions": 3640000,
+      "sha256": "99cc089abbd003d449a4b1e8c01ec8b4b29943aef11c8f6c5dd8fa0bee74a0db"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994051-B2/step-001500000.pt",
+      "seed": 1994051,
+      "arm": "B2",
+      "transitions": 1500000,
+      "sha256": "f816d3ae2c87819ae34a895a8604d844280ff00577a9edbf615d4a9c0f848604"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994063-B0/final.pt",
+      "seed": 1994063,
+      "arm": "B0",
+      "transitions": 3640000,
+      "sha256": "d20d9427e4747ee10cb94d860d278b65a10d581dbf4f7f9a0f0f01c7a7d632f4"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994063-B1/final.pt",
+      "seed": 1994063,
+      "arm": "B1",
+      "transitions": 3640000,
+      "sha256": "be7357af2012a71f2d2a7fa4fb5b2e25037f7f9b9d76f81b20602af4efc5064c"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994063-B2/final.pt",
+      "seed": 1994063,
+      "arm": "B2",
+      "transitions": 3640000,
+      "sha256": "c73f00a29ed1bb1753b2ebef16f538c820678a377da0496ddcba8f6fb07cd124"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/formal/1994063-B2/step-001500000.pt",
+      "seed": 1994063,
+      "arm": "B2",
+      "transitions": 1500000,
+      "sha256": "af589f383a4aad4a0a60a1480aa715035e58c6b9ac20eb6fa4076ec9cb52c0d8"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994011-S0/final.pt",
+      "seed": 1994011,
+      "arm": "S0",
+      "transitions": 1700000,
+      "sha256": "236f5b278028bfd2ccce1790c90330f0d8b8140c75e143b0da20711717bdadce"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994011-S1/final.pt",
+      "seed": 1994011,
+      "arm": "S1",
+      "transitions": 1700000,
+      "sha256": "e30016ef4804c645645ed4c69b8d699fa40b3e7f9b53fc44c622f4091929594f"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994011-S2/final.pt",
+      "seed": 1994011,
+      "arm": "S2",
+      "transitions": 1700000,
+      "sha256": "fd8887f0d2b412b4fc0cc07247142eb4b8387d5ad8ead23be9411a9bd4a460f0"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994023-S0/final.pt",
+      "seed": 1994023,
+      "arm": "S0",
+      "transitions": 1700000,
+      "sha256": "6a72e8cd2871a21e571e236040766df6a416d1737b4355e4ce87b4bb90d27ab8"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994023-S1/final.pt",
+      "seed": 1994023,
+      "arm": "S1",
+      "transitions": 1700000,
+      "sha256": "aed107b6b215888d29dc637177ea79647612da1adb48d66540e74fa775ca4b5b"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994023-S2/final.pt",
+      "seed": 1994023,
+      "arm": "S2",
+      "transitions": 1700000,
+      "sha256": "9ba62b9fce1efcc58320cda980481d50ad4005f63a755d5e60c00724680930cb"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994037-S0/final.pt",
+      "seed": 1994037,
+      "arm": "S0",
+      "transitions": 1700000,
+      "sha256": "de4db6d495447ab4c6452f882a5159b7aff4723f08ff9d8b18c96b32d7d89102"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994037-S1/final.pt",
+      "seed": 1994037,
+      "arm": "S1",
+      "transitions": 1700000,
+      "sha256": "000820cb45b492e81880548778f0b983affaa086d8adc34ca03628808e643759"
+    },
+    {
+      "path": "overlay/benchmark-results/ai7-selfplay/e4-ray-routing-v1/tactical-learning-pilot/runs/1994037-S2/final.pt",
+      "seed": 1994037,
+      "arm": "S2",
+      "transitions": 1700000,
+      "sha256": "c8d98915b31bd0e839a68f61b3a1833b544a72ee3b6e40da5d5fe1b523ab6471"
+    }
+  ],
+  "opponents": {
+    "92001": {
+      "path": "opponents/92001.pt",
+      "sha256": "a5f00e10ccb885df29a2f60c2154ca2e018b5d5987f000a9b03363d79c95296c"
+    },
+    "S1": {
+      "path": "opponents/S1.pt",
+      "sha256": "9b42e23d301e447ce99d373e50568bff51bbbc9674ecf59478ac998267a667c8"
+    },
+    "4023": {
+      "path": "opponents/4023.pt",
+      "sha256": "d7b5623b61b26b1f17dd93189a512c3c0f81a4c9d8bd7a3131728078c53bb4b8"
+    }
+  }
+}
