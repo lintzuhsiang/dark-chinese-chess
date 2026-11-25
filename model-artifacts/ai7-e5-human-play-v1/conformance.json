@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "runtime": "v25.8.0",
+  "results": [
+    {
+      "id": "e5-a-low-loss",
+      "fixtures": 12,
+      "probability_max_abs_error": 1.487384402309999e-7,
+      "value_max_abs_error": 1.3445345053986202e-7
+    },
+    {
+      "id": "e5-j-most-wins",
+      "fixtures": 12,
+      "probability_max_abs_error": 3.369625928284492e-7,
+      "value_max_abs_error": 2.227012885214208e-7
+    },
+    {
+      "id": "e5-f-far-tactics",
+      "fixtures": 12,
+      "probability_max_abs_error": 1.0656444693335487e-7,
+      "value_max_abs_error": 1.5084835103262861e-7
+    },
+    {
+      "id": "e5-e-wide-cnn",
+      "fixtures": 12,
+      "probability_max_abs_error": 2.1551812312559093e-7,
+      "value_max_abs_error": 1.3247556452516962e-7
+    }
+  ]
+}
